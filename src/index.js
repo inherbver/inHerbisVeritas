@@ -6,7 +6,7 @@ import './styles/global.css';
 
 const rootElement = document.getElementById('root');
 
-if (!rootElement) throw new Error("Élément root introuvable");
+if (!rootElement) throw new Error('Élément root introuvable');
 
 const root = ReactDOM.createRoot(rootElement);
 root.render(

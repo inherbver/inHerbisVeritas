@@ -14,7 +14,7 @@
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-react": "^7.37.4",
-    "firebase": "^11.2.0",
+    "firebase": "^11.3.0",
     "postcss": "^8.5.1",
     "postcss-loader": "^8.1.1",
     "prettier": "^3.4.2",
