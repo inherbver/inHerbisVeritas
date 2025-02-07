@@ -75,9 +75,9 @@ const Navbar = () => {
             label="Panier"
           />
           <IconLink
-            to="/profile"
+            to="/signin"
             icon={<FaUser className="w-6 h-6" />}
-            label="Profil"
+            label="Mon compte"
           />
 
           {/* Burger menu */}
