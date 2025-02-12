@@ -2,6 +2,8 @@ import React from 'react';
 import heroImage from '../assets/images/hero.jpg';
 import '../styles/global.css';
 
+console.log("heroImage:", heroImage);
+
 const HeroSection = () => {
   return (
     <div className="hero" style={{ backgroundImage: `url(${heroImage})` }}>
