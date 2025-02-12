@@ -4,12 +4,12 @@ import '../styles/global.css';
 
 const HeroSection = () => {
   return (
-    <div 
-      className="hero"
-      style={{ backgroundImage: `url(${heroImage})` }}
-    >
+    <div className="hero" style={{ backgroundImage: `url(${heroImage})` }}>
       <h1>Bienvenue sur In Herbis Veritas</h1>
-      <p>Découvrez nos soins naturels et bio, conçus avec amour pour vous et la nature.</p>
+      <p>
+        Découvrez nos soins naturels et bio, conçus avec amour pour vous et la
+        nature.
+      </p>
       <button className="cta-button">Découvrir nos produits</button>
       <p>1 commande = 1 cadeau offert</p>
     </div>

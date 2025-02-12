@@ -24,10 +24,4 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'prettier/prettier': ['error', { endOfLine: 'auto' }],
   },
-
-  env: {
-    browser: true,
-    es2021: true,
-    node: true, // ← Ajoute ceci pour éviter l'erreur sur `process`
-  },
 };
