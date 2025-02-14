@@ -49,10 +49,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 w-full bg-white shadow-md z-20 dark:bg-gray-900 transition-all duration-300 ease-in-out">
+    <nav className="fixed top-0 w-full bg-green-500 text-white shadow-md z-20 transition-all duration-300 ease-in-out">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo ou marque */}
-        <div className="text-xl font-bold dark:text-white">inHerbisVeritas</div>
+        <div className="text-xl font-bold">inHerbisVeritas</div>
 
         {/* Liens desktop */}
         <div className="hidden lg:flex items-center gap-x-8">
@@ -97,7 +97,7 @@ const Navbar = () => {
         {/* Menu mobile avec transitions */}
         <div
           ref={menuRef}
-          className={`lg:hidden absolute top-full left-0 w-full bg-white dark:bg-gray-900 shadow-lg overflow-hidden transition-all duration-300 ease-in-out ${
+          className={`lg:hidden absolute top-full left-0 w-full bg-green-500 text-white shadow-lg overflow-hidden transition-all duration-300 ease-in-out ${
             isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
           }`}
         >
@@ -115,7 +115,7 @@ const Navbar = () => {
 const NavLink = ({ to, label, mobile }) => (
   <Link
     to={to}
-    className={`hover:text-green-600 dark:text-white px-4 py-2 rounded-lg transition-colors duration-200 ${
+    className={`text-white hover:text-green-600 px-4 py-2 rounded-lg transition-colors duration-200 ${
       mobile ? 'text-lg' : ''
     }`}
     aria-current="page"
@@ -127,7 +127,7 @@ const NavLink = ({ to, label, mobile }) => (
 const IconLink = ({ to, icon, label }) => (
   <Link
     to={to}
-    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+    className="text-white p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
     aria-label={label}
   >
     {icon}
@@ -137,7 +137,7 @@ const IconLink = ({ to, icon, label }) => (
 const IconButton = ({ onClick, children, ariaLabel }) => (
   <button
     onClick={onClick}
-    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+    className="text-white p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
     aria-label={ariaLabel}
   >
     {children}

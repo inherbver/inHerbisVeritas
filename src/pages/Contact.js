@@ -3,6 +3,38 @@ import MarketCard from '../components/MarketCard';
 
 function Contact() {
   console.log('Contact page loaded');
+  const markets = [
+    {
+      name: 'Béziers',
+      address: 'Place Pierre Sémard, 34500 Béziers',
+      latitude: 43.3445,
+      longitude: 3.2158,
+    },
+    {
+      name: 'Pézenas',
+      address: 'Place Frédéric Mistral, 34120 Pézenas',
+      latitude: 43.459,
+      longitude: 3.4236,
+    },
+    {
+      name: 'Montpellier',
+      address: 'Place des Arceaux, 34000 Montpellier',
+      latitude: 43.6119,
+      longitude: 3.8701,
+    },
+    {
+      name: 'Sète',
+      address: 'Les Halles de Sète, Rue Gambetta, 34200 Sète',
+      latitude: 43.4075,
+      longitude: 3.6935,
+    },
+    {
+      name: 'Agde',
+      address: 'Avenue du 8 Mai 1945 et Place Jean Jaurès, 34300 Agde',
+      latitude: 43.3108,
+      longitude: 3.4753,
+    },
+  ];
   return (
     <div
       className="container mx-auto px-4 py-8"
@@ -117,7 +149,7 @@ function Contact() {
                 </svg>
               </a>
               <a
-                href="https://www.instagram.com/in_herbis_veritas?igsh=dGs2aXA5cGd6dW42"
+                href="https://www.instagram.com/in_herbis_veritas?igshid=dGs2aXA5cGd6dW42"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -197,37 +229,12 @@ function Contact() {
           </div>
         </div>
         <div className="md:w-1/3">
-          <h2 className="mb-4">Nos marchés</h2>
-          <MarketCard
-            name="Marché de Béziers"
-            days="Samedi 8h-13h"
-            address="Adresse 1"
-            mapLink="Lien Google Maps 1"
-          />
-          <MarketCard
-            name="Marché de Pézenas"
-            days="Dimanche 9h-14h"
-            address="Adresse 2"
-            mapLink="Lien Google Maps 2"
-          />
-          <MarketCard
-            name="Marché de Montpellier"
-            days="Mercredi 7h-12h"
-            address="Adresse 3"
-            mapLink="Lien Google Maps 3"
-          />
-          <MarketCard
-            name="Marché de Sète"
-            days="Vendredi 8h-13h"
-            address="Adresse 4"
-            mapLink="Lien Google Maps 4"
-          />
-          <MarketCard
-            name="Marché de Agde"
-            days="Jeudi 9h-14h"
-            address="Adresse 5"
-            mapLink="Lien Google Maps 5"
-          />
+          <h2 className="mb-4 text-center text-2xl font-serif font-semibold">
+            Retrouvez-moi sur les marchés
+          </h2>
+          {markets.map((market) => (
+            <MarketCard key={market.name} {...market} />
+          ))}
         </div>
       </div>
     </div>
