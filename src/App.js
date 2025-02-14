@@ -9,6 +9,7 @@ import Profile from './pages/Profile';
 import SignIn from './pages/SignIn';
 import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
+import Magazine from './pages/Magazine';
 
 console.log('PUBLIC_URL:', process.env.PUBLIC_URL);
 
@@ -146,6 +147,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/terms" element={<Terms />} />
+        <Route path="/magazine" element={<Magazine />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

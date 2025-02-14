@@ -58,6 +58,7 @@ const Navbar = () => {
         <div className="hidden lg:flex items-center gap-x-8">
           <NavLink to="/shop" label="Shop" />
           <NavLink to="/contact" label="Contact" />
+          <NavLink to="/magazine" label="Magazine" />
         </div>
 
         {/* Contrôles droite */}
@@ -101,9 +102,10 @@ const Navbar = () => {
             isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
           }`}
         >
-          <div className="container mx-auto px-4 py-4 flex flex-col gap-y-4">
+          <div className="flex flex-col items-center py-4">
             <NavLink to="/shop" label="Shop" mobile />
             <NavLink to="/contact" label="Contact" mobile />
+            <NavLink to="/magazine" label="Magazine" mobile />
           </div>
         </div>
       </div>
