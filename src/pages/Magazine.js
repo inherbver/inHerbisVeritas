@@ -1,79 +1,70 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import ArticleCard from '../components/ArticleCard';
 
 const Magazine = () => {
   const articles = [
     {
-      id: 1,
-      title: 'Hydratation et soins naturels',
-      category: 'Beauté',
-      image: '/assets/images/mag_1.jpg',
-      excerpt:
-        'Découvrez comment hydrater votre peau naturellement avec des huiles végétales et des plantes aux vertus apaisantes.',
-      buttonText: 'En savoir plus →',
+      id: '1',
+      imageUrl: '/assets/images/mag_1.jpeg',
+      title: 'Article 1: Eco-Friendly Beauty Tips',
+      category: 'Beauty',
+      excerpt: 'Discover the best eco-friendly beauty tips for a sustainable lifestyle.',
+      articleUrl: '/articles/eco-friendly-beauty-tips'
     },
     {
-      id: 2,
-      title: 'Les bienfaits des tisanes sauvages',
-      category: 'Bien-être',
-      image: '/assets/images/mag_2.jpg',
-      excerpt:
-        'Certaines plantes sauvages ont des effets bénéfiques sur la digestion et le sommeil. Apprenez à les intégrer à votre routine.',
-      buttonText: 'En savoir plus →',
+      id: '2',
+      imageUrl: '/assets/images/mag_2.jpeg',
+      title: 'Article 2: Natural Skin Care Routine',
+      category: 'Skin Care',
+      excerpt: 'Learn how to create a natural skin care routine using organic products.',
+      articleUrl: '/articles/natural-skin-care-routine'
     },
     {
-      id: 3,
-      title: 'Créer son rituel bien-être avec la nature',
-      category: 'Rituel Naturel',
-      image: '/assets/images/mag_3.jpg',
-      excerpt:
-        'Reconnectez-vous à la nature avec un rituel simple à base de plantes, d’encens et de méditation pour une relaxation profonde.',
-      buttonText: 'En savoir plus →',
+      id: '3',
+      imageUrl: '/assets/images/mag_3.jpeg',
+      title: 'Article 3: Sustainable Makeup Brands',
+      category: 'Makeup',
+      excerpt: 'Explore the top sustainable makeup brands that are good for you and the planet.',
+      articleUrl: '/articles/sustainable-makeup-brands'
     },
+    {
+      id: '4',
+      imageUrl: '/assets/images/mag_4.jpeg',
+      title: 'Article 4: Organic Hair Care Products',
+      category: 'Hair Care',
+      excerpt: 'Find the best organic hair care products for healthy and shiny hair.',
+      articleUrl: '/articles/organic-hair-care-products'
+    },
+    {
+      id: '5',
+      imageUrl: '/assets/images/mag_5.jpeg',
+      title: 'Article 5: DIY Natural Beauty Recipes',
+      category: 'DIY',
+      excerpt: 'Create your own natural beauty recipes at home with simple ingredients.',
+      articleUrl: '/articles/diy-natural-beauty-recipes'
+    },
+    {
+      id: '6',
+      imageUrl: '/assets/images/mag_6.jpeg',
+      title: 'Article 6: The Benefits of Natural Cosmetics',
+      category: 'Cosmetics',
+      excerpt: 'Learn about the benefits of using natural cosmetics for your skin and health.',
+      articleUrl: '/articles/benefits-of-natural-cosmetics'
+    }
   ];
 
   return (
-    <div className="container mx-auto py-12">
-      <h1 className="text-3xl font-semibold text-center mt-8 mb-8">Magazine</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {articles.map((article) => (
-          <div
+    <div className="container mx-auto px-4 py-12">
+      <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">
+        Magazine Éco-Beauté
+      </h1>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {articles.map(article => (
+          <ArticleCard
             key={article.id}
-            className="shadow-md rounded-lg overflow-hidden"
-          >
-            <img
-              src={article.image}
-              alt={article.title}
-              className="w-full h-48 object-cover"
-            />
-            <div className="p-6">
-              <span className="inline-block bg-green-200 text-green-800 text-xs px-2 py-1 rounded-full mb-2">
-                {article.category}
-              </span>
-              <h2 className="text-xl font-semibold mb-2">{article.title}</h2>
-              <p className="text-gray-700 mb-4">{article.excerpt}</p>
-              <Link
-                to={`/article/${article.id}`}
-                className="inline-flex items-center text-green-500 hover:text-green-700 transition-colors duration-200"
-              >
-                {article.buttonText}
-                <svg
-                  className="w-4 h-4 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 5l7 7-7 7"
-                  ></path>
-                </svg>
-              </Link>
-            </div>
-          </div>
+            {...article}
+          />
         ))}
       </div>
     </div>
