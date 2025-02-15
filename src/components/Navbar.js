@@ -8,6 +8,7 @@ import {
   FaBars,
   FaTimes,
 } from 'react-icons/fa';
+import PropTypes from 'prop-types';
 
 const Navbar = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -48,6 +49,69 @@ const Navbar = () => {
     document.documentElement.classList.toggle('dark');
   };
 
+  const NavLink = ({ to, label, mobile, onClick }) => {
+    const handleClick = () => {
+      if (mobile) {
+        setIsMobileMenuOpen(false);
+      }
+      if (onClick) {
+        onClick();
+      }
+    };
+
+    return (
+      <Link
+        to={to}
+        className={`text-white hover:text-green-600 px-4 py-2 rounded-lg transition-colors duration-200 ${
+          mobile ? 'text-lg' : ''
+        }`}
+        aria-current="page"
+        onClick={handleClick}
+      >
+        {label}
+      </Link>
+    );
+  };
+
+  NavLink.propTypes = {
+    to: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    onClick: PropTypes.func,
+    mobile: PropTypes.bool,
+  };
+
+  const IconLink = ({ to, icon, label }) => (
+    <Link
+      to={to}
+      className="text-white p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+      aria-label={label}
+    >
+      {icon}
+    </Link>
+  );
+
+  IconLink.propTypes = {
+    to: PropTypes.string.isRequired,
+    icon: PropTypes.node.isRequired,
+    label: PropTypes.string.isRequired,
+  };
+
+  const IconButton = ({ onClick, children, ariaLabel }) => (
+    <button
+      onClick={onClick}
+      className="text-white p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+      aria-label={ariaLabel}
+    >
+      {children}
+    </button>
+  );
+
+  IconButton.propTypes = {
+    onClick: PropTypes.func.isRequired,
+    children: PropTypes.node.isRequired,
+    ariaLabel: PropTypes.string.isRequired,
+  };
+
   return (
     <nav className="fixed top-0 w-full bg-green-500 text-white shadow-md z-20 transition-all duration-300 ease-in-out">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -70,22 +134,15 @@ const Navbar = () => {
               <FaMoon className="w-6 h-6" />
             )}
           </IconButton>
-          <IconLink
-            to="/cart"
-            icon={<FaShoppingCart className="w-6 h-6" />}
-            label="Panier"
-          />
-          <IconLink
-            to="/signin"
-            icon={<FaUser className="w-6 h-6" />}
-            label="Mon compte"
-          />
+          <IconLink to="/cart" icon={<FaShoppingCart className="w-6 h-6" />} label="Panier" />
+          <IconLink to="/signin" icon={<FaUser className="w-6 h-6" />} label="Mon compte" />
 
           {/* Burger menu */}
           <button
             onClick={toggleMobileMenu}
             aria-label={isMobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
             className="p-2 lg:hidden rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            aria-expanded={isMobileMenuOpen}
           >
             {isMobileMenuOpen ? (
               <FaTimes className="w-6 h-6" />
@@ -103,70 +160,14 @@ const Navbar = () => {
           }`}
         >
           <div className="flex flex-col items-center py-4">
-            <NavLink to="/shop" label="Shop" mobile />
-            <NavLink to="/contact" label="Contact" mobile />
-            <NavLink to="/magazine" label="Magazine" mobile />
+            <NavLink to="/shop" label="Shop" mobile onClick={toggleMobileMenu} />
+            <NavLink to="/contact" label="Contact" mobile onClick={toggleMobileMenu} />
+            <NavLink to="/magazine" label="Magazine" mobile onClick={toggleMobileMenu} />
           </div>
         </div>
       </div>
     </nav>
   );
-};
-
-// Composants réutilisables
-const NavLink = ({ to, label, mobile }) => (
-  <Link
-    to={to}
-    className={`text-white hover:text-green-600 px-4 py-2 rounded-lg transition-colors duration-200 ${
-      mobile ? 'text-lg' : ''
-    }`}
-    aria-current="page"
-  >
-    {label}
-  </Link>
-);
-
-const IconLink = ({ to, icon, label }) => (
-  <Link
-    to={to}
-    className="text-white p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
-    aria-label={label}
-  >
-    {icon}
-  </Link>
-);
-
-const IconButton = ({ onClick, children, ariaLabel }) => (
-  <button
-    onClick={onClick}
-    className="text-white p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
-    aria-label={ariaLabel}
-  >
-    {children}
-  </button>
-);
-
-import PropTypes from 'prop-types';
-
-// Définition des PropTypes pour NavLink
-NavLink.propTypes = {
-  to: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  mobile: PropTypes.bool,
-};
-
-// Définition des PropTypes pour IconLink
-IconLink.propTypes = {
-  to: PropTypes.string.isRequired,
-  icon: PropTypes.node.isRequired,
-  label: PropTypes.string.isRequired,
-};
-
-// Définition des PropTypes pour IconButton
-IconButton.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
-  ariaLabel: PropTypes.string.isRequired,
 };
 
 export default Navbar;

@@ -40,7 +40,7 @@ function Contact() {
       className="container mx-auto px-4 py-8"
       style={{ minHeight: '100vh', height: 'auto' }}
     >
-      <h1 className="text-3xl font-semibold text-center my-8">
+      <h1 className="text-3xl font-semibold text-center mt-16 md:mt-16 lg:mt-20">
         Nous contacter
       </h1>
       <div
