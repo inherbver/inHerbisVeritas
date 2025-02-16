@@ -37,36 +37,31 @@ function Contact() {
   ];
   return (
     <div
-      className="container mx-auto px-4 py-8"
+      className="container mx-auto px-4 py-8 bg-gray-50 text-gray-800"
       style={{ minHeight: '100vh', height: 'auto' }}
     >
-      <h1 className="text-3xl font-semibold text-center mt-16 md:mt-16 lg:mt-20">
+      <h1 className="text-3xl font-bold text-center mt-16 md:mt-16 lg:mt-20 mb-6 text-gray-600">
         Nous contacter
       </h1>
       <div
         className="flex flex-col md:flex-row"
-        style={{ alignItems: 'stretch', height: '100%' }}
+        style={{
+          alignItems: 'stretch',
+          height: '100%',
+          backgroundColor: '#F9F9F9',
+        }}
       >
         <div
           className="md:w-2/3 relative mb-8 md:mb-0"
           style={{
-            padding: '2rem',
-            color: 'white',
+            color: 'black',
             display: 'flex',
             flexDirection: 'column',
+            backgroundColor: '#FFFFFF',
+            boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+            padding: '2rem',
           }}
         >
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `url('/assets/images/contact-img.jpg')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center center',
-              backgroundRepeat: 'no-repeat',
-              minHeight: '100%',
-              height: 'auto',
-            }}
-          ></div>
           <div
             className="relative text-shadow"
             style={{
@@ -79,8 +74,9 @@ function Contact() {
               className="text-2xl font-semibold mb-4"
               style={{
                 color: '#2E3A23',
-                fontWeight: 'bold',
+                fontWeight: '600',
                 fontSize: '1.125rem',
+                textTransform: 'uppercase',
               }}
             >
               Coordonnées
@@ -88,7 +84,7 @@ function Contact() {
             <p
               className="mb-2"
               style={{
-                color: '#2E3A23',
+                color: '#2A2A2A',
                 fontWeight: 'bold',
                 fontSize: '1.125rem',
               }}
@@ -98,7 +94,7 @@ function Contact() {
             <p
               className="mb-2"
               style={{
-                color: '#2E3A23',
+                color: '#2A2A2A',
                 fontWeight: 'bold',
                 fontSize: '1.125rem',
               }}
@@ -106,9 +102,9 @@ function Contact() {
               Email :{' '}
               <a
                 href="mailto:contact@inherbisveritas.com"
-                className="text-white"
+                className="text-black"
                 style={{
-                  color: '#2E3A23',
+                  color: '#2A2A2A',
                   fontWeight: 'bold',
                   fontSize: '1.125rem',
                 }}
@@ -119,108 +115,95 @@ function Contact() {
             <p
               className="mb-2"
               style={{
-                color: '#2E3A23',
+                color: '#2A2A2A',
                 fontWeight: 'bold',
                 fontSize: '1.125rem',
               }}
             >
               Téléphone : +33 6 12 34 56 78
             </p>
-            <div className="mt-4">
+            <div className="mt-4 flex items-center space-x-8">
               <a
                 href="https://www.facebook.com/in.herbis.veritas"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mr-4"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="feather feather-facebook"
-                >
-                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                </svg>
+                <img
+                  src="/assets/images/facebook.jpeg"
+                  alt="Facebook"
+                  width="40"
+                  height="40"
+                  className="hover:opacity-80 transition-opacity duration-300"
+                />
               </a>
               <a
                 href="https://www.instagram.com/in_herbis_veritas?igshid=dGs2aXA5cGd6dW42"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="feather feather-instagram"
-                >
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                </svg>
+                <img
+                  src="/assets/images/instagram.jpeg"
+                  alt="Instagram"
+                  width="40"
+                  height="40"
+                  className="hover:opacity-80 transition-opacity duration-300"
+                />
               </a>
             </div>
-            <form className="mt-8">
-              <div>
+            <form
+              className="mt-8 max-w-lg mx-auto bg-gray-100 rounded-lg shadow-md p-4"
+              style={{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}
+            >
+              <div className="mb-4">
                 <label
                   htmlFor="name"
                   className="block text-sm font-bold mb-2"
-                  style={{ color: '#2E3A23' }}
+                  style={{ color: '#2A2A2A' }}
                 >
                   Nom
                 </label>
                 <input
                   type="text"
                   id="name"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4 hover:border-gray-500 hover:shadow-md"
                   placeholder="Votre nom"
                 />
               </div>
-              <div className="mt-4">
+              <div className="mb-4">
                 <label
                   htmlFor="email"
                   className="block text-sm font-bold mb-2"
-                  style={{ color: '#2E3A23' }}
+                  style={{ color: '#2A2A2A' }}
                 >
                   Email
                 </label>
                 <input
                   type="email"
                   id="email"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4 hover:border-gray-500 hover:shadow-md"
                   placeholder="Votre email"
                 />
               </div>
-              <div className="mt-4">
+              <div className="mb-4">
                 <label
                   htmlFor="message"
                   className="block text-sm font-bold mb-2"
-                  style={{ color: '#2E3A23' }}
+                  style={{ color: '#2A2A2A' }}
                 >
                   Message
                 </label>
                 <textarea
                   id="message"
                   rows="4"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4 hover:border-gray-500 hover:shadow-md"
                   placeholder="Votre message"
                 ></textarea>
               </div>
               <div className="mt-6">
                 <button
                   type="submit"
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  style={{ backgroundColor: '#EF9C66' }}
                 >
                   Envoyer
                 </button>
@@ -232,9 +215,14 @@ function Contact() {
           <h2 className="mb-4 text-center text-2xl font-serif font-semibold">
             Retrouvez-moi sur les marchés
           </h2>
-          {markets.map((market) => (
-            <MarketCard key={market.name} {...market} />
-          ))}
+          <div
+            className="border rounded-lg shadow-md p-4"
+            style={{ borderColor: 'white' }}
+          >
+            {markets.map((market) => (
+              <MarketCard key={market.name} {...market} />
+            ))}
+          </div>
         </div>
       </div>
     </div>

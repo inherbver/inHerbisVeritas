@@ -13,16 +13,6 @@ import Magazine from './pages/Magazine';
 
 console.log('PUBLIC_URL:', process.env.PUBLIC_URL);
 
-const argan = `${process.env.PUBLIC_URL}/assets/images/pdct2.jpeg`;
-const teatree = `${process.env.PUBLIC_URL}/assets/images/pdct3.jpeg`;
-const aloe = `${process.env.PUBLIC_URL}/assets/images/pdct4.jpeg`;
-const curcuma = `${process.env.PUBLIC_URL}/assets/images/pdct5.jpeg`;
-const fruitsRouges = `${process.env.PUBLIC_URL}/assets/images/pdct6.jpeg`;
-const arnica = `${process.env.PUBLIC_URL}/assets/images/pdct7.jpeg`;
-const huileSeche = `${process.env.PUBLIC_URL}/assets/images/pdct8.jpeg`;
-const abricot = `${process.env.PUBLIC_URL}/assets/images/pdct10.jpeg`;
-const fleurOranger = `${process.env.PUBLIC_URL}/assets/images/pdct11.jpeg`;
-
 const products = [
   {
     id: 1,
@@ -140,7 +130,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Shop />} />
-        <Route path="/shop" element={<Shop />} />
+        <Route path="/boutique" element={<Shop />} />
         <Route path="/product/:id" element={<Product />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/cart" element={<Cart />} />

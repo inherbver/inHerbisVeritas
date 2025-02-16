@@ -3,7 +3,7 @@ import { useAuth } from '../../config/auth';
 
 const ProtectedRoute = () => {
   const { currentUser } = useAuth();
-  
+
   return currentUser ? <Outlet /> : <Navigate to="/login" replace />;
 };
 

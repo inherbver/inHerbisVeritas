@@ -5,7 +5,7 @@ import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 
 const mapContainerStyle = {
   width: '100%',
-  height: '200px',
+  height: '150px',
   borderRadius: '0.5rem',
 };
 
@@ -28,13 +28,15 @@ function MarketCard({ name, days, address, mapLink, latitude, longitude }) {
         <MapPinIcon className="h-4 w-4 inline-block mr-1" />
         <strong>Adresse:</strong> {address}
       </p>
-      <GoogleMap
-        mapContainerStyle={mapContainerStyle}
-        zoom={10}
-        center={{ lat: latitude, lng: longitude }}
-      >
-        <Marker position={{ lat: latitude, lng: longitude }} />
-      </GoogleMap>
+      <div className="flex justify-center">
+        <GoogleMap
+          mapContainerStyle={mapContainerStyle}
+          zoom={10}
+          center={{ lat: latitude, lng: longitude }}
+        >
+          <Marker position={{ lat: latitude, lng: longitude }} />
+        </GoogleMap>
+      </div>
     </div>
   );
 }
