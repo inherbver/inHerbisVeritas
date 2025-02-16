@@ -55,11 +55,7 @@ const Navbar = () => {
               key={link.path}
               to={link.path}
               className={({ isActive }) =>
-                `relative px-2 py-1 text-lg ${
-                  isActive
-                    ? 'text-green-600 font-semibold'
-                    : 'text-gray-600 hover:text-green-500 transition-colors duration-200'
-                }`
+                `relative px-2 py-1 text-lg text-white hover:text-white transition-colors duration-200`
               }
             >
               {link.label}
@@ -67,7 +63,7 @@ const Navbar = () => {
                 (link.path === '/' && location.pathname === '/boutique')) && (
                 <motion.div
                   layoutId="underline"
-                  className="absolute left-0 -bottom-1 h-0.5 w-full bg-green-600"
+                  className="absolute left-0 -bottom-1 h-0.5 w-full bg-white"
                   initial={false}
                   transition={{
                     type: 'spring',
