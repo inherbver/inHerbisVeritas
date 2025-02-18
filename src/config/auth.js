@@ -1,22 +1,23 @@
 import { auth, googleProvider, facebookProvider } from './firebaseConfig';
-import { signInWithPopup } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  signInWithPopup,
+} from 'firebase/auth';
 
-export const signInWithGoogle = async () => {
-  try {
-    const result = await signInWithPopup(auth, googleProvider);
-    return result.user;
-  } catch (error) {
-    console.error('Erreur Google Auth :', error);
-    throw error;
-  }
-};
+export const register = (email, password) =>
+  createUserWithEmailAndPassword(auth, email, password);
 
-export const signInWithFacebook = async () => {
-  try {
-    const result = await signInWithPopup(auth, facebookProvider);
-    return result.user;
-  } catch (error) {
-    console.error('Erreur Facebook Auth :', error);
-    throw error;
-  }
-};
+export const login = (email, password) =>
+  signInWithEmailAndPassword(auth, email, password);
+
+export const logout = () => signOut(auth);
+
+export const authStateListener = (callback) =>
+  onAuthStateChanged(auth, callback);
+
+export const signInWithGoogle = () => signInWithPopup(auth, googleProvider);
+
+export const signInWithFacebook = () => signInWithPopup(auth, facebookProvider);

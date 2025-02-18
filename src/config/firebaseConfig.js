@@ -15,11 +15,7 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
-console.log('Firebase API Key:', process.env.REACT_APP_FIREBASE_API_KEY);
-
-// Initialisation Firebase
 const app = initializeApp(firebaseConfig);
-
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 export const facebookProvider = new FacebookAuthProvider();

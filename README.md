@@ -4,8 +4,8 @@
 
 L'application utilise **Firebase Authentication** avec 2 fournisseurs :
 
-- 🔵 Connexion Google
-- 🔷 Connexion Facebook
+- Connexion Google
+- Connexion Facebook
 
 ### Configuration requise
 
@@ -18,4 +18,34 @@ L'application utilise **Firebase Authentication** avec 2 fournisseurs :
 ```bash
 npm install
 npm start
+```
+
+## Architecture Technique
+
+### Structure des Fichiers Clés
+
+| Fichier | Rôle | Technologies |
+|---------|------|--------------|
+| `src/config/firebaseConfig.js` | Configuration Firebase | Environnement variables |
+| `src/contexts/AuthContext.js` | Gestion état d'authentification | React Context API |
+| `src/components/ProtectedRoute.js` | Protection des routes | React Router 6 |
+
+### Dépendances Principales
+
+```json
+{
+  "firebase": "Authentification temps réel",
+  "react-router-dom": "Gestion des routes",
+  "tailwindcss": "Stylage moderne"
+}
+```
+
+### Diagramme d'Architecture
+
+```mermaid
+graph TD
+  A[Client] --> B[(Firestore)]
+  A --> C{Firebase Auth}
+  B --> D[Admin Panel]
+  C --> D
 ```

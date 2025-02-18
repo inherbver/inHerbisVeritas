@@ -10,6 +10,8 @@ import SignIn from './pages/SignIn';
 import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
 import Magazine from './pages/Magazine';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import Admin from './pages/Admin';
 
 console.log('PUBLIC_URL:', process.env.PUBLIC_URL);
 
@@ -129,13 +131,22 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
+        <Route path="/signin" element={<SignIn />} />
+        <Route
+          path="/admin/*"
+          element={
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/" element={<Shop />} />
         <Route path="/boutique" element={<Shop />} />
         <Route path="/product/:id" element={<Product />} />
-        <Route path="/contact" element={<Contact />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/signin" element={<SignIn />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/magazine" element={<Magazine />} />
         <Route path="*" element={<NotFound />} />

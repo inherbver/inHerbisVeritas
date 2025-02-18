@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { FaShoppingCart, FaBars, FaTimes, FaUser } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
+import { AuthContext } from '../contexts/AuthContext';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const location = useLocation();
+  const { currentUser } = useContext(AuthContext);
 
   // Gestion des clics externes et touche ESC pour fermer le menu mobile
   useEffect(() => {
@@ -85,7 +87,7 @@ const Navbar = () => {
             <FaShoppingCart className="w-6 h-6" />
           </Link>
           <Link
-            to="/signin"
+            to={currentUser ? '/profile' : '/signin'}
             className="text-white p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
           >
             <FaUser className="w-6 h-6" />
@@ -127,6 +129,11 @@ const Navbar = () => {
       </div>
     </nav>
   );
+};
+
+Navbar.propTypes = {
+  isMobileMenuOpen: PropTypes.bool,
+  toggleMobileMenu: PropTypes.func,
 };
 
 export default Navbar;

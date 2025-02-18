@@ -1,57 +1,83 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaGoogle, FaFacebook } from 'react-icons/fa';
-import { auth } from '../config/firebaseConfig';
+import { useAuth } from '../contexts/AuthContext';
 import {
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  FacebookAuthProvider,
-  signInWithPopup,
-} from 'firebase/auth';
+  register,
+  login,
+  signInWithGoogle,
+  signInWithFacebook,
+} from '../config/auth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLogin, setIsLogin] = useState(true);
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (currentUser) navigate('/admin');
+  }, [currentUser, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      if (isLogin) {
+        const auth = getAuth();
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        console.log('Connexion réussie :', userCredential);
+      } else {
+        await register(email, password);
+      }
     } catch (err) {
-      setError(err.message);
+      console.error('Erreur Firebase :', err.code, err.message);
+      setError(translateError(err.code));
     }
   };
 
-  const signInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const signInWithFacebook = async () => {
-    const provider = new FacebookAuthProvider();
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (err) {
-      setError(err.message);
-    }
+  const translateError = (code) => {
+    const errors = {
+      'auth/user-not-found': 'Aucun compte associé à cet email',
+      'auth/wrong-password': 'Mot de passe incorrect',
+      'auth/email-already-in-use': 'Cet email est déjà utilisé',
+      'auth/weak-password':
+        'Le mot de passe doit contenir au moins 6 caractères',
+      'auth/invalid-email': 'Email invalide',
+      'auth/popup-closed-by-user': "Connexion annulée par l'utilisateur",
+    };
+    return errors[code] || "Erreur lors de l'authentification";
   };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Connexion à votre compte
+          {isLogin ? 'Connexion à votre compte' : 'Création de compte'}
         </h2>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => setIsLogin(!isLogin)}
+                className="text-sm text-green-600 hover:text-green-500"
+              >
+                {isLogin
+                  ? 'Pas de compte ? Créer un compte'
+                  : 'Déjà un compte ? Se connecter'}
+              </button>
+            </div>
+
             <div>
               <label
                 htmlFor="email"
@@ -99,59 +125,33 @@ function SignIn() {
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-                Connexion
+                {isLogin ? 'Connexion' : 'Créer un compte'}
               </button>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="text-sm">
-                <Link
-                  to="/forgot-password"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  Mot de passe oublié ?
-                </Link>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300" />
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">Ou</span>
-                </div>
-              </div>
             </div>
 
             <div className="mt-6">
               <button
                 type="button"
                 onClick={signInWithGoogle}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700"
               >
                 <FaGoogle className="mr-2" />
                 Connexion avec Google
               </button>
             </div>
 
-            <div className="mt-6">
+            <div className="mt-4">
               <button
                 type="button"
                 onClick={signInWithFacebook}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700"
               >
                 <FaFacebook className="mr-2" />
                 Connexion avec Facebook
               </button>
             </div>
 
-            {error && (
-              <div className="mt-6">
-                <p className="text-sm text-red-600">{error}</p>
-              </div>
-            )}
+            {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
           </form>
         </div>
       </div>
