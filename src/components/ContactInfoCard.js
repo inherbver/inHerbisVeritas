@@ -10,8 +10,8 @@ export default function ContactInfoCard() {
       <address className="not-italic">
         <p className="mb-3">
           <span className="font-bold block">Adresse :</span>
-          Lieu de l'activité (à définir)
-        </p>
+          <p>Lieu de l&apos;activité (à définir)</p>
+          </p>
         <p className="mb-3">
           <span className="font-bold block">Email :</span>
           <a

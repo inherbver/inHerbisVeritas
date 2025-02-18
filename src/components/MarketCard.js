@@ -10,6 +10,9 @@ const mapContainerStyle = {
 };
 
 function MarketCard({ market }) {
+  const [isLoaded, setIsLoaded] = React.useState(false);
+  const [mapError, setMapError] = React.useState(null);
+
   return (
     <div className="border rounded-lg p-4 mb-4">
       <h3 className="text-xl font-bold mb-2">{market.name}</h3>
@@ -22,8 +25,18 @@ function MarketCard({ market }) {
         <strong>Adresse:</strong> {market.address}
       </p>
       <div className="h-48 w-full">
+        {!isLoaded && (
+          <div className="text-center py-4">Chargement de la carte...</div>
+        )}
+        {mapError && (
+          <div className="text-red-500 text-sm p-2">
+            Erreur de chargement de la carte : {mapError}
+          </div>
+        )}
         <LoadScript
           googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
+          onLoad={() => setIsLoaded(true)}
+          onError={(error) => setMapError(error.message)}
         >
           <GoogleMap
             mapContainerStyle={{ width: '100%', height: '100%' }}
