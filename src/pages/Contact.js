@@ -49,9 +49,9 @@ function Contact() {
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Carte Coordonnées */}
-          <article className="lg:w-1/3 bg-white rounded-xl shadow-md p-6 flex flex-col">
+          <section className="lg:w-1/3 bg-white rounded-xl shadow-md p-6 flex flex-col">
             <ContactInfoCard />
-          </article>
+          </section>
 
           {/* Carte Réseaux Sociaux */}
           <article className="lg:w-2/3 bg-white rounded-xl shadow-md p-6 flex flex-col">

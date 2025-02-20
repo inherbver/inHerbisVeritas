@@ -11,7 +11,7 @@ const mapContainerStyle = {
 
 function MarketCard({ market }) {
   return (
-    <div className="border rounded-lg p-4 mb-4">
+    <article className="border rounded-lg p-4 mb-4">
       <h3 className="text-xl font-bold mb-2">{market.name}</h3>
       <p className="mb-1 text-sm text-gray-500">
         <ClockIcon className="h-4 w-4 inline-block mr-1" />
@@ -28,7 +28,7 @@ function MarketCard({ market }) {
           zoom={15}
         />
       </div>
-    </div>
+    </article>
   );
 }
 

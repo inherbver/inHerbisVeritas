@@ -2,12 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome, FaNewspaper, FaUsers, FaCog } from 'react-icons/fa';
 
-const AdminSidebar = () => {
+export default function AdminSidebar() {
   return (
     <aside className="admin-sidebar fixed left-0 top-0 h-full w-64 bg-gray-800 text-white p-6">
-      <div className="flex items-center mb-8">
+      <aside className="flex items-center mb-8">
         <h2 className="text-xl font-bold">Admin Panel</h2>
-      </div>
+      </aside>
       <nav>
         <ul className="space-y-4">
           <li>
@@ -47,5 +47,3 @@ const AdminSidebar = () => {
     </aside>
   );
 };
-
-export default AdminSidebar;

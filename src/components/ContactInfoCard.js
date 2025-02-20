@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function ContactInfoCard() {
   return (
-    <article className="bg-white rounded-lg shadow-md p-6 mb-6">
+    <section className="bg-white rounded-xl shadow-md p-6 mb-6">
       <h2 className="text-xl font-semibold mb-4 text-gray-800">Coordonnées</h2>
       <address className="not-italic">
         <div className="mb-3">
@@ -28,6 +28,6 @@ export default function ContactInfoCard() {
           </a>
         </div>
       </address>
-    </article>
+    </section>
   );
 }
