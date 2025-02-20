@@ -2,34 +2,31 @@ import React from 'react';
 
 export default function ContactInfoCard() {
   return (
-    <article
-      className="bg-white p-6 rounded-lg shadow-md flex-1"
-      aria-label="Coordonnées de contact"
-    >
+    <article className="bg-white rounded-lg shadow-md p-6 mb-6">
       <h2 className="text-xl font-semibold mb-4 text-gray-800">Coordonnées</h2>
       <address className="not-italic">
-        <p className="mb-3">
+        <div className="mb-3">
           <span className="font-bold block">Adresse :</span>
-          <p>Lieu de l&apos;activité (à définir)</p>
-          </p>
-        <p className="mb-3">
+          <span>Lieu de l'activité (à définir)</span>
+        </div>
+        <div className="mb-3">
           <span className="font-bold block">Email :</span>
           <a
             href="mailto:contact@inherbisveritas.com"
-            className="text-blue-700 hover:text-blue-900 transition-colors"
+            className="text-blue-600 hover:text-blue-800"
           >
             contact@inherbisveritas.com
           </a>
-        </p>
-        <p>
+        </div>
+        <div>
           <span className="font-bold block">Téléphone :</span>
           <a
             href="tel:+33612345678"
-            className="text-blue-700 hover:text-blue-900 transition-colors"
+            className="text-blue-600 hover:text-blue-800"
           >
             +33 6 12 34 56 78
           </a>
-        </p>
+        </div>
       </address>
     </article>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ClockIcon, MapPinIcon } from '@heroicons/react/20/solid';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap } from '@react-google-maps/api';
 
 const mapContainerStyle = {
   width: '100%',
@@ -10,9 +10,6 @@ const mapContainerStyle = {
 };
 
 function MarketCard({ market }) {
-  const [isLoaded, setIsLoaded] = React.useState(false);
-  const [mapError, setMapError] = React.useState(null);
-
   return (
     <div className="border rounded-lg p-4 mb-4">
       <h3 className="text-xl font-bold mb-2">{market.name}</h3>
@@ -25,29 +22,11 @@ function MarketCard({ market }) {
         <strong>Adresse:</strong> {market.address}
       </p>
       <div className="h-48 w-full">
-        {!isLoaded && (
-          <div className="text-center py-4">Chargement de la carte...</div>
-        )}
-        {mapError && (
-          <div className="text-red-500 text-sm p-2">
-            Erreur de chargement de la carte : {mapError}
-          </div>
-        )}
-        <LoadScript
-          googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
-          onLoad={() => setIsLoaded(true)}
-          onError={(error) => setMapError(error.message)}
-        >
-          <GoogleMap
-            mapContainerStyle={{ width: '100%', height: '100%' }}
-            center={{ lat: market.latitude, lng: market.longitude }}
-            zoom={15}
-          >
-            <Marker
-              position={{ lat: market.latitude, lng: market.longitude }}
-            />
-          </GoogleMap>
-        </LoadScript>
+        <GoogleMap
+          mapContainerStyle={mapContainerStyle}
+          center={{ lat: market.latitude, lng: market.longitude }}
+          zoom={15}
+        />
       </div>
     </div>
   );
