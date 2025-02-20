@@ -38,20 +38,26 @@ function Contact() {
     },
   ];
   return (
-    <main
-      className="container mx-auto px-4 py-8 bg-gray-50 text-gray-800"
-      style={{ minHeight: '100vh', height: 'auto' }}
-    >
-      <header className="text-center mt-16 md:mt-16 lg:mt-20 mb-6">
-        <h1 className="text-3xl font-bold text-gray-600">Nous contacter</h1>
-      </header>
+    <main className="container mx-auto px-4 py-8 bg-gray-50">
+      <section className="mt-12" aria-labelledby="contact-heading">
+        <h2
+          id="contact-heading"
+          className="text-2xl font-semibold mb-6 text-gray-700"
+        >
+          Contact
+        </h2>
 
-      <section
-        className="flex flex-col md:flex-row gap-8"
-        aria-labelledby="coordonnees-heading"
-      >
-        <ContactInfoCard />
-        <SocialMediaLinks />
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Carte Coordonnées */}
+          <article className="lg:w-1/3 bg-white rounded-xl shadow-md p-6 flex flex-col">
+            <ContactInfoCard />
+          </article>
+
+          {/* Carte Réseaux Sociaux */}
+          <article className="lg:w-2/3 bg-white rounded-xl shadow-md p-6 flex flex-col">
+            <SocialMediaLinks />
+          </article>
+        </div>
       </section>
 
       <section className="mt-12" aria-labelledby="marches-heading">

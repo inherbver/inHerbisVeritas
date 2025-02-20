@@ -7,7 +7,7 @@ export default function ContactInfoCard() {
       <address className="not-italic">
         <div className="mb-3">
           <span className="font-bold block">Adresse :</span>
-          <span>Lieu de l'activité (à définir)</span>
+          <span>12 rue des rêves, 34500 Béziers</span>
         </div>
         <div className="mb-3">
           <span className="font-bold block">Email :</span>
