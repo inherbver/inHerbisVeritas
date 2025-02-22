@@ -4,27 +4,26 @@ import { Link } from 'react-router-dom';
 
 const ArticleCard = ({ imageUrl, title, category, excerpt, articleUrl }) => {
   return (
-    <article className="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-      <img
-        src={imageUrl}
-        alt={title}
-        className="w-full h-48 object-cover"
-        loading="lazy"
-      />
-      <div className="p-6 flex-1 flex flex-col">
-        <span className="text-sm font-semibold text-emerald-700 mb-2">
+    <article className="bg-white rounded-lg shadow-md overflow-hidden h-full flex flex-col">
+      <header>
+        <img src={imageUrl} alt={title} className="w-full h-48 object-cover" />
+      </header>
+      <section className="p-4 flex flex-col flex-grow items-center text-center h-full">
+        <span className="text-sm font-semibold text-green-600 mb-2">
           {category}
         </span>
-        <h3 className="text-xl font-bold text-gray-900 mb-3">{title}</h3>
-        <p className="text-gray-600 mb-4 line-clamp-3">{excerpt}</p>
-        <Link
-          to={articleUrl}
-          className="mt-auto text-emerald-700 font-medium hover:text-emerald-900 transition-colors"
-          aria-label={`Lire l'article : ${title}`}
-        >
-          Lire la suite →
-        </Link>
-      </div>
+        <h2 className="text-xl font-bold mb-4">{title}</h2>
+        <p className="text-gray-600 mb-4">{excerpt}</p>
+        <footer className="w-full mt-auto flex-shrink-0">
+          <Link
+            to={articleUrl}
+            className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors flex justify-center items-center w-full"
+            aria-label={`Lire l'article : ${title}`}
+          >
+            Lire la suite
+          </Link>
+        </footer>
+      </section>
     </article>
   );
 };

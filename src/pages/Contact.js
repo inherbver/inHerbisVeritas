@@ -38,42 +38,44 @@ function Contact() {
     },
   ];
   return (
-    <main className="container mx-auto px-4 py-8 bg-gray-50">
-      <section className="mt-12" aria-labelledby="contact-heading">
-        <h2
-          id="contact-heading"
-          className="text-2xl font-semibold mb-6 text-gray-700"
-        >
-          Contact
-        </h2>
+    <div className="p-12 flex justify-center items-center">
+      <main className="container mx-auto px-4 py-8 bg-gray-50 w-1/2">
+        <section className="mt-12" aria-labelledby="contact-heading">
+          <h2
+            id="contact-heading"
+            className="text-3xl font-bold text-center mb-8 mt-4"
+          >
+            Contact
+          </h2>
 
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* Carte Coordonnées */}
-          <section className="lg:w-1/3 bg-white rounded-xl shadow-md p-6 flex flex-col">
-            <ContactInfoCard />
-          </section>
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Carte Coordonnées */}
+            <section className="lg:w-1/3 bg-white rounded-xl shadow-md p-6 flex flex-col">
+              <ContactInfoCard />
+            </section>
 
-          {/* Carte Réseaux Sociaux */}
-          <article className="lg:w-2/3 bg-white rounded-xl shadow-md p-6 flex flex-col">
-            <SocialMediaLinks />
+            {/* Carte Réseaux Sociaux */}
+            <article className="lg:w-2/3 bg-white rounded-xl shadow-md p-6 flex flex-col">
+              <SocialMediaLinks />
+            </article>
+          </div>
+        </section>
+
+        <section className="mt-12" aria-labelledby="marches-heading">
+          <h2
+            id="marches-heading"
+            className="text-2xl font-semibold mb-6 text-gray-700"
+          >
+            Nos marchés
+          </h2>
+          <article className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {markets.map((market, index) => (
+              <MarketCard key={index} market={market} />
+            ))}
           </article>
-        </div>
-      </section>
-
-      <section className="mt-12" aria-labelledby="marches-heading">
-        <h2
-          id="marches-heading"
-          className="text-2xl font-semibold mb-6 text-gray-700"
-        >
-          Nos marchés
-        </h2>
-        <article className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {markets.map((market, index) => (
-            <MarketCard key={index} market={market} />
-          ))}
-        </article>
-      </section>
-    </main>
+        </section>
+      </main>
+    </div>
   );
 }
 

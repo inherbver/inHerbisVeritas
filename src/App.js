@@ -2,14 +2,14 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Shop from './pages/Shop';
-import Product from './pages/Product';
+import Magazine from './pages/Magazine';
+import ProductDetails from './pages/ProductDetails';
 import Contact from './pages/Contact';
 import Cart from './pages/Cart';
 import Profile from './pages/Profile';
 import SignIn from './pages/SignIn';
 import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
-import Magazine from './pages/Magazine';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Admin from './pages/Admin';
 import GoogleMapsProvider from './providers/GoogleMapsProvider';
@@ -133,6 +133,10 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
+          <Route path="/" element={<Shop />} />
+          <Route path="/boutique" element={<Shop />} />
+          <Route path="/magazine" element={<Magazine />} />
+          <Route path="/produits/:slug" element={<ProductDetails />} />
           <Route path="/signin" element={<SignIn />} />
           <Route
             path="/admin/*"
@@ -142,15 +146,10 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/shop" element={<Shop />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/" element={<Shop />} />
-          <Route path="/boutique" element={<Shop />} />
-          <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/terms" element={<Terms />} />
-          <Route path="/magazine" element={<Magazine />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>

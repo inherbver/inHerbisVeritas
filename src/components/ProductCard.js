@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const ProductCard = ({ product }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+    <Link 
+      to={`/produits/${product.slug}`} 
+      className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col hover:shadow-xl transition-shadow"
+    >
       <div className="h-64">
         <img
-          src={product.image}
+          src={product.imageUrl}
           alt={product.title}
           className="w-full h-full object-cover object-center"
         />
@@ -27,13 +31,13 @@ const ProductCard = ({ product }) => {
           </button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
 ProductCard.propTypes = {
   product: PropTypes.shape({
-    image: PropTypes.string.isRequired,
+    imageUrl: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
