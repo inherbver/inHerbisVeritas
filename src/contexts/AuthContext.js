@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { auth } from '../config/firebaseConfig';
+import { supabase } from '../config/supabase';
 
 export const AuthContext = createContext();
 
@@ -9,11 +9,16 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      setCurrentUser(session?.user || null);
       setLoading(false);
     });
-    return unsubscribe;
+
+    return () => {
+      if (subscription) subscription.unsubscribe();
+    };
   }, []);
 
   if (loading) {

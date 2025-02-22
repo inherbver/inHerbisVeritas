@@ -2,13 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaGoogle, FaFacebook } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
-import {
-  register,
-  login,
-  signInWithGoogle,
-  signInWithFacebook,
-} from '../config/auth';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { supabase } from '../config/supabase';
 
 function SignIn() {
   const [email, setEmail] = useState('');
@@ -25,34 +19,23 @@ function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (isLogin) {
-        const auth = getAuth();
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        console.log('Connexion réussie :', userCredential);
-      } else {
-        await register(email, password);
-      }
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) throw error;
     } catch (err) {
-      console.error('Erreur Firebase :', err.code, err.message);
-      setError(translateError(err.code));
+      console.error('Erreur Supabase :', err.message);
+      setError(err.message);
     }
   };
 
-  const translateError = (code) => {
+  const translateError = (message) => {
     const errors = {
-      'auth/user-not-found': 'Aucun compte associé à cet email',
-      'auth/wrong-password': 'Mot de passe incorrect',
-      'auth/email-already-in-use': 'Cet email est déjà utilisé',
-      'auth/weak-password':
-        'Le mot de passe doit contenir au moins 6 caractères',
-      'auth/invalid-email': 'Email invalide',
-      'auth/popup-closed-by-user': "Connexion annulée par l'utilisateur",
+      'Invalid credentials': 'Identifiants invalides',
+      'User not found': 'Utilisateur non trouvé',
     };
-    return errors[code] || "Erreur lors de l'authentification";
+    return errors[message] || "Erreur lors de l'authentification";
   };
 
   return (
@@ -129,29 +112,11 @@ function SignIn() {
               </button>
             </div>
 
-            <div className="mt-6">
-              <button
-                type="button"
-                onClick={signInWithGoogle}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700"
-              >
-                <FaGoogle className="mr-2" />
-                Connexion avec Google
-              </button>
-            </div>
-
-            <div className="mt-4">
-              <button
-                type="button"
-                onClick={signInWithFacebook}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700"
-              >
-                <FaFacebook className="mr-2" />
-                Connexion avec Facebook
-              </button>
-            </div>
-
-            {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+            {error && (
+              <p className="mt-4 text-sm text-red-600">
+                {translateError(error)}
+              </p>
+            )}
           </form>
         </div>
       </div>
