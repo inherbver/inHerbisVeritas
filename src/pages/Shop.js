@@ -1,6 +1,6 @@
 import React from 'react';
-import ProductGrid from '../components/ProductGrid';
-import HeroSection from '../components/HeroSection';
+import ProductGrid from '../components/shop/ProductGrid';
+import HeroSection from '../components/shop/HeroSection';
 import { products } from '../data/products';
 
 const Shop = () => {

@@ -1,44 +1,43 @@
 import React from 'react';
 
-export default function SocialMediaLinks() {
-  return (
-    <aside
-      className="bg-white p-6 rounded-lg shadow-md flex-1"
-      aria-label="Réseaux sociaux"
-    >
-      <h2 className="text-xl font-semibold mb-4 text-gray-800">Nous suivre</h2>
-      <div className="flex gap-6">
+const socialMediaLinks = [
+  {
+    name: 'Facebook',
+    href: 'https://www.facebook.com/in.herbis.veritas',
+  },
+  {
+    name: 'Instagram',
+    href: 'https://www.instagram.com/in_herbis_veritas',
+  },
+];
+
+const SocialMediaLinks = ({ className, links = socialMediaLinks }) => (
+  <aside
+    className={`${className} bg-white p-6 rounded-lg shadow-md flex-1`}
+    aria-label="Réseaux sociaux"
+  >
+    <h2 className="text-xl font-semibold mb-4 text-gray-800">Nous suivre</h2>
+    <div className="flex gap-6">
+      {links.map(link => (
         <a
-          href="https://www.facebook.com/in.herbis.veritas"
+          key={link.name}
+          href={link.href}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Page Facebook"
+          aria-label={link.name}
           className="hover:opacity-75 transition-opacity"
         >
           <img
-            src="/assets/images/facebook.png"
+            src={`/assets/images/${link.name.toLowerCase()}.png`}
             alt=""
             role="presentation"
             width="40"
             height="40"
           />
         </a>
-        <a
-          href="https://www.instagram.com/in_herbis_veritas"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Profil Instagram"
-          className="hover:opacity-75 transition-opacity"
-        >
-          <img
-            src="/assets/images/instagram.png"
-            alt=""
-            role="presentation"
-            width="40"
-            height="40"
-          />
-        </a>
-      </div>
-    </aside>
-  );
-}
+      ))}
+    </div>
+  </aside>
+);
+
+export default SocialMediaLinks;

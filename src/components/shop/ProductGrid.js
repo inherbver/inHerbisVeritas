@@ -6,10 +6,12 @@ const ProductGrid = ({ products }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Tous');
 
-  const filteredProducts = products.filter(product => {
-    const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch =
+      product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'Tous' || product.category === selectedCategory;
+    const matchesCategory =
+      selectedCategory === 'Tous' || product.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -32,7 +34,7 @@ const ProductGrid = ({ products }) => {
           <option>Infusions</option>
         </select>
       </div>
-      
+
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredProducts.map((product) => (
           <ProductCard key={product.id} product={product} />

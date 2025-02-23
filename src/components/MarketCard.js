@@ -1,42 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ClockIcon, MapPinIcon } from '@heroicons/react/20/solid';
-import { GoogleMap } from '@react-google-maps/api';
 
-const mapContainerStyle = {
-  width: '100%',
-  height: '150px',
-  borderRadius: '0.5rem',
-};
-
-function MarketCard({ market }) {
-  return (
-    <article className="border rounded-lg p-4 mb-4">
-      <h3 className="text-xl font-bold mb-2">{market.name}</h3>
-      <p className="mb-1 text-sm text-gray-500">
-        <ClockIcon className="h-4 w-4 inline-block mr-1" />
-        <strong>Jours et horaires:</strong> {market.days}
-      </p>
-      <p className="mb-1 text-sm text-gray-500">
+const MarketCard = ({ market }) => (
+  <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-all">
+    <h3 className="text-2xl font-semibold text-gray-900">{market.name}</h3>
+    <p className="mt-2 text-gray-600">
+      <ClockIcon className="h-4 w-4 inline-block mr-1" />
+      {market.days}
+    </p>
+    <div className="mt-4">
+      <p className="text-sm font-medium text-emerald-700">
         <MapPinIcon className="h-4 w-4 inline-block mr-1" />
-        <strong>Adresse:</strong> {market.address}
+        {market.address}
       </p>
-      <div className="h-48 w-full">
-        <GoogleMap
-          mapContainerStyle={mapContainerStyle}
-          center={{ lat: market.latitude, lng: market.longitude }}
-          zoom={15}
-        />
-      </div>
-    </article>
-  );
-}
+      <a
+        href={`https://www.openstreetmap.org/?mlat=${market.latitude}&mlon=${market.longitude}`}
+        className="mt-3 inline-flex items-center text-sm text-sky-600 hover:text-sky-800"
+      >
+        Voir sur la carte →
+      </a>
+    </div>
+  </div>
+);
 
 MarketCard.propTypes = {
   market: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    days: PropTypes.string.isRequired,
     address: PropTypes.string.isRequired,
+    days: PropTypes.string.isRequired,
+    hours: PropTypes.string.isRequired,
     latitude: PropTypes.number.isRequired,
     longitude: PropTypes.number.isRequired,
   }).isRequired,

@@ -1,13 +1,14 @@
 import React from 'react';
 import { articles } from '../data/articles';
 import ArticlesGrid from '../components/ArticlesGrid';
+import PageTitle from '../components/Ui/PageTitle';
 
 const Magazine = () => {
   return (
-    <div className="pt-24 min-h-screen">
-      <h1 className="text-3xl font-bold text-center mb-8 lg:text-4xl">
-        Nos Articles
-      </h1>
+    <div className="min-h-screen">
+      <PageTitle subtitle="Découvrez nos derniers articles" size="5xl">
+        Magazine
+      </PageTitle>
       <ArticlesGrid articles={articles} />
     </div>
   );
