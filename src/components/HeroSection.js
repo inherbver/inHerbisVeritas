@@ -2,7 +2,14 @@ import React from 'react';
 
 function HeroSection() {
   return (
-    <section className="relative min-h-screen bg-[url('~/public/assets/images/hero.jpg')] bg-cover bg-center pt-20">
+    <section
+      className="relative min-h-screen pt-20"
+      style={{
+        backgroundImage: `url('/assets/images/hero.jpg')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       <div className="absolute inset-0 bg-black/50"></div>
       <div className="relative z-10 container mx-auto px-4 h-full flex flex-col items-center justify-center text-center">
         <h1 className="text-4xl font-bold text-white mb-4 md:text-6xl">
