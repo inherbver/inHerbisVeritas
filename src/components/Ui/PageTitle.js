@@ -1,37 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const PageTitle = ({
-  children,
-  subtitle,
-  size = '4xl',
-  color = 'gray-900',
-  className = '',
-}) => (
-  <div className="pt-24 pb-8">
-    <div className="text-center mb-8">
-      <div className="mx-auto max-w-2xl">
-        <h1
-          className={`text-${size} font-bold tracking-tight text-${color} ${className}`}
-        >
-          {children}
-        </h1>
+const PageTitle = ({ children, subtitle, className = '', hasHero = false }) => (
+  <div className="max-w-7xl mx-auto px-4">
+    <section className="pt-16 pb-8">
+      <div className={`text-center max-w-7xl ${className}`}>
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">{children}</h1>
         {subtitle && (
-          <p className="mt-4 text-lg text-gray-600">
-            {subtitle}
-          </p>
+          <p className="text-lg text-gray-600 text-center">{subtitle}</p>
         )}
       </div>
-    </div>
+    </section>
   </div>
 );
 
 PageTitle.propTypes = {
   children: PropTypes.node.isRequired,
   subtitle: PropTypes.string,
-  size: PropTypes.oneOf(['4xl', '5xl', '6xl']),
-  color: PropTypes.string,
   className: PropTypes.string,
+  hasHero: PropTypes.bool,
 };
 
 export default PageTitle;

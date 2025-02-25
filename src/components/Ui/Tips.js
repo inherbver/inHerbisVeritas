@@ -6,7 +6,7 @@ const Tips = ({ content }) => (
 );
 
 Tips.propTypes = {
-  content: PropTypes.string.isRequired
+  content: PropTypes.string.isRequired,
 };
 
 export default Tips;

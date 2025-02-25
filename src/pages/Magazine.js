@@ -2,15 +2,17 @@ import React from 'react';
 import { articles } from '../data/articles';
 import ArticlesGrid from '../components/ArticlesGrid';
 import PageTitle from '../components/Ui/PageTitle';
+import StandardPageLayout from '../components/StandardPageLayout';
 
 const Magazine = () => {
   return (
-    <div className="min-h-screen">
-      <PageTitle subtitle="Découvrez nos derniers articles" size="5xl">
-        Magazine
-      </PageTitle>
+    <StandardPageLayout
+      title="Magazine"
+      subtitle="Découvrez nos derniers articles"
+    >
+      <PageTitle subtitle="Découvrez nos derniers articles">Magazine</PageTitle>
       <ArticlesGrid articles={articles} />
-    </div>
+    </StandardPageLayout>
   );
 };
 

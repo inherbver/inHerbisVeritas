@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const AddToCartButton = ({ onClick }) => (
   <button
@@ -8,5 +9,9 @@ const AddToCartButton = ({ onClick }) => (
     Ajouter au panier
   </button>
 );
+
+AddToCartButton.propTypes = {
+  onClick: PropTypes.func.isRequired
+};
 
 export default AddToCartButton;

@@ -5,10 +5,10 @@ import { products } from '../data/products';
 
 const Shop = () => {
   return (
-    <div className="min-h-screen bg-gray-50 pt-24">
+    <div className="min-h-screen bg-gray-50">
       <HeroSection />
 
-      <div className="mx-auto px-4 py-12">
+      <div className="mx-auto px-4">
         <ProductGrid products={products} />
       </div>
     </div>

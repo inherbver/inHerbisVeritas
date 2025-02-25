@@ -11,7 +11,6 @@ import SignIn from './pages/SignIn';
 import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/auth/ProtectedRoute';
-import Admin from './pages/Admin';
 import GoogleMapsProvider from './providers/GoogleMapsProvider';
 
 console.log('PUBLIC_URL:', process.env.PUBLIC_URL);
@@ -38,14 +37,6 @@ const App = () => {
           />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/terms" element={<Terms />} />
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <Admin />
-              </ProtectedRoute>
-            }
-          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>

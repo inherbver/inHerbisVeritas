@@ -1,29 +1,27 @@
 import React from 'react';
+import PageTitle from '../Ui/PageTitle';
 
-function HeroSection() {
-  return (
-    <section
-      className="relative min-h-screen pt-20"
-      style={{
-        backgroundImage: `url('/assets/images/hero.jpg')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
-      <div className="absolute inset-0 bg-black/50"></div>
-      <div className="relative z-10 container mx-auto px-4 h-full flex flex-col items-center justify-center text-center">
-        <h1 className="text-4xl font-bold text-white mb-4 md:text-6xl">
-          Bienvenue sur HerbisVeritas
-        </h1>
-        <p className="text-lg text-gray-200 mb-8 md:text-xl">
-          Découvrez notre sélection de plantes médicinales
+const HeroSection = () => (
+  <section className="relative h-[calc(100vh-4rem)]">
+    {/* Arrière-plan */}
+    <div className="absolute inset-0 z-0">
+      <img
+        src="/assets/images/hero.jpg"
+        className="w-full h-full object-cover"
+        alt="Herbes médicinales"
+      />
+    </div>
+
+    {/* Contenu au premier plan */}
+    <div className="relative z-10 h-full flex items-center justify-center pt-16">
+      <PageTitle hasHero className="text-white text-center mx-auto">
+        Découvrez nos plantes médicinales
+        <p className="mt-4 text-lg">
+          La puissance des plantes méditerranéennes
         </p>
-        <button className="bg-green-600 px-6 py-3 rounded-lg text-white hover:bg-green-700 transition-colors">
-          Découvrir nos produits
-        </button>
-      </div>
-    </section>
-  );
-}
+      </PageTitle>
+    </div>
+  </section>
+);
 
 export default HeroSection;
