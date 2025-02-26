@@ -34,10 +34,7 @@ const ProductDetails = () => {
       />
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <ProductGallery
-          imageUrl={product.imageUrl}
-          alt={product.title}
-        />
+        <ProductGallery imageUrl={product.imageUrl} alt={product.title} />
 
         <div className="space-y-8">
           <ProductPrice

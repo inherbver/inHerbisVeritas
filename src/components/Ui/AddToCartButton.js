@@ -11,7 +11,7 @@ const AddToCartButton = ({ onClick }) => (
 );
 
 AddToCartButton.propTypes = {
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
 };
 
 export default AddToCartButton;

@@ -13,7 +13,7 @@ const ProductGallery = ({ imageUrl, alt }) => (
 
 ProductGallery.propTypes = {
   imageUrl: PropTypes.string.isRequired,
-  alt: PropTypes.string.isRequired
+  alt: PropTypes.string.isRequired,
 };
 
 export default ProductGallery;

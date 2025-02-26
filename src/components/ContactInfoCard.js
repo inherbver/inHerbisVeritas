@@ -1,57 +1,48 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {
-  MapPinIcon,
-  EnvelopeIcon,
-  PhoneIcon,
-} from '@heroicons/react/24/outline';
+import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock } from 'react-icons/fa';
 
-export default function ContactInfoCard(props) {
+const ContactInfoCard = () => {
   return (
-    <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl shadow-md p-8">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-        <MapPinIcon className="w-8 h-8 text-emerald-600" />
-        Notre adresse
-      </h2>
+    <div className="p-6 h-full flex flex-col">
+      <h3 className="text-xl font-semibold mb-4 text-emerald-800">
+        Nous contacter
+      </h3>
 
-      <div className="space-y-6">
-        <div className="flex items-start gap-4">
-          <MapPinIcon className="w-6 h-6 text-gray-600 mt-1 flex-shrink-0" />
-          <p className="text-gray-700 leading-relaxed">{props.address}</p>
+      <div className="space-y-4 text-gray-600">
+        <div className="flex items-start">
+          <FaMapMarkerAlt className="text-emerald-600 mt-1 mr-3 flex-shrink-0" />
+          <div>
+            <p className="font-medium">Adresse</p>
+            <p>123 Rue des Plantes, 34000 Montpellier</p>
+          </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <EnvelopeIcon className="w-6 h-6 text-gray-600" />
-          <a
-            href={`mailto:${props.email}`}
-            className="text-emerald-700 hover:text-emerald-800 transition-colors"
-          >
-            {props.email}
-          </a>
+        <div className="flex items-start">
+          <FaPhone className="text-emerald-600 mt-1 mr-3 flex-shrink-0" />
+          <div>
+            <p className="font-medium">Téléphone</p>
+            <p>+33 4 67 XX XX XX</p>
+          </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <PhoneIcon className="w-6 h-6 text-gray-600" />
-          <a
-            href={`tel:${props.phone}`}
-            className="text-emerald-700 hover:text-emerald-800 transition-colors"
-          >
-            {props.phone}
-          </a>
+        <div className="flex items-start">
+          <FaEnvelope className="text-emerald-600 mt-1 mr-3 flex-shrink-0" />
+          <div>
+            <p className="font-medium">Email</p>
+            <p>contact@inherbisveri.tas</p>
+          </div>
+        </div>
+
+        <div className="flex items-start">
+          <FaClock className="text-emerald-600 mt-1 mr-3 flex-shrink-0" />
+          <div>
+            <p className="font-medium">Horaires</p>
+            <p>Lundi - Vendredi: 9h - 18h</p>
+            <p>Samedi: 9h - 12h</p>
+          </div>
         </div>
       </div>
     </div>
   );
-}
-
-ContactInfoCard.propTypes = {
-  address: PropTypes.string,
-  email: PropTypes.string,
-  phone: PropTypes.string,
 };
 
-ContactInfoCard.defaultProps = {
-  address: '12 rue des rêves, 34500 Béziers',
-  email: 'contact@inherbisveritas.com',
-  phone: '+33612345678',
-};
+export default ContactInfoCard;
