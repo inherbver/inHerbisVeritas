@@ -38,4 +38,5 @@ export const contactInfos = {
 export const socialMediaLinks = [
   { name: 'Facebook', href: '#facebook' },
   { name: 'Instagram', href: '#instagram' },
+  { name: 'Twitter', href: '#twitter' },
 ];

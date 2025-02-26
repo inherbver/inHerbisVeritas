@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const socialMediaLinks = [
   {
@@ -16,9 +17,9 @@ const SocialMediaLinks = ({ className, links = socialMediaLinks }) => (
     className={`${className} bg-white p-6 rounded-lg shadow-md flex-1`}
     aria-label="Réseaux sociaux"
   >
-    <h2 className="text-xl font-semibold mb-4 text-gray-800">Nous suivre</h2>
+    <h2 className="text-2xl font-semibold mb-4 text-gray-800">Nous suivre</h2>
     <div className="flex gap-6">
-      {links.map(link => (
+      {links.map((link) => (
         <a
           key={link.name}
           href={link.href}
@@ -39,5 +40,15 @@ const SocialMediaLinks = ({ className, links = socialMediaLinks }) => (
     </div>
   </aside>
 );
+
+SocialMediaLinks.propTypes = {
+  className: PropTypes.string,
+  links: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      href: PropTypes.string.isRequired,
+    })
+  ),
+};
 
 export default SocialMediaLinks;
