@@ -11,37 +11,34 @@ import SignIn from './pages/SignIn';
 import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/auth/ProtectedRoute';
-import GoogleMapsProvider from './providers/GoogleMapsProvider';
 
 console.log('PUBLIC_URL:', process.env.PUBLIC_URL);
 
-const App = () => {
+function App() {
   return (
-    <GoogleMapsProvider>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Shop />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/magazine" element={<Magazine />} />
-          <Route path="/produits/:slug" element={<ProductDetails />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
-    </GoogleMapsProvider>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Shop />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/magazine" element={<Magazine />} />
+        <Route path="/produits/:slug" element={<ProductDetails />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Router>
   );
-};
+}
 
 export default App;
