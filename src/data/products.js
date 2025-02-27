@@ -6,6 +6,7 @@ export const products = [
     description:
       'Baume nourrissant et apaisant pour peaux sèches, sujettes aux rougeurs et imperfections.',
     price: parseFloat(14.9).toFixed(2),
+    volume: '50ml',
     category: 'Baumes',
     imageUrl: '/assets/images/pdct_1.jpg',
     stock: 20,
@@ -35,6 +36,7 @@ export const products = [
     description:
       'Baume naturel pour redonner vitalité et éclat aux peaux sèches et matures.',
     price: parseFloat(16.5).toFixed(2),
+    volume: '50ml',
     category: 'Baumes',
     imageUrl: '/assets/images/pdct_2.jpg',
     stock: 18,
@@ -65,6 +67,7 @@ export const products = [
     description:
       'Huile polyvalente pour le visage et le corps, enrichie en camomille et lavande.',
     price: parseFloat(19.0).toFixed(2),
+    volume: '100ml',
     category: 'Huiles',
     imageUrl: '/assets/images/pdct_3.jpg',
     stock: 25,
@@ -92,6 +95,7 @@ export const products = [
     description:
       'Soin réparateur et apaisant pour le visage et le corps, idéal après une exposition au soleil.',
     price: parseFloat(18.5).toFixed(2),
+    volume: '100ml',
     category: 'Huiles',
     imageUrl: '/assets/images/pdct_4.jpg',
     stock: 22,
@@ -118,6 +122,7 @@ export const products = [
     description:
       'Encens en poudre naturelle aux notes mystiques de myrrhe, oliban et cyprès.',
     price: parseFloat(12.9).toFixed(2),
+    volume: '50g',
     category: 'Encens',
     imageUrl: '/assets/images/pdct_5.jpg',
     stock: 30,
@@ -140,6 +145,7 @@ export const products = [
     description:
       'Sel marin artisanal aux calices d’hibiscus bio, parfait pour rehausser vos plats.',
     price: parseFloat(9.5).toFixed(2),
+    volume: '150g',
     category: 'Sels aromatisés',
     imageUrl: '/assets/images/pdct_6.jpg',
     stock: 28,
