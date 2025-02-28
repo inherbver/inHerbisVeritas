@@ -11,12 +11,14 @@ import SignIn from './pages/SignIn';
 import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import ScrollToTop from './components/ScrollToTop'; // Import ScrollToTop
 
 console.log('PUBLIC_URL:', process.env.PUBLIC_URL);
 
 function App() {
   return (
     <Router>
+      <ScrollToTop /> {/* Render ScrollToTop */}
       <Navbar />
       <Routes>
         <Route path="/" element={<Shop />} />

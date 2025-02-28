@@ -1,17 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const AddToCartButton = ({ onClick }) => (
+const AddToCartButton = ({
+  onClick,
+  text = 'Ajouter au panier',
+  className = '',
+}) => (
   <button
-    className="w-full py-4 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors"
-    onClick={onClick}
+    className={`w-full py-4 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors ${className}`}
+    onClick={onClick || (() => {})}
   >
-    Ajouter au panier
+    {text}
   </button>
 );
 
 AddToCartButton.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
+  text: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default AddToCartButton;
