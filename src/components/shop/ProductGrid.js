@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ProductCard from './ProductCard';
 import PropTypes from 'prop-types';
+import SearchAndFilterBar from '../Ui/SearchAndFilterBar';
 
 const ProductGrid = ({ products }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -24,76 +25,20 @@ const ProductGrid = ({ products }) => {
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       {/* Section de recherche et filtres */}
-      <div className="bg-white rounded-lg shadow-sm p-5 mb-8">
-        <div className="flex flex-col gap-4">
-          {/* Barre de recherche */}
-          <div className="w-full">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Rechercher un produit..."
-                className="w-full p-3 pl-4 pr-10 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <svg
-                className="w-5 h-5 text-gray-400 absolute right-4 top-1/2 transform -translate-y-1/2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                ></path>
-              </svg>
-            </div>
-          </div>
-
-          {/* Filtres sous forme de pills */}
-          <div className="w-full">
-            <p className="text-sm text-gray-500 mb-2">
-              Filtrer par catégorie :
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    selectedCategory === category
-                      ? 'bg-green-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Compteur de résultats */}
-      <div className="mb-4 text-gray-600 flex justify-between items-center">
-        <div>
-          {filteredProducts.length} produit
-          {filteredProducts.length > 1 ? 's' : ''} trouvé
-          {filteredProducts.length > 1 ? 's' : ''}
-        </div>
-        <div className="text-sm text-gray-500">
-          {selectedCategory !== 'Tous' && (
-            <button
-              onClick={() => setSelectedCategory('Tous')}
-              className="text-green-600 hover:underline"
-            >
-              Réinitialiser les filtres
-            </button>
-          )}
-        </div>
-      </div>
+      <SearchAndFilterBar
+        searchValue={searchTerm}
+        onSearchChange={setSearchTerm}
+        searchPlaceholder="Rechercher un produit..."
+        filterOptions={categories}
+        selectedFilter={selectedCategory}
+        onFilterChange={setSelectedCategory}
+        filterLabel="Filtrer par catégorie :"
+        className="mb-8"
+        resultsCount={filteredProducts.length}
+        resultsCountSuffix={
+          filteredProducts.length > 1 ? ' produits trouvés' : ' produit trouvé'
+        }
+      />
 
       {/* Grille de produits améliorée */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -102,19 +47,21 @@ const ProductGrid = ({ products }) => {
         ))}
       </div>
 
+      {/* Message si aucun produit n'est trouvé */}
       {filteredProducts.length === 0 && (
-        <div className="text-center py-12 bg-white rounded-lg shadow-sm my-8">
-          <p className="text-gray-500 text-lg">
+        <div className="text-center py-12 text-gray-500">
+          <p className="text-xl mb-2">
             Aucun produit ne correspond à votre recherche
           </p>
+          <p>Essayez avec des termes différents ou réinitialisez les filtres</p>
           <button
             onClick={() => {
               setSearchTerm('');
               setSelectedCategory('Tous');
             }}
-            className="mt-4 text-green-600 hover:underline"
+            className="mt-4 px-6 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors"
           >
-            Réinitialiser la recherche
+            Réinitialiser tous les filtres
           </button>
         </div>
       )}
