@@ -1,7 +1,4 @@
 import PropTypes from 'prop-types';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
 import MarketCard from './MarketCard';
 
 const ContactGrid = ({ markets = [] }) => {

@@ -11,6 +11,9 @@ export const products = [
     imageUrl: '/assets/images/pdct_1.jpg',
     stock: 20,
     rating: 4.7,
+    isCueilletteSauvage: true,
+    isVegan: false,
+    isFrenchMade: true,
     composition: [
       'Huile de tournesol',
       'Huile de cameline',
@@ -41,6 +44,9 @@ export const products = [
     imageUrl: '/assets/images/pdct_2.jpg',
     stock: 18,
     rating: 4.8,
+    isCueilletteSauvage: true,
+    isVegan: false,
+    isFrenchMade: true,
     composition: [
       'Huile de tournesol',
       'Huile de cameline',
@@ -72,6 +78,9 @@ export const products = [
     imageUrl: '/assets/images/pdct_3.jpg',
     stock: 25,
     rating: 4.9,
+    isCueilletteSauvage: false,
+    isVegan: true,
+    isFrenchMade: true,
     composition: [
       'Huile de tournesol',
       'Huile d’amande douce',
@@ -100,6 +109,9 @@ export const products = [
     imageUrl: '/assets/images/pdct_4.jpg',
     stock: 22,
     rating: 4.8,
+    isCueilletteSauvage: true,
+    isVegan: true,
+    isFrenchMade: true,
     composition: [
       'Huile de tournesol',
       'Extrait de millepertuis',
@@ -127,6 +139,9 @@ export const products = [
     imageUrl: '/assets/images/pdct_5.jpg',
     stock: 30,
     rating: 4.7,
+    isCueilletteSauvage: true,
+    isVegan: true,
+    isFrenchMade: false,
     composition: ['Myrrhe', 'Oliban', 'Cyprès'],
     usageTips:
       'Déposer une pincée de poudre sur un charbon ardent et laisser se consumer.',
@@ -150,6 +165,9 @@ export const products = [
     imageUrl: '/assets/images/pdct_6.jpg',
     stock: 28,
     rating: 4.6,
+    isCueilletteSauvage: false,
+    isVegan: true,
+    isFrenchMade: true,
     composition: ['Sel de Gruissan', 'Calices d’hibiscus bio'],
     usageTips:
       'Saupoudrer sur vos plats après cuisson pour conserver la saveur et la couleur.',
