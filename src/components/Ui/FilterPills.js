@@ -34,7 +34,7 @@ const FilterPills = ({
   return (
     <div className={`w-full ${className}`}>
       {label && <p className="text-sm text-gray-500 mb-2">{label}</p>}
-      
+
       <div className="flex flex-wrap gap-2">
         {displayOptions.map((option) => (
           <button

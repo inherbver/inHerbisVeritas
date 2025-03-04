@@ -18,20 +18,22 @@ const BlogFilterExample = ({ articles }) => {
     const matchesSearch =
       article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       article.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     const matchesCategory =
       selectedCategory === 'Tous' || article.category === selectedCategory;
-    
+
     return matchesSearch && matchesCategory;
   });
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Exemple de filtrage pour le blog</h2>
-      
+      <h2 className="text-2xl font-bold mb-6">
+        Exemple de filtrage pour le blog
+      </h2>
+
       <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
         <h3 className="text-lg font-semibold mb-4">Rechercher des articles</h3>
-        
+
         {/* Utilisation indépendante de SearchBar */}
         <div className="mb-6">
           <label className="block text-sm text-gray-600 mb-2">
@@ -43,7 +45,7 @@ const BlogFilterExample = ({ articles }) => {
             onChange={setSearchTerm}
           />
         </div>
-        
+
         {/* Utilisation indépendante de FilterPills */}
         <div>
           <FilterPills
@@ -55,19 +57,23 @@ const BlogFilterExample = ({ articles }) => {
           />
         </div>
       </div>
-      
+
       {/* Affichage des résultats */}
       <div className="bg-white rounded-lg shadow-sm p-6">
         <h3 className="text-lg font-semibold mb-4">
-          {filteredArticles.length} article{filteredArticles.length !== 1 ? 's' : ''} trouvé{filteredArticles.length !== 1 ? 's' : ''}
+          {filteredArticles.length} article
+          {filteredArticles.length !== 1 ? 's' : ''} trouvé
+          {filteredArticles.length !== 1 ? 's' : ''}
         </h3>
-        
+
         {filteredArticles.length > 0 ? (
           <ul className="divide-y divide-gray-100">
             {filteredArticles.map((article) => (
               <li key={article.id} className="py-4">
                 <h4 className="font-medium text-lg">{article.title}</h4>
-                <p className="text-sm text-green-600 mb-1">{article.category}</p>
+                <p className="text-sm text-green-600 mb-1">
+                  {article.category}
+                </p>
                 <p className="text-gray-600">{article.excerpt}</p>
               </li>
             ))}

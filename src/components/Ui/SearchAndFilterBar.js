@@ -45,13 +45,13 @@ const SearchAndFilterBar = ({
           resetButtonLabel={filterResetLabel}
           onReset={onFilterReset}
         />
-        
+
         {/* Compteur de résultats (optionnel) */}
         {showResultsCount && resultsCount !== undefined && (
           <div className="pt-2 border-t border-gray-100 text-gray-600 flex justify-between items-center">
             <div>
               {resultsCountPrefix}
-              {resultsCount} 
+              {resultsCount}
               {resultsCountSuffix}
             </div>
           </div>

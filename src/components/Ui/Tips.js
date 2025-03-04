@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Tips = ({ content }) => (
-  <p className="text-gray-600 leading-relaxed">{content}</p>
+const Tips = ({ text }) => (
+  <p className="text-gray-600 leading-relaxed">{text}</p>
 );
 
 Tips.propTypes = {
-  content: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
 };
 
 export default Tips;
