@@ -51,7 +51,7 @@ const SocialMediaLinks = ({ className, links = socialMediaLinks }) => (
       dernières actualités, événements et promotions.
     </p>
 
-    <div className="grid grid-cols-2 gap-4 mb-6">
+    <div className="grid grid-cols-2 gap-4">
       {links.map((link) => (
         <a
           key={link.name}
@@ -65,26 +65,6 @@ const SocialMediaLinks = ({ className, links = socialMediaLinks }) => (
           <span className="font-medium">{link.name}</span>
         </a>
       ))}
-    </div>
-
-    <div className="mt-auto pt-4 border-t border-gray-100">
-      <p className="text-sm text-gray-500 text-center mb-2">
-        Partagez votre expérience avec nous
-      </p>
-      <div className="flex justify-center gap-4">
-        {links.map((link) => (
-          <a
-            key={`small-${link.name}`}
-            href={link.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center w-10 h-10 bg-green-100 text-green-600 rounded-full hover:bg-green-200 transition-colors"
-            aria-label={link.name}
-          >
-            <link.icon size={20} />
-          </a>
-        ))}
-      </div>
     </div>
   </div>
 );

@@ -13,9 +13,11 @@ const Breadcrumb = ({ items }) => (
         {item.active ? (
           <span className="text-green-600">{item.label}</span>
         ) : (
-          <span 
-            className="hover:text-green-600 cursor-pointer" 
-            onClick={() => { if (item.url) window.location.href = item.url; }}
+          <span
+            className="hover:text-green-600 cursor-pointer"
+            onClick={() => {
+              if (item.url) window.location.href = item.url;
+            }}
           >
             {item.label}
           </span>
