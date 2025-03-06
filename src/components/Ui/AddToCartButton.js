@@ -8,7 +8,12 @@ const AddToCartButton = ({
 }) => (
   <button
     className={`w-full py-4 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors ${className}`}
-    onClick={onClick || (() => {})}
+    onClick={
+      onClick ||
+      (() => {
+        /* Default empty handler when no onClick provided */
+      })
+    }
   >
     {text}
   </button>

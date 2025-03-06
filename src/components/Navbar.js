@@ -1,13 +1,21 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { FaShoppingCart, FaBars, FaTimes, FaUser } from 'react-icons/fa';
+import {
+  FaShoppingCart,
+  FaBars,
+  FaTimes,
+  FaUser,
+  FaChevronDown,
+} from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { AuthContext } from '../contexts/AuthContext';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const userMenuRef = useRef(null);
   const location = useLocation();
   const { currentUser } = useContext(AuthContext);
 
@@ -17,15 +25,19 @@ const Navbar = () => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setIsMobileMenuOpen(false);
       }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setIsUserMenuOpen(false);
+      }
     };
 
     const handleEscape = (event) => {
       if (event.key === 'Escape') {
         setIsMobileMenuOpen(false);
+        setIsUserMenuOpen(false);
       }
     };
 
-    if (isMobileMenuOpen) {
+    if (isMobileMenuOpen || isUserMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
       document.addEventListener('keydown', handleEscape);
     }
@@ -34,10 +46,14 @@ const Navbar = () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscape);
     };
-  }, [isMobileMenuOpen]);
+  }, [isMobileMenuOpen, isUserMenuOpen]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const toggleUserMenu = () => {
+    setIsUserMenuOpen(!isUserMenuOpen);
   };
 
   return (
@@ -86,12 +102,46 @@ const Navbar = () => {
           >
             <FaShoppingCart className="w-6 h-6" />
           </Link>
-          <Link
-            to={currentUser ? '/profile' : '/signin'}
-            className="text-white p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
-          >
-            <FaUser className="w-6 h-6" />
-          </Link>
+
+          {/* Menu compte utilisateur avec dropdown */}
+          <div ref={userMenuRef} className="relative">
+            <button
+              onClick={toggleUserMenu}
+              className="flex items-center text-white p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+            >
+              <FaUser className="w-6 h-6" />
+            </button>
+
+            {/* Dropdown menu */}
+            {isUserMenuOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-30">
+                <div className="py-1">
+                  <Link
+                    to="/signin"
+                    onClick={() => setIsUserMenuOpen(false)}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Connexion
+                  </Link>
+                  <Link
+                    to="/signup"
+                    onClick={() => setIsUserMenuOpen(false)}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Inscription
+                  </Link>
+                  <div className="border-t border-gray-100"></div>
+                  <Link
+                    to="/admin"
+                    onClick={() => setIsUserMenuOpen(false)}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Administration
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Bouton Burger pour mobile */}
           <button
@@ -123,6 +173,9 @@ const Navbar = () => {
             </NavLink>
             <NavLink to="/contact" className="py-2" onClick={toggleMobileMenu}>
               Contact
+            </NavLink>
+            <NavLink to="/admin" className="py-2" onClick={toggleMobileMenu}>
+              Administration
             </NavLink>
           </div>
         </div>
