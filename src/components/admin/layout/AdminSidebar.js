@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import {
-  FiHome,
   FiBox,
   FiTag,
   FiShoppingCart,
@@ -10,6 +9,8 @@ import {
   FiSettings,
   FiMessageSquare,
   FiLogOut,
+  FiFileText,
+  FiMapPin,
 } from 'react-icons/fi';
 import { useAuth } from '../../../contexts/AuthContext';
 
@@ -27,28 +28,53 @@ const AdminSidebar = () => {
   };
 
   const navItems = [
-    { icon: <FiHome size={20} />, label: 'Tableau de bord', path: '/admin' },
-    { icon: <FiBox size={20} />, label: 'Produits', path: '/admin/products' },
     {
-      icon: <FiTag size={20} />,
-      label: 'Promotions',
-      path: '/admin/promotions',
+      icon: <FiBox size={20} />,
+      label: 'Produits',
+      path: '/admin/products',
+      description: 'Gérer les produits de la boutique',
+    },
+    {
+      icon: <FiFileText size={20} />,
+      label: 'Articles',
+      path: '/admin/articles',
+      description: 'Gérer les articles du magazine',
     },
     {
       icon: <FiShoppingCart size={20} />,
       label: 'Commandes',
       path: '/admin/orders',
+      description: 'Gérer les commandes clients',
     },
-    { icon: <FiUsers size={20} />, label: 'Clients', path: '/admin/customers' },
+    {
+      icon: <FiUsers size={20} />,
+      label: 'Utilisateurs',
+      path: '/admin/customers',
+      description: 'Gérer les comptes utilisateurs',
+    },
     {
       icon: <FiMessageSquare size={20} />,
       label: 'Avis',
       path: '/admin/reviews',
+      description: 'Modérer les avis clients',
+    },
+    {
+      icon: <FiTag size={20} />,
+      label: 'Promotions',
+      path: '/admin/promotions',
+      description: 'Gérer les codes promo',
+    },
+    {
+      icon: <FiMapPin size={20} />,
+      label: 'Informations Contact',
+      path: '/admin/contact-info',
+      description: 'Modifier les informations de contact',
     },
     {
       icon: <FiSettings size={20} />,
       label: 'Paramètres',
       path: '/admin/settings',
+      description: 'Configurer le site',
     },
   ];
 
@@ -78,6 +104,7 @@ const AdminSidebar = () => {
                 ? 'bg-orange-500 text-white'
                 : 'text-gray-300 hover:bg-gray-700'
             }`}
+            title={item.description}
           >
             <span className="mr-3">{item.icon}</span>
             <span>{item.label}</span>

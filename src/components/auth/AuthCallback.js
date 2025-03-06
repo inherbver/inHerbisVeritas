@@ -12,36 +12,40 @@ const AuthCallback = () => {
     const handleAuthCallback = async () => {
       try {
         // Récupérer les paramètres d'URL
-        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const hashParams = new URLSearchParams(
+          window.location.hash.substring(1)
+        );
         const queryParams = new URLSearchParams(window.location.search);
-        
+
         // Si nous avons un token de réinitialisation de mot de passe, rediriger vers la page de réinitialisation
         if (queryParams.get('type') === 'recovery') {
           navigate('/reset-password');
           return;
         }
-        
+
         // Si nous avons un paramètre d'accès, c'est une connexion
         const accessToken = hashParams.get('access_token');
         const refreshToken = hashParams.get('refresh_token');
-        
+
         if (accessToken) {
           // Définir la session avec les tokens
           const { error } = await supabase.auth.setSession({
             access_token: accessToken,
             refresh_token: refreshToken,
           });
-          
+
           if (error) {
             throw error;
           }
-          
+
           // Rediriger vers le tableau de bord
           navigate('/');
         } else {
           // S'il n'y a pas de token, vérifier l'état de la session actuelle
-          const { data: { session } } = await supabase.auth.getSession();
-          
+          const {
+            data: { session },
+          } = await supabase.auth.getSession();
+
           if (session) {
             navigate('/');
           } else {
@@ -63,9 +67,13 @@ const AuthCallback = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          {processing ? 'Vérification de votre identité...' : error ? 'Une erreur est survenue' : 'Redirection en cours...'}
+          {processing
+            ? 'Vérification de votre identité...'
+            : error
+              ? 'Une erreur est survenue'
+              : 'Redirection en cours...'}
         </h2>
-        
+
         {error && (
           <div className="mt-8">
             <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">

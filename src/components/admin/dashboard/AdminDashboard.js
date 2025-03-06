@@ -1,68 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
+  FiEdit,
   FiShoppingBag,
   FiUsers,
-  FiTrendingUp,
-  FiCreditCard,
+  FiMessageSquare,
 } from 'react-icons/fi';
-import StatCard from '../ui/StatCard';
 import AlertItem from '../ui/AlertItem';
 
-// Composant de graphique simplifié pour la démo
-const SimpleChart = ({ data, label, color }) => {
-  // Simulation d'un graphique simple en utilisant des barres
-  const maxValue = Math.max(...data);
-
-  return (
-    <div className="pt-6">
-      <p className="text-sm font-medium text-gray-500 mb-2">{label}</p>
-      <div className="flex items-end space-x-2 h-40">
-        {data.map((value, index) => (
-          <div
-            key={index}
-            className="flex-1 bg-opacity-80 rounded-t-md"
-            style={{
-              height: `${(value / maxValue) * 100}%`,
-              backgroundColor: color,
-            }}
-            title={`Jour ${index + 1}: ${value}`}
-          />
-        ))}
-      </div>
-      <div className="flex justify-between mt-2">
-        <span className="text-xs text-gray-500">1</span>
-        <span className="text-xs text-gray-500">
-          {Math.floor(data.length / 2)}
-        </span>
-        <span className="text-xs text-gray-500">{data.length}</span>
-      </div>
-    </div>
-  );
-};
-
-SimpleChart.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.number).isRequired,
-  label: PropTypes.string.isRequired,
-  color: PropTypes.string.isRequired,
-};
-
 const AdminDashboard = () => {
-  const [stats, setStats] = useState({
-    sales: { value: 0, change: 0 },
-    orders: { value: 0, change: 0 },
-    customers: { value: 0, change: 0 },
-    revenue: { value: 0, change: 0 },
-  });
-
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Données simulées pour les graphiques
-  const salesData = [15, 22, 18, 24, 35, 30, 28, 32, 36, 30, 28, 35, 42, 38];
-  const revenueData = [
-    280, 350, 300, 450, 600, 580, 550, 620, 700, 680, 650, 750, 820, 780,
-  ];
 
   useEffect(() => {
     fetchDashboardData();
@@ -71,17 +19,10 @@ const AdminDashboard = () => {
   const fetchDashboardData = async () => {
     setLoading(true);
     try {
-      // Dans une app réelle, appel à Supabase pour récupérer les statistiques et alertes
+      // Dans une app réelle, appel à Supabase pour récupérer les alertes
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API delay
 
       // Données fictives pour la démo
-      setStats({
-        sales: { value: 2547, change: 12.5 },
-        orders: { value: 178, change: 8.2 },
-        customers: { value: 1253, change: 4.3 },
-        revenue: { value: 12350, change: 15.8 },
-      });
-
       setAlerts([
         {
           id: 1,
@@ -97,13 +38,6 @@ const AdminDashboard = () => {
           title: 'Information',
           message: '5 nouvelles commandes à traiter',
           link: '/admin/orders',
-        },
-        {
-          id: 3,
-          type: 'info',
-          title: 'Succès',
-          message: 'Les objectifs de vente mensuels ont été atteints',
-          link: '/admin/dashboard',
         },
         {
           id: 4,
@@ -129,7 +63,7 @@ const AdminDashboard = () => {
     { id: 2, name: 'Tisane Détox Bio', sales: 98, stock: 32 },
     {
       id: 3,
-      name: 'Diffuseur d&apos;arômes ultrasonique',
+      name: "Diffuseur d'arômes ultrasonique",
       sales: 85,
       stock: 17,
     },
@@ -148,110 +82,78 @@ const AdminDashboard = () => {
   return (
     <div className="space-y-6">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Tableau de bord</h1>
-        <p className="text-gray-600">Vue d&apos;ensemble de votre boutique</p>
+        <h1 className="text-2xl font-bold text-gray-900">
+          Administration du site
+        </h1>
+        <p className="text-gray-600">
+          Bienvenue dans votre interface d'administration
+        </p>
       </div>
 
-      {/* Cartes statistiques */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard
-          title="Ventes totales"
-          value={stats.sales.value}
-          trend={stats.sales.change}
-          icon={<FiShoppingBag size={24} />}
-          color="bg-blue-500"
-        />
-        <StatCard
-          title="Commandes"
-          value={stats.orders.value}
-          trend={stats.orders.change}
-          icon={<FiCreditCard size={24} />}
-          color="bg-orange-500"
-        />
-        <StatCard
-          title="Clients"
-          value={stats.customers.value}
-          trend={stats.customers.change}
-          icon={<FiUsers size={24} />}
-          color="bg-green-500"
-        />
-        <StatCard
-          title="Revenu (€)"
-          value={stats.revenue.value.toLocaleString('fr-FR')}
-          trend={stats.revenue.change}
-          icon={<FiTrendingUp size={24} />}
-          color="bg-purple-500"
-        />
+      {/* Raccourcis d'accès rapide */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-lg font-medium text-gray-900 mb-4">Accès rapide</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <a
+            href="/admin/products"
+            className="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
+          >
+            <FiShoppingBag className="text-green-600 mr-3" size={24} />
+            <div>
+              <h3 className="font-medium">Gestion des produits</h3>
+              <p className="text-sm text-gray-600">
+                Ajouter ou modifier les produits
+              </p>
+            </div>
+          </a>
+
+          <a
+            href="/admin/orders"
+            className="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+          >
+            <FiEdit className="text-blue-600 mr-3" size={24} />
+            <div>
+              <h3 className="font-medium">Commandes</h3>
+              <p className="text-sm text-gray-600">
+                Gérer les commandes en cours
+              </p>
+            </div>
+          </a>
+
+          <a
+            href="/admin/customers"
+            className="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors"
+          >
+            <FiUsers className="text-purple-600 mr-3" size={24} />
+            <div>
+              <h3 className="font-medium">Utilisateurs</h3>
+              <p className="text-sm text-gray-600">
+                Gérer les comptes utilisateurs
+              </p>
+            </div>
+          </a>
+
+          <a
+            href="/admin/reviews"
+            className="flex items-center p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors"
+          >
+            <FiMessageSquare className="text-yellow-600 mr-3" size={24} />
+            <div>
+              <h3 className="font-medium">Avis clients</h3>
+              <p className="text-sm text-gray-600">Modérer les avis</p>
+            </div>
+          </a>
+        </div>
       </div>
 
-      {/* Graphiques */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-medium text-gray-900">
-            Ventes (14 derniers jours)
-          </h2>
-          <SimpleChart
-            data={salesData}
-            label="Nombre de ventes par jour"
-            color="#FE5000"
-          />
-        </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-medium text-gray-900">
-            Revenus (14 derniers jours)
-          </h2>
-          <SimpleChart
-            data={revenueData}
-            label="Revenus en euros (€) par jour"
-            color="#3B82F6"
-          />
-        </div>
-      </div>
-
-      {/* Produits les plus vendus et alertes */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Produits les plus vendus */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-medium text-gray-900">
-              Top 5 produits
-            </h2>
-          </div>
-          <div className="divide-y divide-gray-200">
-            {topProducts.map((product, index) => (
-              <div key={product.id} className="px-6 py-4 flex items-center">
-                <div className="flex-shrink-0 w-8 text-gray-500 font-semibold">
-                  #{index + 1}
-                </div>
-                <div className="ml-4 flex-1">
-                  <h3 className="text-sm font-medium text-gray-900">
-                    {product.name}
-                  </h3>
-                  <div className="flex mt-1">
-                    <span className="text-xs text-gray-500 mr-4">
-                      {product.sales} ventes
-                    </span>
-                    <span
-                      className={`text-xs ${product.stock < 20 ? 'text-red-500' : 'text-gray-500'}`}
-                    >
-                      Stock: {product.stock}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Alertes récentes */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-medium text-gray-900">
-              Alertes récentes
-            </h2>
-          </div>
-          <div className="divide-y divide-gray-200">
-            {alerts.map((alert) => (
+      {/* Alertes */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-lg font-medium text-gray-900 mb-4">
+          Alertes récentes
+        </h2>
+        <div className="space-y-3">
+          {alerts.length > 0 ? (
+            alerts.map((alert) => (
               <AlertItem
                 key={alert.id}
                 type={alert.type}
@@ -259,62 +161,73 @@ const AdminDashboard = () => {
                 message={alert.message}
                 link={alert.link}
               />
-            ))}
-          </div>
+            ))
+          ) : (
+            <p className="text-gray-500">Aucune alerte pour le moment</p>
+          )}
         </div>
       </div>
 
-      {/* Section activité récente (peut être développée davantage) */}
+      {/* Produits à surveiller */}
       <div className="bg-white rounded-lg shadow p-6">
         <h2 className="text-lg font-medium text-gray-900 mb-4">
-          Activité récente
+          Stock à surveiller
         </h2>
-        <div className="space-y-4">
-          <div className="flex">
-            <div className="flex-shrink-0 mr-3">
-              <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-                <FiCreditCard className="text-green-600" />
-              </div>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-900">
-                Nouvelle commande #ORD-005
-              </p>
-              <p className="text-xs text-gray-500">
-                Il y a 10 minutes - Camille Leblanc - 35.25 €
-              </p>
-            </div>
-          </div>
-          <div className="flex">
-            <div className="flex-shrink-0 mr-3">
-              <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-                <FiUsers className="text-blue-600" />
-              </div>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-900">
-                Nouveau client enregistré
-              </p>
-              <p className="text-xs text-gray-500">
-                Il y a 45 minutes - Thomas Roche
-              </p>
-            </div>
-          </div>
-          <div className="flex">
-            <div className="flex-shrink-0 mr-3">
-              <div className="h-8 w-8 rounded-full bg-purple-100 flex items-center justify-center">
-                <FiTrendingUp className="text-purple-600" />
-              </div>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-900">
-                Augmentation des ventes détectée
-              </p>
-              <p className="text-xs text-gray-500">
-                Il y a 2 heures - +15% par rapport à hier
-              </p>
-            </div>
-          </div>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Produit
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Stock
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {topProducts.map((product) => (
+                <tr key={product.id}>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">
+                      {product.name}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div
+                      className={`text-sm ${
+                        product.stock < 20
+                          ? 'text-red-600 font-medium'
+                          : 'text-gray-500'
+                      }`}
+                    >
+                      {product.stock} unités
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <a
+                      href={`/admin/products?id=${product.id}`}
+                      className="text-blue-600 hover:text-blue-900"
+                    >
+                      Modifier
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

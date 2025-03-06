@@ -124,8 +124,8 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Fonction de déconnexion
-  const signOut = async () => {
+  // Fonction de déconnexion (renommée de signOut à logout)
+  const logout = async () => {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
@@ -173,7 +173,7 @@ export const AuthProvider = ({ children }) => {
     isAdmin: userRole === 'admin',
     signIn,
     signUp,
-    signOut,
+    logout, // Met à jour le nom de la méthode exposée
     resetPassword,
     updatePassword,
   };

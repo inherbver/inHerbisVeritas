@@ -69,12 +69,7 @@ const ArticleCard = ({
         </div>
       </Link>
 
-      {/* 
-        Produit en relation (optionnel) - FONCTIONNALITÉ CONSERVÉE MAIS CACHÉE TEMPORAIREMENT
-        Cette section affiche un produit associé à l'article avec un bouton d'achat
-        À réactiver lorsque la fonctionnalité sera prête pour la production
-      */}
-      {/* 
+      {/* Produit en relation - Fonctionnalité réactivée */}
       {relatedProductId && (
         <div className="mt-auto px-5 pb-5 pt-2 bg-gray-50 border-t border-gray-100">
           <div className="flex items-center gap-3">
@@ -105,7 +100,6 @@ const ArticleCard = ({
           </div>
         </div>
       )}
-      */}
     </article>
   );
 };

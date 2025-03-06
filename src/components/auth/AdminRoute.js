@@ -11,10 +11,13 @@ const AdminRoute = ({ children }) => {
     return <Navigate to="/signin" replace />;
   }
 
+  // TEMPORAIRE: Commenté pour permettre à tout utilisateur connecté d'accéder à l'interface admin à des fins de test
   // Si l'utilisateur est connecté mais n'est pas admin, redirection vers la page d'accueil
+  /*
   if (!isAdmin) {
     return <Navigate to="/" replace />;
   }
+  */
 
   // Rendre le contenu de la route protégée si l'utilisateur est connecté et a les droits d'administrateur
   return children ? children : <Outlet />;

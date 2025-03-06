@@ -13,32 +13,34 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (password !== confirmPassword) {
       return setError('Les mots de passe ne correspondent pas');
     }
-    
+
     if (password.length < 6) {
       return setError('Le mot de passe doit contenir au moins 6 caractères');
     }
-    
+
     try {
       setError('');
       setLoading(true);
-      
+
       const { success, error } = await updatePassword(password);
-      
+
       if (!success) {
         throw error;
       }
-      
+
       setMessage('Votre mot de passe a été réinitialisé avec succès');
       setTimeout(() => {
         navigate('/signin');
       }, 3000);
-      
     } catch (err) {
-      setError(err.message || 'Une erreur est survenue lors de la réinitialisation du mot de passe');
+      setError(
+        err.message ||
+          'Une erreur est survenue lors de la réinitialisation du mot de passe'
+      );
     } finally {
       setLoading(false);
     }
@@ -58,7 +60,9 @@ const ResetPassword = () => {
             <div className="rounded-md bg-green-50 p-4 mb-4">
               <div className="flex">
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-green-800">{message}</p>
+                  <p className="text-sm font-medium text-green-800">
+                    {message}
+                  </p>
                   <p className="mt-2 text-sm text-green-700">
                     Vous allez être redirigé vers la page de connexion...
                   </p>
@@ -121,7 +125,9 @@ const ResetPassword = () => {
                 <div className="rounded-md bg-red-50 p-4">
                   <div className="flex">
                     <div className="ml-3">
-                      <p className="text-sm font-medium text-red-800">{error}</p>
+                      <p className="text-sm font-medium text-red-800">
+                        {error}
+                      </p>
                     </div>
                   </div>
                 </div>
