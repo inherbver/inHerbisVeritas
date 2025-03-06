@@ -12,6 +12,7 @@ import {
   FaClock,
   FaArrowLeft,
   FaQuoteLeft,
+  FaLeaf,
 } from 'react-icons/fa';
 import SocialMediaFooter from '../components/SocialMediaFooter';
 
@@ -226,6 +227,52 @@ const MagazineDetails = () => {
           <p className="text-lg text-gray-700 mb-12 leading-relaxed">
             {articleContent.conclusion}
           </p>
+
+          {/* Produit associé - Affiché uniquement si l'article a un produit associé */}
+          {article.relatedProductId && article.relatedProductImage && (
+            <div className="mb-12 p-6 bg-green-50 rounded-xl shadow-sm">
+              <h3 className="text-xl font-serif font-bold text-gray-800 mb-4 flex items-center">
+                <FaLeaf className="text-green-600 mr-2" />
+                Produit recommandé avec cet article
+              </h3>
+              <div className="flex flex-col md:flex-row items-center gap-6 bg-white p-4 rounded-lg">
+                <div className="w-full md:w-1/3 h-48 rounded-lg overflow-hidden">
+                  <img
+                    src={article.relatedProductImage}
+                    alt={article.relatedProductName}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-xl font-bold mb-2">
+                    {article.relatedProductName}
+                  </h4>
+                  <p className="text-gray-600 mb-4">
+                    Ce produit est parfaitement complémentaire avec les
+                    informations présentées dans cet article. Découvrez ses
+                    bienfaits et comment il peut enrichir votre routine
+                    bien-être.
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl font-bold text-green-600">
+                      {article.relatedProductPrice}€
+                    </span>
+                    <button
+                      onClick={() => {
+                        // Logique d'ajout au panier
+                        console.log(
+                          `Ajout du produit ${article.relatedProductId} au panier`
+                        );
+                      }}
+                      className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-full transition-colors transform active:scale-95"
+                    >
+                      Ajouter au panier
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Partage social */}
           <div className="border-t border-gray-200 pt-8 mb-16">

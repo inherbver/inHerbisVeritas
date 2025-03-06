@@ -75,6 +75,7 @@ const ArticlesGrid = ({ articles = [], featuredArticles = [] }) => {
                     relatedProductName={article.relatedProductName}
                     relatedProductPrice={article.relatedProductPrice}
                     featured={true}
+                    showRelatedProduct={false} // Ne pas afficher le produit associé dans la grille
                   />
                 ))}
               </div>
@@ -104,6 +105,7 @@ const ArticlesGrid = ({ articles = [], featuredArticles = [] }) => {
                     relatedProductImage={article.relatedProductImage}
                     relatedProductName={article.relatedProductName}
                     relatedProductPrice={article.relatedProductPrice}
+                    showRelatedProduct={false} // Ne pas afficher le produit associé dans la grille
                   />
                 ))}
               </div>

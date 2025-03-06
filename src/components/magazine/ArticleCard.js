@@ -16,6 +16,7 @@ const ArticleCard = ({
   relatedProductName = null,
   relatedProductPrice = null,
   featured = false,
+  showRelatedProduct = false, // Nouvelle prop pour contrôler l'affichage du produit associé
 }) => {
   return (
     <article
@@ -69,8 +70,8 @@ const ArticleCard = ({
         </div>
       </Link>
 
-      {/* Produit en relation - Fonctionnalité réactivée */}
-      {relatedProductId && (
+      {/* Produit en relation - Affiché uniquement si showRelatedProduct est true */}
+      {showRelatedProduct && relatedProductId && (
         <div className="mt-auto px-5 pb-5 pt-2 bg-gray-50 border-t border-gray-100">
           <div className="flex items-center gap-3">
             <div className="w-16 h-16 rounded-md overflow-hidden shrink-0">
@@ -120,6 +121,7 @@ ArticleCard.propTypes = {
     PropTypes.number,
   ]),
   featured: PropTypes.bool,
+  showRelatedProduct: PropTypes.bool, // Ajout de la prop dans propTypes
 };
 
 export default ArticleCard;
