@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ArticleCard from './ArticleCard';
-import SearchAndFilterBar from './Ui/SearchAndFilterBar';
+import SearchAndFilterBar from '../Ui/SearchAndFilterBar';
 
 const ArticlesGrid = ({ articles = [], featuredArticles = [] }) => {
   const [searchTerm, setSearchTerm] = useState('');

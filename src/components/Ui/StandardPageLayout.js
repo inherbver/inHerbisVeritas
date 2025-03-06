@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Footer from './Footer';
+import Footer from '../Footer';
 
 const StandardPageLayout = ({ children }) => (
   <div className="flex flex-col min-h-screen">

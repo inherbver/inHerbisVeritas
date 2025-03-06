@@ -12,7 +12,7 @@ import SignIn from './pages/SignIn';
 import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/auth/ProtectedRoute';
-import ScrollToTop from './components/ScrollToTop';
+import ScrollToTop from './components/Ui/ScrollToTop';
 
 // Import Admin components
 import AdminLayout from './components/admin/layout/AdminLayout';

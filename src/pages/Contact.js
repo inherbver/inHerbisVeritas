@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import ContactInfoCard from '../components/ContactInfoCard';
-import SocialMediaLinks from '../components/SocialMediaLinks';
-import ContactGrid from '../components/ContactGrid';
-import StandardPageLayout from '../components/StandardPageLayout';
+import ContactInfoCard from '../components/contact/ContactInfoCard';
+import SocialMediaLinks from '../components/contact/SocialMediaLinks';
+import ContactGrid from '../components/contact/ContactGrid';
+import StandardPageLayout from '../components/Ui/StandardPageLayout';
 import PageTitle from '../components/Ui/PageTitle';
 import { FaMapMarkedAlt, FaLeaf, FaHandHoldingHeart } from 'react-icons/fa';
 

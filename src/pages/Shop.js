@@ -1,7 +1,7 @@
 import React from 'react';
 import ProductGrid from '../components/shop/ProductGrid';
 import HeroSection from '../components/shop/HeroSection';
-import StandardPageLayout from '../components/StandardPageLayout';
+import StandardPageLayout from '../components/Ui/StandardPageLayout';
 import { products } from '../data/products';
 
 const Shop = () => {

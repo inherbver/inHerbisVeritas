@@ -1,8 +1,8 @@
 import React from 'react';
 import { articles, featuredArticles } from '../data/articles';
-import ArticlesGrid from '../components/ArticlesGrid';
+import ArticlesGrid from '../components/magazine/ArticlesGrid';
 import PageTitle from '../components/Ui/PageTitle';
-import StandardPageLayout from '../components/StandardPageLayout';
+import StandardPageLayout from '../components/Ui/StandardPageLayout';
 import { FaLeaf, FaSearch, FaStarOfLife } from 'react-icons/fa';
 
 const Magazine = () => {
