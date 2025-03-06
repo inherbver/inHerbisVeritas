@@ -4,30 +4,19 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 const AdminRoute = ({ children }) => {
-  const { currentUser } = useAuth();
+  const { currentUser, isAdmin } = useAuth();
 
-  // Vérifier si l'utilisateur est connecté et a le rôle d'administrateur
-  // Dans une application réelle, vous devriez vérifier le rôle d'administrateur
-  // à partir des claims Firebase ou d'une collection Supabase
-
-  // TEMPORAIRE: Pour les tests, on désactive la vérification d'authentification
-  // et on autorise l'accès direct à l'interface admin
-  const isAdmin = true; // Bypass temporaire pour permettre les tests
-
-  /* Original code (commented for testing)
-  const isAdmin =
-    currentUser &&
-    (currentUser.email === 'admin@inherbis.com' ||
-      currentUser.email?.endsWith('@inherbis.com') ||
-      currentUser.admin === true);
-  */
-
-  if (!isAdmin) {
-    // Rediriger vers la page de connexion si l'utilisateur n'est pas admin
+  // Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
+  if (!currentUser) {
     return <Navigate to="/signin" replace />;
   }
 
-  // Rendre le contenu de la route protégée
+  // Si l'utilisateur est connecté mais n'est pas admin, redirection vers la page d'accueil
+  if (!isAdmin) {
+    return <Navigate to="/" replace />;
+  }
+
+  // Rendre le contenu de la route protégée si l'utilisateur est connecté et a les droits d'administrateur
   return children ? children : <Outlet />;
 };
 
