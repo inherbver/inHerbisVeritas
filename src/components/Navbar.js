@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import {
   FaShoppingCart,
@@ -6,10 +6,18 @@ import {
   FaTimes,
   FaUser,
   FaChevronDown,
+  FaSignOutAlt,
+  FaClipboardList,
+  FaHeart,
+  FaIdCard,
+  FaUserCog,
+  FaSignInAlt,
+  FaUserPlus,
+  FaTachometerAlt,
 } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
-import { AuthContext } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -17,7 +25,7 @@ const Navbar = () => {
   const menuRef = useRef(null);
   const userMenuRef = useRef(null);
   const location = useLocation();
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, userRole, isAdmin, logout } = useAuth();
 
   // Gestion des clics externes et touche ESC pour fermer le menu mobile
   useEffect(() => {
@@ -54,6 +62,15 @@ const Navbar = () => {
 
   const toggleUserMenu = () => {
     setIsUserMenuOpen(!isUserMenuOpen);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setIsUserMenuOpen(false);
+    } catch (error) {
+      console.error('Erreur lors de la déconnexion:', error);
+    }
   };
 
   return (
@@ -114,30 +131,95 @@ const Navbar = () => {
 
             {/* Dropdown menu */}
             {isUserMenuOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-30">
+              <div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg z-30">
                 <div className="py-1">
-                  <Link
-                    to="/signin"
-                    onClick={() => setIsUserMenuOpen(false)}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Connexion
-                  </Link>
-                  <Link
-                    to="/signup"
-                    onClick={() => setIsUserMenuOpen(false)}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Inscription
-                  </Link>
-                  <div className="border-t border-gray-100"></div>
-                  <Link
-                    to="/admin"
-                    onClick={() => setIsUserMenuOpen(false)}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Administration
-                  </Link>
+                  {!currentUser ? (
+                    /* Options pour utilisateur non connecté */
+                    <>
+                      <Link
+                        to="/signin"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <FaSignInAlt className="w-5 h-5 mr-3 text-green-600" />
+                        Connexion
+                      </Link>
+                      <Link
+                        to="/signup"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <FaUserPlus className="w-5 h-5 mr-3 text-green-600" />
+                        Inscription
+                      </Link>
+                    </>
+                  ) : isAdmin ? (
+                    /* Options pour administrateur */
+                    <>
+                      <div className="px-4 py-2 text-xs text-gray-500 border-b border-gray-100">
+                        Connecté en tant qu'
+                        <span className="font-semibold">administrateur</span>
+                      </div>
+                      <Link
+                        to="/admin"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <FaTachometerAlt className="w-5 h-5 mr-3 text-green-600" />
+                        Dashboard
+                      </Link>
+                      <div className="border-t border-gray-100"></div>
+                      <button
+                        onClick={handleLogout}
+                        className="flex w-full items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <FaSignOutAlt className="w-5 h-5 mr-3 text-green-600" />
+                        Déconnexion
+                      </button>
+                    </>
+                  ) : (
+                    /* Options pour utilisateur standard connecté */
+                    <>
+                      <div className="px-4 py-2 text-xs text-gray-500 border-b border-gray-100">
+                        Connecté en tant que{' '}
+                        <span className="font-semibold">
+                          {currentUser.email}
+                        </span>
+                      </div>
+                      <Link
+                        to="/profile"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <FaIdCard className="w-5 h-5 mr-3 text-green-600" />
+                        Mes informations personnelles
+                      </Link>
+                      <Link
+                        to="/orders"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <FaClipboardList className="w-5 h-5 mr-3 text-green-600" />
+                        Mes commandes
+                      </Link>
+                      <Link
+                        to="/favorites"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <FaHeart className="w-5 h-5 mr-3 text-green-600" />
+                        Mes produits favoris
+                      </Link>
+                      <div className="border-t border-gray-100"></div>
+                      <button
+                        onClick={handleLogout}
+                        className="flex w-full items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <FaSignOutAlt className="w-5 h-5 mr-3 text-green-600" />
+                        Déconnexion
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             )}
@@ -174,9 +256,11 @@ const Navbar = () => {
             <NavLink to="/contact" className="py-2" onClick={toggleMobileMenu}>
               Contact
             </NavLink>
-            <NavLink to="/admin" className="py-2" onClick={toggleMobileMenu}>
-              Administration
-            </NavLink>
+            {isAdmin && (
+              <NavLink to="/admin" className="py-2" onClick={toggleMobileMenu}>
+                Dashboard
+              </NavLink>
+            )}
           </div>
         </div>
       </div>

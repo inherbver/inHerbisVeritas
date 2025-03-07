@@ -1,17 +1,173 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { FiImage, FiX, FiLink } from 'react-icons/fi';
+import { FiImage, FiX, FiLink, FiPlus } from 'react-icons/fi';
 import { products } from '../../../data/products';
 
 // Éditeur de texte simplifié pour un non-développeur
 const SimpleEditor = ({ value, onChange, placeholder }) => {
+  const [showImageInput, setShowImageInput] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
+  const [imageAlt, setImageAlt] = useState('');
+  const [previewImage, setPreviewImage] = useState(false);
+  const textareaRef = useRef(null);
+
+  // Fonction pour insérer l'image dans le contenu
+  const insertImage = () => {
+    if (!imageUrl.trim()) {
+      alert("Veuillez saisir une URL d'image valide");
+      return;
+    }
+
+    // Créer la balise markdown pour l'image
+    const imgMarkdown = `\n![${imageAlt || 'Image'}](${imageUrl})\n`;
+
+    // Récupérer la position du curseur
+    const textarea = textareaRef.current;
+    const startPos = textarea.selectionStart;
+
+    // Insérer l'image à la position du curseur
+    const newValue =
+      value.substring(0, startPos) +
+      imgMarkdown +
+      value.substring(textarea.selectionEnd);
+    onChange(newValue);
+
+    // Réinitialiser les champs
+    setImageUrl('');
+    setImageAlt('');
+    setShowImageInput(false);
+    setPreviewImage(false);
+
+    // Replacer le focus sur le textarea
+    setTimeout(() => {
+      textarea.focus();
+      textarea.selectionStart = startPos + imgMarkdown.length;
+      textarea.selectionEnd = startPos + imgMarkdown.length;
+    }, 0);
+  };
+
+  // Vérifier si l'URL est valide
+  const isValidUrl = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  };
+
+  // Prévisualiser l'image
+  const handlePreviewImage = () => {
+    if (imageUrl && isValidUrl(imageUrl)) {
+      setPreviewImage(true);
+    } else {
+      alert("Veuillez saisir une URL d'image valide");
+    }
+  };
+
   return (
-    <textarea
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 min-h-[200px]"
-    />
+    <div className="w-full border border-gray-300 rounded-md overflow-hidden">
+      <div className="bg-gray-50 p-2 border-b border-gray-300 flex items-center">
+        <button
+          type="button"
+          onClick={() => setShowImageInput(!showImageInput)}
+          className="p-2 text-gray-700 hover:bg-gray-200 rounded-md flex items-center space-x-1"
+          title="Insérer une image"
+        >
+          <FiImage />
+          <span className="text-sm">Insérer une image</span>
+        </button>
+      </div>
+
+      {showImageInput && (
+        <div className="p-3 bg-gray-50 border-b border-gray-300">
+          <div className="space-y-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                URL de l'image
+              </label>
+              <div className="flex space-x-2">
+                <input
+                  type="text"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  placeholder="https://exemple.com/mon-image.jpg"
+                  className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={handlePreviewImage}
+                  className="p-2 bg-gray-100 hover:bg-gray-200 rounded-md text-gray-700 text-sm"
+                  disabled={!imageUrl}
+                >
+                  Prévisualiser
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Texte alternatif (description)
+              </label>
+              <input
+                type="text"
+                value={imageAlt}
+                onChange={(e) => setImageAlt(e.target.value)}
+                placeholder="Description de l'image"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+              />
+            </div>
+
+            {previewImage && imageUrl && (
+              <div className="mt-2 relative inline-block">
+                <img
+                  src={imageUrl}
+                  alt={imageAlt || 'Aperçu'}
+                  className="h-32 w-auto rounded border border-gray-300"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src =
+                      'https://via.placeholder.com/200x150?text=Image+non+disponible';
+                    alert("Impossible de charger l'image. Vérifiez l'URL.");
+                  }}
+                />
+              </div>
+            )}
+
+            <div className="flex justify-end space-x-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowImageInput(false);
+                  setImageUrl('');
+                  setImageAlt('');
+                  setPreviewImage(false);
+                }}
+                className="px-3 py-1.5 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 text-sm"
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                onClick={insertImage}
+                className="px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm"
+                disabled={!imageUrl}
+              >
+                Insérer l'image
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <textarea
+        ref={textareaRef}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="w-full p-3 border-none focus:outline-none focus:ring-0 min-h-[200px]"
+      />
+    </div>
   );
 };
 
