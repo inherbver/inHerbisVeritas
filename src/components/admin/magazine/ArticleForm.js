@@ -29,7 +29,7 @@ const ArticleForm = ({ article, onSave, onCancel, loading = false }) => {
     excerpt: '',
     imageUrl: '',
     content: '',
-    featured: false,  // Renommé de isFeatured à featured pour correspondre au modèle de données du service
+    featured: false, // Renommé de isFeatured à featured pour correspondre au modèle de données du service
     readTime: '5 min',
     relatedProductId: '',
     date: new Date().toLocaleDateString('fr-FR', {
@@ -55,9 +55,9 @@ const ArticleForm = ({ article, onSave, onCancel, loading = false }) => {
   useEffect(() => {
     if (article) {
       // Assurer la compatibilité entre isFeatured et featured
-      const updatedArticle = { 
+      const updatedArticle = {
         ...article,
-        featured: article.featured || article.isFeatured
+        featured: article.featured || article.isFeatured,
       };
       setFormData(updatedArticle);
     }
@@ -75,19 +75,21 @@ const ArticleForm = ({ article, onSave, onCancel, loading = false }) => {
   // Gestion de la soumission du formulaire
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     // Validation basique
     if (!formData.title || !formData.category || !formData.excerpt) {
-      alert('Veuillez remplir tous les champs obligatoires (titre, catégorie, extrait).');
+      alert(
+        'Veuillez remplir tous les champs obligatoires (titre, catégorie, extrait).'
+      );
       return;
     }
-    
+
     // Créer un slug à partir du titre
     const slug = formData.title
       .toLowerCase()
       .replace(/[^\w\s]/gi, '')
       .replace(/\s+/g, '-');
-    
+
     // Appel de la fonction de sauvegarde
     onSave({
       ...formData,
@@ -159,10 +161,15 @@ const ArticleForm = ({ article, onSave, onCancel, loading = false }) => {
             className="h-4 w-4 text-green-600 rounded border-gray-300 focus:ring-green-500"
             disabled={loading}
           />
-          <label htmlFor="featured" className="ml-2 block text-sm text-gray-700">
+          <label
+            htmlFor="featured"
+            className="ml-2 block text-sm text-gray-700"
+          >
             Mettre cet article à la une
           </label>
-          <div className="ml-1 text-xs text-gray-500">(visible en premier sur la page Magazine)</div>
+          <div className="ml-1 text-xs text-gray-500">
+            (visible en premier sur la page Magazine)
+          </div>
         </div>
       </div>
 
@@ -185,7 +192,11 @@ const ArticleForm = ({ article, onSave, onCancel, loading = false }) => {
             type="button"
             className="p-3 bg-gray-100 rounded-md text-gray-600 hover:bg-gray-200 disabled:opacity-50"
             title="Parcourir les médias (fonctionnalité à venir)"
-            onClick={() => alert('Cette fonctionnalité sera disponible dans une prochaine mise à jour.')}
+            onClick={() =>
+              alert(
+                'Cette fonctionnalité sera disponible dans une prochaine mise à jour.'
+              )
+            }
             disabled={loading}
           >
             <FiImage />
@@ -200,7 +211,8 @@ const ArticleForm = ({ article, onSave, onCancel, loading = false }) => {
               className="h-24 w-auto rounded border border-gray-300"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = 'https://via.placeholder.com/200x150?text=Image+non+disponible';
+                e.target.src =
+                  'https://via.placeholder.com/200x150?text=Image+non+disponible';
               }}
             />
             <button
@@ -307,14 +319,32 @@ const ArticleForm = ({ article, onSave, onCancel, loading = false }) => {
         >
           {loading ? (
             <>
-              <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <svg
+                className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
               </svg>
-              {article ? "Mise à jour en cours..." : "Création en cours..."}
+              {article ? 'Mise à jour en cours...' : 'Création en cours...'}
             </>
+          ) : article ? (
+            "Mettre à jour l'article"
           ) : (
-            article ? "Mettre à jour l'article" : "Créer l'article"
+            "Créer l'article"
           )}
         </button>
       </div>

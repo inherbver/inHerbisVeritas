@@ -245,7 +245,7 @@ const ProductDetails = () => {
                     <div className="col-span-5">
                       <AddToCartButton
                         onClick={handleAddToCart}
-                        text={`Acheter pour ${product.price}€`}
+                        text={`Acheter pour ${(product.price * quantity).toFixed(2)}€`}
                         className="py-4 text-base hover:shadow-md"
                       />
                     </div>

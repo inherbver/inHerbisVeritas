@@ -228,7 +228,7 @@ const MagazineDetails = () => {
             {articleContent.conclusion}
           </p>
 
-          {/* Produit associé - Affiché uniquement si l'article a un produit associé */}
+          {/* Produit associé - Affiché uniquement si l'article a un produit associé défini par l'admin */}
           {article.relatedProductId && article.relatedProductImage && (
             <div className="mb-12 p-6 bg-green-50 rounded-xl shadow-sm">
               <h3 className="text-xl font-serif font-bold text-gray-800 mb-4 flex items-center">

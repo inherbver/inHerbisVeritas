@@ -28,24 +28,27 @@ const ArticleList = ({ onEdit, onCreate }) => {
   const fetchArticles = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       // Utilisation du service pour récupérer les articles
       const result = await articleService.getArticles({
         search: searchTerm,
         category: filterCategory !== 'Tous' ? filterCategory : undefined,
       });
-      
+
       if (result.error) {
         throw result.error;
       }
-      
+
       setArticles(result.data);
-      
+
       // Extraire les catégories uniques des articles
-      const uniqueCategories = ['Tous', ...new Set(result.data.map(article => article.category))];
+      const uniqueCategories = [
+        'Tous',
+        ...new Set(result.data.map((article) => article.category)),
+      ];
       setCategories(uniqueCategories);
-      
+
       setLoading(false);
     } catch (err) {
       setError(err.message || 'Erreur lors du chargement des articles');
@@ -60,7 +63,7 @@ const ArticleList = ({ onEdit, onCreate }) => {
     const debounceTimer = setTimeout(() => {
       fetchArticles();
     }, 500);
-    
+
     return () => clearTimeout(debounceTimer);
   }, [searchTerm, filterCategory]);
 
@@ -69,26 +72,29 @@ const ArticleList = ({ onEdit, onCreate }) => {
     try {
       // Inversion de l'état actuel
       const newFeaturedState = !article.featured;
-      
+
       // Appel au service pour mettre à jour l'état "featured"
-      const result = await articleService.toggleFeatured(article.id, newFeaturedState);
-      
+      const result = await articleService.toggleFeatured(
+        article.id,
+        newFeaturedState
+      );
+
       if (result.error) {
         throw result.error;
       }
-      
+
       // Mise à jour de l'état local pour refléter le changement
-      setArticles(prevArticles => 
-        prevArticles.map(a => 
-          a.id === article.id 
-            ? { ...a, featured: newFeaturedState } 
-            : a
+      setArticles((prevArticles) =>
+        prevArticles.map((a) =>
+          a.id === article.id ? { ...a, featured: newFeaturedState } : a
         )
       );
-      
     } catch (err) {
       alert(`Erreur lors de la mise à jour: ${err.message}`);
-      console.error('Erreur lors de la modification du statut mis en avant:', err);
+      console.error(
+        'Erreur lors de la modification du statut mis en avant:',
+        err
+      );
     }
   };
 
@@ -98,17 +104,18 @@ const ArticleList = ({ onEdit, onCreate }) => {
       try {
         // Appel au service pour supprimer l'article
         const result = await articleService.deleteArticle(articleId);
-        
+
         if (result.error) {
           throw result.error;
         }
-        
+
         // Si la suppression réussit, mettre à jour l'état local
-        setArticles(prevArticles => prevArticles.filter(article => article.id !== articleId));
-        
+        setArticles((prevArticles) =>
+          prevArticles.filter((article) => article.id !== articleId)
+        );
       } catch (err) {
         alert(`Erreur lors de la suppression: ${err.message}`);
-        console.error('Erreur lors de la suppression de l\'article:', err);
+        console.error("Erreur lors de la suppression de l'article:", err);
       }
     }
   };
@@ -127,7 +134,7 @@ const ArticleList = ({ onEdit, onCreate }) => {
         <div className="flex">
           <div>
             <p className="text-red-700">{error}</p>
-            <button 
+            <button
               onClick={fetchArticles}
               className="mt-2 px-4 py-2 bg-red-100 text-red-800 rounded hover:bg-red-200"
             >

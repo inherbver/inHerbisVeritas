@@ -21,31 +21,37 @@ const ArticleManagement = () => {
   const handleSaveArticle = async (articleData) => {
     setLoading(true);
     setError(null);
-    
+
     try {
       let result;
-      
+
       if (currentArticle) {
         // Mise à jour d'un article existant
-        result = await articleService.updateArticle(currentArticle.id, articleData);
+        result = await articleService.updateArticle(
+          currentArticle.id,
+          articleData
+        );
       } else {
         // Création d'un nouvel article
         result = await articleService.createArticle(articleData);
       }
-      
+
       if (result.error) {
         throw result.error;
       }
-      
+
       // Afficher une notification de succès
       alert(
         `L'article "${articleData.title}" a été ${currentArticle ? 'mis à jour' : 'créé'} avec succès.`
       );
-      
+
       handleBackToList();
     } catch (err) {
-      setError(err.message || "Une erreur est survenue lors de l'enregistrement de l'article.");
-      console.error('Erreur lors de la sauvegarde de l\'article:', err);
+      setError(
+        err.message ||
+          "Une erreur est survenue lors de l'enregistrement de l'article."
+      );
+      console.error("Erreur lors de la sauvegarde de l'article:", err);
     } finally {
       setLoading(false);
     }
