@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
 import ArticleList from './ArticleList';
 import ArticleForm from './ArticleForm';
-import { articleService } from '../../../services/api';
+import articleService from '../../../services/api/articleService';
 
 const ArticleManagement = () => {
   const [view, setView] = useState('list'); // 'list', 'edit', 'create'

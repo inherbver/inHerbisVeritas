@@ -9,7 +9,7 @@ import {
   FiStar,
   FiFilter,
 } from 'react-icons/fi';
-import { articleService } from '../../../services/api';
+import articleService from '../../../services/api/articleService';
 
 const ArticleList = ({ onEdit, onCreate }) => {
   const [articles, setArticles] = useState([]);

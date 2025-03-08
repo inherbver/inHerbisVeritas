@@ -12,6 +12,8 @@ import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import ScrollToTop from './components/Ui/ScrollToTop';
+import { AuthProvider } from './contexts/AuthContext';
+import AdminToggleButton from './components/admin/AdminToggleButton';
 
 // Import Layouts
 import ClientLayout from './components/layout/ClientLayout';
@@ -32,64 +34,68 @@ console.log('PUBLIC_URL:', process.env.PUBLIC_URL);
 
 function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <Routes>
-        {/* Admin Routes */}
-        <Route
-          path="/admin"
-          element={
-            <AdminRoute>
-              <AdminLayout />
-            </AdminRoute>
-          }
-        >
-          <Route index element={<AdminDashboard />} />
+    <AuthProvider>
+      <Router>
+        <ScrollToTop />
+        <Routes>
+          {/* Admin Routes */}
           <Route
-            path="products"
+            path="/admin"
             element={
-              <ProductList
-                search=""
-                onEdit={() => {
-                  /* Not needed in this context */
-                }}
-              />
+              <AdminRoute>
+                <AdminLayout />
+              </AdminRoute>
+            }
+          >
+            <Route index element={<AdminDashboard />} />
+            <Route
+              path="products"
+              element={
+                <ProductList
+                  search=""
+                  onEdit={() => {
+                    /* Not needed in this context */
+                  }}
+                />
+              }
+            />
+            <Route path="reviews" element={<ReviewList search="" />} />
+            <Route path="promotions" element={<PromotionsManagement />} />
+            <Route path="orders" element={<OrdersManagement />} />
+            <Route path="articles" element={<ArticleManagement />} />
+            {/* Autres routes admin à ajouter ici */}
+          </Route>
+
+          {/* Client Routes avec Layout commun */}
+          <Route path="/" element={<ClientLayout />}>
+            <Route index element={<Shop />} />
+            <Route path="shop" element={<Shop />} />
+            <Route path="magazine" element={<Magazine />} />
+            <Route path="magazine/:id" element={<MagazineDetails />} />
+            <Route path="produits/:slug" element={<ProductDetails />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="cart" element={<Cart />} />
+            <Route path="signin" element={<SignIn />} />
+            <Route path="terms" element={<Terms />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+
+          {/* Route protégée avec layout client */}
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ClientLayout>
+                  <Profile />
+                </ClientLayout>
+              </ProtectedRoute>
             }
           />
-          <Route path="reviews" element={<ReviewList search="" />} />
-          <Route path="promotions" element={<PromotionsManagement />} />
-          <Route path="orders" element={<OrdersManagement />} />
-          <Route path="articles" element={<ArticleManagement />} />
-          {/* Autres routes admin à ajouter ici */}
-        </Route>
-
-        {/* Client Routes avec Layout commun */}
-        <Route path="/" element={<ClientLayout />}>
-          <Route index element={<Shop />} />
-          <Route path="shop" element={<Shop />} />
-          <Route path="magazine" element={<Magazine />} />
-          <Route path="magazine/:id" element={<MagazineDetails />} />
-          <Route path="produits/:slug" element={<ProductDetails />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="cart" element={<Cart />} />
-          <Route path="signin" element={<SignIn />} />
-          <Route path="terms" element={<Terms />} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-
-        {/* Route protégée avec layout client */}
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <ClientLayout>
-                <Profile />
-              </ClientLayout>
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </Router>
+        </Routes>
+        {/* Bouton flottant pour basculer entre l'interface admin et le site public */}
+        <AdminToggleButton />
+      </Router>
+    </AuthProvider>
   );
 }
 

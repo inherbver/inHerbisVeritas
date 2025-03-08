@@ -1,4 +1,4 @@
-import articleService from './articleService';
+import articleServiceDefault from './articleService';
 import { TABLES, handleSupabaseError, recordExists } from './config';
 
 /**
@@ -9,4 +9,6 @@ import { TABLES, handleSupabaseError, recordExists } from './config';
  * import { articleService } from '../services/api';
  */
 
+// Re-export articleService as a named export
+const articleService = articleServiceDefault;
 export { articleService, TABLES, handleSupabaseError, recordExists };
