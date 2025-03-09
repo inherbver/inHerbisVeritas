@@ -10,6 +10,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const MarketCard = ({ market }) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -30,24 +31,38 @@ const MarketCard = ({ market }) => {
     return () => window.removeEventListener('resize', checkDevice);
   }, []);
 
+  // Déterminer les coordonnées selon la structure des données
+  const lat = market.coordinates
+    ? market.coordinates[0]
+    : market.position
+      ? market.position.lat
+      : 43.6047;
+  const lng = market.coordinates
+    ? market.coordinates[1]
+    : market.position
+      ? market.position.lng
+      : 3.8714;
+
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md group">
-      <div className="p-4 border-b border-gray-100">
-        <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-green-600 transition-colors">
+    <div className="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md group h-full flex flex-col">
+      <div className="p-4 border-b border-gray-100 h-[110px] flex flex-col">
+        <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-green-600 transition-colors line-clamp-1">
           {market.name}
         </h3>
         <div className="flex items-center text-sm text-gray-600 mb-2">
-          <FaMapMarkerAlt className="text-green-600 mr-2" />
-          <span>Montpellier, France</span>
+          <FaMapMarkerAlt className="text-green-600 mr-2 flex-shrink-0" />
+          <span className="truncate">
+            {market.address || 'Montpellier, France'}
+          </span>
         </div>
         <div className="flex items-center text-sm text-gray-600">
-          <FaCalendarAlt className="text-green-600 mr-2" />
-          <span>Tous les samedis</span>
+          <FaCalendarAlt className="text-green-600 mr-2 flex-shrink-0" />
+          <span className="truncate">{market.days || 'Tous les samedis'}</span>
         </div>
       </div>
-      <div className="relative">
+      <div className="relative flex-grow">
         <MapContainer
-          center={[market.position.lat, market.position.lng]}
+          center={[lat, lng]}
           zoom={14}
           style={{ height: '180px', width: '100%' }}
           scrollWheelZoom={isMobile} // Activation du zoom à la molette sur mobile
@@ -56,14 +71,13 @@ const MarketCard = ({ market }) => {
           attributionControl={false}
           zoomControl={false} // Désactive les contrôles de zoom par défaut pour les placer à droite
         >
-          <ZoomControl position="topright" />{' '}
-          {/* Ajoute les boutons +/- sur la droite */}
+          <ZoomControl position="topright" />
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
           <Marker
-            position={[market.position.lat, market.position.lng]}
+            position={[lat, lng]}
             icon={L.icon({
               iconUrl: '/marker-icon.png',
               iconSize: [25, 41],
@@ -76,10 +90,13 @@ const MarketCard = ({ market }) => {
         </MapContainer>
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white to-transparent h-8"></div>
       </div>
-      <div className="p-4 pt-3">
-        <button className="w-full text-green-600 hover:text-green-700 border border-green-600 hover:border-green-700 text-sm font-medium py-1.5 px-4 rounded-full transition-colors">
+      <div className="p-4 pt-3 mt-auto">
+        <Link
+          to={`/marches/${market.slug || market.id}`}
+          className="block w-full text-center text-green-600 hover:text-green-700 border border-green-600 hover:border-green-700 text-sm font-medium py-1.5 px-4 rounded-full transition-colors"
+        >
           Voir les détails
-        </button>
+        </Link>
       </div>
     </div>
   );
@@ -89,10 +106,14 @@ MarketCard.propTypes = {
   market: PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     name: PropTypes.string.isRequired,
+    slug: PropTypes.string,
+    address: PropTypes.string,
+    days: PropTypes.string,
+    coordinates: PropTypes.array,
     position: PropTypes.shape({
-      lat: PropTypes.number.isRequired,
-      lng: PropTypes.number.isRequired,
-    }).isRequired,
+      lat: PropTypes.number,
+      lng: PropTypes.number,
+    }),
   }).isRequired,
 };
 

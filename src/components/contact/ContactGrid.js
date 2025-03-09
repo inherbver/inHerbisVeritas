@@ -3,9 +3,11 @@ import MarketCard from './MarketCard';
 
 const ContactGrid = ({ markets = [] }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
       {markets.map((market) => (
-        <MarketCard key={`${market.name}-${market.id}`} market={market} />
+        <div key={`${market.name}-${market.id}`} className="h-full">
+          <MarketCard market={market} />
+        </div>
       ))}
     </div>
   );
@@ -17,9 +19,10 @@ ContactGrid.propTypes = {
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       name: PropTypes.string.isRequired,
       position: PropTypes.shape({
-        lat: PropTypes.number.isRequired,
-        lng: PropTypes.number.isRequired,
-      }).isRequired,
+        lat: PropTypes.number,
+        lng: PropTypes.number,
+      }),
+      coordinates: PropTypes.array,
     })
   ),
 };

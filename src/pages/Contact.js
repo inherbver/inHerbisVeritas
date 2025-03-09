@@ -5,26 +5,14 @@ import ContactGrid from '../components/contact/ContactGrid';
 import StandardPageLayout from '../components/Ui/StandardPageLayout';
 import PageTitle from '../components/Ui/PageTitle';
 import { FaMapMarkedAlt, FaLeaf, FaHandHoldingHeart } from 'react-icons/fa';
+import { markets as marketsData } from '../data/markets';
 
 const Contact = () => {
   const [markets, setMarkets] = useState([]);
 
   useEffect(() => {
-    // Exemple de données pour les marchés
-    setMarkets([
-      {
-        id: 1,
-        name: 'Marché des Arceaux',
-        position: { lat: 43.6109, lng: 3.8722 },
-      },
-      { id: 2, name: 'Marché du Lez', position: { lat: 43.6, lng: 3.89 } },
-      {
-        id: 3,
-        name: 'Marché de Antigone',
-        position: { lat: 43.608, lng: 3.89 },
-      },
-      { id: 4, name: 'Marché Paysan', position: { lat: 43.615, lng: 3.865 } },
-    ]);
+    // Utiliser les données du fichier markets.js
+    setMarkets(marketsData);
   }, []);
 
   return (
@@ -78,13 +66,7 @@ const Contact = () => {
           </div>
         </div>
 
-        {/* Section contact - Deux cartes côte à côte */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          <ContactInfoCard />
-          <SocialMediaLinks />
-        </div>
-
-        {/* Section mini-maps - Pleine largeur */}
+        {/* Section mini-maps - Déplacée au-dessus des cartes de contact */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
             Nos marchés
@@ -94,6 +76,12 @@ const Contact = () => {
             produits frais et discuter avec notre équipe de passionnés.
           </p>
           <ContactGrid markets={markets} />
+        </div>
+
+        {/* Section contact - Deux cartes côte à côte - Déplacée en bas */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          <ContactInfoCard />
+          <SocialMediaLinks />
         </div>
       </div>
     </StandardPageLayout>

@@ -60,9 +60,9 @@ const ArticlesGrid = ({ articles = [], featuredArticles = [] }) => {
                 Articles à la une
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {featuredFilteredArticles.map((article) => (
+                {featuredFilteredArticles.map((article, index) => (
                   <ArticleCard
-                    key={`featured-${article.id}`}
+                    key={`featured-${article.id}-${index}`}
                     title={article.title}
                     excerpt={article.excerpt}
                     imageUrl={article.imageUrl}

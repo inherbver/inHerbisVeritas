@@ -74,7 +74,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 w-full bg-green-500 text-white shadow-md z-20 transition-all duration-300 ease-in-out">
+    <nav className="fixed top-0 w-full bg-green-500 text-white shadow-md z-[1001] transition-all duration-300 ease-in-out">
       <div className="container mx-auto px-4 pt-3 pb-0 flex justify-between items-center">
         {/* Logo */}
         <div className="text-xl font-bold">In Herbis Veritas</div>

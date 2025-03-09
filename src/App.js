@@ -5,6 +5,7 @@ import Magazine from './pages/Magazine';
 import MagazineDetails from './pages/MagazineDetails';
 import ProductDetails from './pages/ProductDetails';
 import Contact from './pages/Contact';
+import MarketDetails from './pages/MarketDetails';
 import Cart from './pages/Cart';
 import Profile from './pages/Profile';
 import SignIn from './pages/SignIn';
@@ -74,6 +75,7 @@ function App() {
             <Route path="magazine/:id" element={<MagazineDetails />} />
             <Route path="produits/:slug" element={<ProductDetails />} />
             <Route path="contact" element={<Contact />} />
+            <Route path="marches/:slug" element={<MarketDetails />} />
             <Route path="cart" element={<Cart />} />
             <Route path="signin" element={<SignIn />} />
             <Route path="terms" element={<Terms />} />
