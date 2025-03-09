@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { supabase } from '../config/supabase';
 
 function SignIn() {
   const [email, setEmail] = useState('');
@@ -9,11 +8,12 @@ function SignIn() {
   const [error, setError] = useState('');
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
-  const { currentUser } = useAuth();
+  const { currentUser, signIn } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (currentUser) navigate('/admin');
+    // Si l'utilisateur est déjà connecté, rediriger vers la boutique
+    if (currentUser) navigate('/');
   }, [currentUser, navigate]);
 
   const handleSubmit = async (e) => {
@@ -23,31 +23,40 @@ function SignIn() {
 
     try {
       if (isLogin) {
-        // Connexion
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-        if (error) throw error;
+        // Utiliser la fonction signIn du contexte au lieu d'un fetch direct
+        const result = await signIn(email, password);
+
+        console.log('Résultat de la connexion:', result);
+
+        if (!result.success) {
+          throw new Error(result.error.message || "Erreur d'authentification");
+        }
+
+        // Pas besoin d'explicitement mettre à jour currentUser ou de naviguer
+        // Le contexte met déjà à jour currentUser, et le useEffect s'en chargera
       } else {
-        // Inscription
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
-          },
+        // Inscription via serveur Express
+        const response = await fetch('http://localhost:5000/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email, password }),
         });
-        if (error) throw error;
-        else {
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Erreur lors de l'inscription");
+        } else {
           // Message de confirmation d'inscription
           alert(
-            'Un email de confirmation a été envoyé à votre adresse. Veuillez vérifier votre boîte de réception.'
+            'Votre compte a été créé avec succès. Vous pouvez maintenant vous connecter.'
           );
+          setIsLogin(true); // Basculer vers le formulaire de connexion
         }
       }
     } catch (err) {
-      console.error('Erreur Supabase :', err.message);
+      console.error("Erreur d'authentification:", err.message);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -64,11 +73,23 @@ function SignIn() {
 
     try {
       setLoading(true);
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
-      });
+      const response = await fetch(
+        'http://localhost:5000/api/auth/reset-password',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email }),
+        }
+      );
 
-      if (error) throw error;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || 'Erreur lors de la réinitialisation du mot de passe'
+        );
+      }
       alert('Un lien de réinitialisation a été envoyé à votre adresse email');
     } catch (err) {
       setError(err.message);

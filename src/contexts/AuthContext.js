@@ -26,6 +26,22 @@ export const AuthProvider = ({ children }) => {
     };
   };
 
+  // Fonction pour vérifier et définir le rôle de l'utilisateur
+  const checkUserRole = async (user) => {
+    if (!user) {
+      console.log('Vérification du rôle annulée: aucun utilisateur fourni');
+      setUserRole(null);
+      return;
+    }
+
+    // Par défaut, on attribue le rôle "user" sauf si le serveur indique autre chose
+    // Normalement, cette information devrait venir de la réponse de /api/auth/user
+    const role = user.role || 'user';
+    console.log(`Utilisation du rôle: ${role}`);
+    setUserRole(role);
+    setAuthError(null);
+  };
+
   // Fonction pour créer un profil utilisateur manquant
   const createUserProfile = async (user) => {
     try {
@@ -77,100 +93,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Fonction pour vérifier et définir le rôle de l'utilisateur
-  const checkUserRole = async (user) => {
-    if (!user) {
-      console.log('Vérification du rôle annulée: aucun utilisateur fourni');
-      setUserRole(null);
-      return;
-    }
-
-    try {
-      console.log(
-        `Tentative de récupération du rôle pour l'utilisateur ${user.id}`
-      );
-
-      const response = await fetch(`${API_URL}/api/profiles/${user.id}`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        const errorDetails = {
-          message: data.message || 'Erreur de récupération du rôle',
-          status: response.status,
-        };
-        console.error('Erreur de récupération du rôle:', errorDetails);
-
-        // PGRST116 = No rows returned by the query (l'utilisateur n'a pas de profil)
-        if (errorDetails.status === 404) {
-          console.log(
-            `Profil non trouvé pour l'utilisateur ${user.id}, création en cours...`
-          );
-          const profileCreated = await createUserProfile(user);
-
-          if (profileCreated) {
-            // Récupérer à nouveau le rôle après création du profil
-            console.log(
-              'Profil créé, nouvelle tentative de récupération du rôle'
-            );
-            return await checkUserRole(user);
-          } else {
-            setAuthError({
-              type: 'profile_not_found',
-              message:
-                'Profil utilisateur non trouvé et impossible de le créer automatiquement',
-              code: errorDetails.status,
-            });
-          }
-          return;
-        }
-
-        setAuthError({
-          type: 'role_fetch',
-          ...errorDetails,
-        });
-
-        setUserRole(null);
-      } else {
-        // Optimisation de la lecture du rôle
-        const role = data.role || 'user';
-        console.log(`Rôle récupéré avec succès: ${role}`);
-        setUserRole(role);
-        setAuthError(null);
-      }
-    } catch (error) {
-      const errorMessage = error.message || JSON.stringify(error);
-      console.error(
-        `Exception lors de la vérification du rôle: ${errorMessage}`
-      );
-      setAuthError({
-        type: 'role_check_exception',
-        message: errorMessage,
-      });
-      setUserRole(null);
-    }
-  };
-
-  // Ajouter un système de timeout pour éviter le blocage infini en chargement
-  useEffect(() => {
-    if (loading) {
-      const loadingTimeout = setTimeout(() => {
-        console.log(
-          "Timeout de chargement atteint - forçage de l'état 'non chargé'"
-        );
-        setLoading(false);
-      }, 5000); // 5 secondes max de chargement
-
-      return () => clearTimeout(loadingTimeout);
-    }
-  }, [loading]);
-
   useEffect(() => {
     // Initialiser l'état d'authentification en vérifiant la session via le backend
     const initAuth = async () => {
@@ -195,10 +117,15 @@ export const AuthProvider = ({ children }) => {
           return;
         }
 
-        if (data.success && data.user) {
+        if (data.user) {
           console.log(`Session trouvée pour l'utilisateur ${data.user.id}`);
-          setCurrentUser(data.user);
-          await checkUserRole(data.user);
+          // Définir le rôle directement à partir de la réponse ou utiliser "user" par défaut
+          const userWithRole = {
+            ...data.user,
+            role: data.user.role || 'user',
+          };
+          setCurrentUser(userWithRole);
+          await checkUserRole(userWithRole);
         } else {
           console.log('Aucune session active trouvée');
           setCurrentUser(null);
@@ -255,11 +182,51 @@ export const AuthProvider = ({ children }) => {
         };
       }
 
-      // Mettre à jour l'état avec les infos de l'utilisateur connecté
-      setCurrentUser(data.user);
-      await checkUserRole(data.user);
-      setLoading(false);
+      // Après une connexion réussie, récupérer les informations de l'utilisateur
+      try {
+        // Faire un appel séparé pour obtenir les données utilisateur complètes
+        const userResponse = await fetch(`${API_URL}/api/auth/user`, {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
+        const userData = await userResponse.json();
+
+        if (userResponse.ok && userData.user) {
+          // Attribuer un rôle par défaut ou utiliser celui fourni par le serveur
+          const userWithRole = {
+            ...userData.user,
+            role: userData.user.role || 'user',
+          };
+          setCurrentUser(userWithRole);
+          await checkUserRole(userWithRole);
+        } else {
+          // Utiliser les données initiales si la seconde requête échoue
+          const userWithRole = {
+            ...data.user,
+            role: data.user.role || 'user',
+          };
+          setCurrentUser(userWithRole);
+          await checkUserRole(userWithRole);
+        }
+      } catch (error) {
+        console.error(
+          'Erreur lors de la récupération des infos utilisateur:',
+          error
+        );
+        // En cas d'erreur, utiliser quand même les données fournies par le login
+        const userWithRole = {
+          ...data.user,
+          role: data.user.role || 'user',
+        };
+        setCurrentUser(userWithRole);
+        await checkUserRole(userWithRole);
+      }
+
+      setLoading(false);
       return { success: true, data };
     } catch (error) {
       console.error('Exception lors de la connexion:', error.message || error);
@@ -477,6 +444,20 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
+
+  // Ajouter un système de timeout pour éviter le blocage infini en chargement
+  useEffect(() => {
+    if (loading) {
+      const loadingTimeout = setTimeout(() => {
+        console.log(
+          "Timeout de chargement atteint - forçage de l'état 'non chargé'"
+        );
+        setLoading(false);
+      }, 5000); // 5 secondes max de chargement
+
+      return () => clearTimeout(loadingTimeout);
+    }
+  }, [loading]);
 
   if (loading) {
     return <div className="text-center py-8">Chargement en cours...</div>;

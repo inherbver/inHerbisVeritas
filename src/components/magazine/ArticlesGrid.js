@@ -62,7 +62,7 @@ const ArticlesGrid = ({ articles = [], featuredArticles = [] }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {featuredFilteredArticles.map((article) => (
                   <ArticleCard
-                    key={article.id}
+                    key={`featured-${article.id}`}
                     title={article.title}
                     excerpt={article.excerpt}
                     imageUrl={article.imageUrl}
