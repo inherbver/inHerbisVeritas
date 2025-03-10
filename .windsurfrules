@@ -1,0 +1,42 @@
+Contexte du Projet
+
+Le projet est une application React avec un admin panel permettant de gérer des articles (CRUD : création, lecture, mise à jour, suppression).
+Le front-end utilise actuellement un système mocké (données locales) pour les articles. L’objectif est de passer à un stockage réel sur Supabase.
+Un articleService gère les opérations CRUD (lecture/écriture). Il doit désormais interagir avec Supabase au lieu de tableaux statiques.
+Supabase est configuré avec un projet existant, et la table articles sera créée (ou a été créée) avec les colonnes nécessaires (id, title, slug, category, excerpt, image_url, content, featured, read_time, date, related_product_id, created_at, updated_at).
+Exigences Techniques
+
+Le code doit respecter les bonnes pratiques React et JavaScript (modularité, DRY, etc.).
+Les clés d’API et l’URL de Supabase sont stockées dans des variables d’environnement (par exemple, REACT_APP_SUPABASE_URL et REACT_APP_SUPABASE_ANON_KEY).
+Le service articleService doit utiliser @supabase/supabase-js pour effectuer les requêtes (createClient, etc.).
+Les opérations CRUD doivent être robustes :
+createArticle (INSERT),
+getArticles (SELECT, avec éventuels filtres ilike ou eq pour la recherche et la catégorie),
+updateArticle (UPDATE),
+deleteArticle (DELETE),
+toggleFeatured (UPDATE d’un booléen).
+Les retours d’erreurs doivent être gérés proprement : si Supabase renvoie un error, il faut le renvoyer au front.
+Sécurité et Évolutivité
+
+Les données doivent être vraiment stockées dans Supabase, sans fallback local.
+À terme, l’application pourrait utiliser des politiques Row Level Security (RLS) pour sécuriser l’accès en lecture/écriture.
+Pour l’instant, on suppose que l’admin panel a les droits nécessaires (via un service key ou un accès restreint).
+Stratégie de Migration
+
+Retirer l’importation de tableaux mockés (ex. import { articles } from ...).
+Ajouter un fichier articleService.js ou équivalent qui interagit avec Supabase.
+Les api seront centralisées dans le dossier C:\Users\util37.montpellier\Desktop\inHerbisVeritas\src\services\api
+Tu peux, si besoin créer des sous-dossiers dans le dossier api pour une meilleure organisation et une meilleure maintenabilité du code.
+Dans les composants (ArticleList, ArticleForm, etc.), remplacer les appels à des tableaux mockés par des appels asynchrones à articleService.
+Vérifier la mise à jour du front-end après chaque opération (réexécuter getArticles, etc.).
+Qualité du Code et Minimisation des Erreurs
+
+Utiliser async/await pour gérer les appels asynchrones.
+Centraliser la logique CRUD dans articleService pour éviter la duplication.
+Gérer les erreurs de requête Supabase (ex. if (error) throw error;).
+Respecter un schéma clair pour la table articles.
+Valider les champs obligatoires (titre, excerpt, etc.) côté front.
+Communication et Documentation
+
+Lorsqu’une question ou une demande de développement est faite, Claude 3.7 doit prendre en compte ces règles pour proposer une solution stable et évolutive.
+Les explications fournies doivent être pédagogiques (car l’utilisateur n’est pas dev, mais suffisamment à l’aise pour implémenter les changements).

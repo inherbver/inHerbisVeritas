@@ -47,6 +47,7 @@ export const AuthProvider = ({ children }) => {
       console.log('✅ Rôle récupéré avec succès:', data);
       console.log(`👤 Attribution du rôle: ${data.role}`);
       setUserRole(data.role);
+      return data.role; // Retourner le rôle pour permettre son utilisation immédiate
     } catch (error) {
       console.error(
         '❌ Erreur lors de la récupération du rôle:',
@@ -54,6 +55,7 @@ export const AuthProvider = ({ children }) => {
       );
       console.log('⚠️ Utilisation du rôle par défaut: user');
       setUserRole('user');
+      return 'user'; // Retourner le rôle par défaut
     }
   };
 
@@ -82,7 +84,13 @@ export const AuthProvider = ({ children }) => {
       console.log('✅ Utilisateur récupéré avec succès:', data.user);
       setCurrentUser(data.user);
       console.log('🔍 Récupération du rôle pour cet utilisateur...');
-      await fetchUserRole();
+      const currentRole = await fetchUserRole();
+
+      // Utiliser la valeur retournée directement pour les logs
+      console.log(`👤 Utilisateur connecté - Rôle actuel: ${currentRole}`);
+      console.log(
+        `👑 Statut Admin: ${currentRole === 'admin' ? 'OUI' : 'NON'}`
+      );
     } catch (error) {
       console.error(
         "❌ Erreur lors de la récupération de l'utilisateur:",
@@ -352,6 +360,14 @@ export const AuthProvider = ({ children }) => {
       return () => clearTimeout(loadingTimeout);
     }
   }, [loading]);
+
+  // Ajout d'un effet pour observer les changements de rôle
+  useEffect(() => {
+    console.log(`🔄 Mise à jour du rôle utilisateur: ${userRole}`);
+    console.log(
+      `🔑 Est administrateur: ${userRole === 'admin' ? 'OUI' : 'NON'}`
+    );
+  }, [userRole]);
 
   if (loading) {
     return <div className="text-center py-8">Chargement en cours...</div>;

@@ -2,6 +2,7 @@ import { supabase } from '../../config/supabase';
 import { TABLES, handleSupabaseError, DEFAULT_OPTIONS } from './config';
 import { articles as mockArticles } from '../../data/articles';
 import { products } from '../../data/products';
+import moment from 'moment';
 
 /**
  * Service pour la gestion des articles
@@ -12,7 +13,7 @@ class ArticleService {
   constructor() {
     // Pour le développement, utilisez true pour utiliser les données mockées
     // Changez en false pour utiliser les données Supabase en production
-    this.useMockData = true;
+    this.useMockData = false;
   }
 
   /**
@@ -32,6 +33,51 @@ class ArticleService {
       relatedProductName: product.title || product.name,
       relatedProductPrice: product.price,
     };
+  }
+
+  /**
+   * Formate les dates de l'article pour qu'elles soient compatibles avec PostgreSQL
+   * @param {Object} articleData - Données de l'article
+   * @returns {Object} - Données avec dates formatées
+   */
+  formatArticleDates(articleData) {
+    const formattedData = { ...articleData };
+
+    // Formater la date de l'article si elle existe
+    if (formattedData.date) {
+      try {
+        // Si c'est une date au format français comme "10 mars 2025"
+        if (
+          typeof formattedData.date === 'string' &&
+          formattedData.date.includes(' ')
+        ) {
+          // Configurer Moment.js pour reconnaître le format français
+          moment.locale('fr');
+          formattedData.date = moment(formattedData.date, 'D MMMM YYYY').format(
+            'YYYY-MM-DDTHH:mm:ssZ'
+          );
+        } else {
+          // Sinon utiliser le parseur standard
+          formattedData.date = moment(formattedData.date).format(
+            'YYYY-MM-DDTHH:mm:ssZ'
+          );
+        }
+        console.log(`📅 Date formatée avec succès: ${formattedData.date}`);
+      } catch (error) {
+        console.error(
+          `❌ Erreur lors du formatage de la date: ${error.message}`
+        );
+        // En cas d'erreur, on peut soit laisser la date telle quelle, soit la mettre à null
+        formattedData.date = null;
+      }
+    }
+
+    // Gérer le champ relatedProductId (UUID dans PostgreSQL)
+    if (formattedData.relatedProductId === '') {
+      formattedData.relatedProductId = null;
+    }
+
+    return formattedData;
   }
 
   /**
@@ -194,13 +240,16 @@ class ArticleService {
    */
   async createArticle(articleData) {
     try {
+      // Formater les dates de l'article
+      const formattedArticleData = this.formatArticleDates(articleData);
+
       if (this.useMockData) {
         // Simuler la création d'un article
         const newArticle = {
-          ...articleData,
+          ...formattedArticleData,
           id: Math.max(...mockArticles.map((a) => a.id)) + 1,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
+          created_at: moment().format('YYYY-MM-DDTHH:mm:ssZ'),
+          updated_at: moment().format('YYYY-MM-DDTHH:mm:ssZ'),
         };
 
         // Dans un environnement réel, les données mockées seraient persistantes
@@ -214,9 +263,9 @@ class ArticleService {
           .from(TABLES.ARTICLES)
           .insert([
             {
-              ...articleData,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString(),
+              ...formattedArticleData,
+              created_at: moment().format('YYYY-MM-DDTHH:mm:ssZ'),
+              updated_at: moment().format('YYYY-MM-DDTHH:mm:ssZ'),
             },
           ])
           .select()
@@ -246,6 +295,9 @@ class ArticleService {
    */
   async updateArticle(id, articleData) {
     try {
+      // Formater les dates de l'article
+      const formattedArticleData = this.formatArticleDates(articleData);
+
       if (this.useMockData) {
         // Simuler la mise à jour d'un article
         const index = mockArticles.findIndex(
@@ -258,8 +310,8 @@ class ArticleService {
 
         const updatedArticle = {
           ...mockArticles[index],
-          ...articleData,
-          updated_at: new Date().toISOString(),
+          ...formattedArticleData,
+          updated_at: moment().format('YYYY-MM-DDTHH:mm:ssZ'),
         };
 
         // Dans un environnement réel, les données mockées seraient persistantes
@@ -272,8 +324,8 @@ class ArticleService {
         const { data, error } = await supabase
           .from(TABLES.ARTICLES)
           .update({
-            ...articleData,
-            updated_at: new Date().toISOString(),
+            ...formattedArticleData,
+            updated_at: moment().format('YYYY-MM-DDTHH:mm:ssZ'),
           })
           .eq('id', id)
           .select()
