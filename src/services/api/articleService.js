@@ -3,6 +3,7 @@ import { TABLES, handleSupabaseError, DEFAULT_OPTIONS } from './config';
 import { articles as mockArticles } from '../../data/articles';
 import { products } from '../../data/products';
 import moment from 'moment';
+import { toSnakeCase, toCamelCase } from '../../utils/convertKeys';
 
 /**
  * Service pour la gestion des articles
@@ -137,25 +138,28 @@ class ArticleService {
         };
       } else {
         // Utilisation de Supabase pour la production
+        // Convertir les options en snake_case pour Supabase
+        const snakeCaseOptions = toSnakeCase(options);
+        
         let query = supabase
           .from(TABLES.ARTICLES)
           .select('*', { ...DEFAULT_OPTIONS });
 
         // Appliquer les filtres
-        if (options.category) {
-          query = query.eq('category', options.category);
+        if (snakeCaseOptions.category) {
+          query = query.eq('category', snakeCaseOptions.category);
         }
 
-        if (options.search) {
+        if (snakeCaseOptions.search) {
           query = query.or(
-            `title.ilike.%${options.search}%,excerpt.ilike.%${options.search}%`
+            `title.ilike.%${snakeCaseOptions.search}%,excerpt.ilike.%${snakeCaseOptions.search}%`
           );
         }
 
         // Tri
-        if (options.sortBy) {
-          query = query.order(options.sortBy, {
-            ascending: options.sortDirection !== 'desc',
+        if (snakeCaseOptions.sort_by) {
+          query = query.order(snakeCaseOptions.sort_by, {
+            ascending: snakeCaseOptions.sort_direction !== 'desc',
           });
         } else {
           // Tri par défaut
@@ -163,12 +167,12 @@ class ArticleService {
         }
 
         // Pagination
-        if (options.limit) {
-          query = query.limit(options.limit);
+        if (snakeCaseOptions.limit) {
+          query = query.limit(snakeCaseOptions.limit);
 
-          if (options.page) {
-            const start = (options.page - 1) * options.limit;
-            query = query.range(start, start + options.limit - 1);
+          if (snakeCaseOptions.page) {
+            const start = (snakeCaseOptions.page - 1) * snakeCaseOptions.limit;
+            query = query.range(start, start + snakeCaseOptions.limit - 1);
           }
         }
 
@@ -176,8 +180,11 @@ class ArticleService {
 
         if (error) throw error;
 
+        // Convertir les données de snake_case vers camelCase
+        const camelCaseData = toCamelCase(data);
+
         // Enrichir les articles avec les données de produits associés
-        const enrichedArticles = data.map((article) =>
+        const enrichedArticles = camelCaseData.map((article) =>
           this.enrichArticleWithProductData(article)
         );
 
@@ -219,7 +226,10 @@ class ArticleService {
 
         if (error) throw error;
 
-        const enrichedArticle = this.enrichArticleWithProductData(data);
+        // Convertir les données de snake_case vers camelCase
+        const camelCaseData = toCamelCase(data);
+        
+        const enrichedArticle = this.enrichArticleWithProductData(camelCaseData);
         return { data: enrichedArticle, error: null };
       }
     } catch (error) {
@@ -259,24 +269,44 @@ class ArticleService {
         const enrichedArticle = this.enrichArticleWithProductData(newArticle);
         return { data: enrichedArticle, error: null };
       } else {
+        // Retirer les propriétés qui ne sont pas dans la table Supabase
+        const { articleUrl, ...cleanArticleData } = formattedArticleData;
+        
+        // Créer un nouvel objet pour les données à envoyer à Supabase
+        const dataToSend = { ...cleanArticleData };
+        
+        // Supprimer le champ date s'il existe
+        delete dataToSend.date;
+        
+        // Ajouter created_at et updated_at au format ISO
+        const now = new Date().toISOString();
+        dataToSend.created_at = now;
+        dataToSend.updated_at = now;
+
+        // Convertir en snake_case pour Supabase
+        const snakeCaseData = toSnakeCase(dataToSend);
+
+        console.log('Données envoyées à Supabase:', snakeCaseData);
+
         const { data, error } = await supabase
           .from(TABLES.ARTICLES)
-          .insert([
-            {
-              ...formattedArticleData,
-              created_at: moment().format('YYYY-MM-DDTHH:mm:ssZ'),
-              updated_at: moment().format('YYYY-MM-DDTHH:mm:ssZ'),
-            },
-          ])
+          .insert([snakeCaseData])
           .select()
           .single();
 
-        if (error) throw error;
+        if (error) {
+          console.error('Erreur Supabase détaillée:', error);
+          throw error;
+        }
 
-        const enrichedArticle = this.enrichArticleWithProductData(data);
+        // Convertir les données de snake_case vers camelCase
+        const camelCaseData = toCamelCase(data);
+        
+        const enrichedArticle = this.enrichArticleWithProductData(camelCaseData);
         return { data: enrichedArticle, error: null };
       }
     } catch (error) {
+      console.error('Erreur complète:', error);
       return {
         data: null,
         error: handleSupabaseError(
@@ -321,19 +351,25 @@ class ArticleService {
           this.enrichArticleWithProductData(updatedArticle);
         return { data: enrichedArticle, error: null };
       } else {
+        // Convertir les données en snake_case pour Supabase
+        const snakeCaseData = toSnakeCase({
+          ...formattedArticleData,
+          updated_at: moment().format('YYYY-MM-DDTHH:mm:ssZ'),
+        });
+
         const { data, error } = await supabase
           .from(TABLES.ARTICLES)
-          .update({
-            ...formattedArticleData,
-            updated_at: moment().format('YYYY-MM-DDTHH:mm:ssZ'),
-          })
+          .update(snakeCaseData)
           .eq('id', id)
           .select()
           .single();
 
         if (error) throw error;
 
-        const enrichedArticle = this.enrichArticleWithProductData(data);
+        // Convertir les données de snake_case vers camelCase
+        const camelCaseData = toCamelCase(data);
+        
+        const enrichedArticle = this.enrichArticleWithProductData(camelCaseData);
         return { data: enrichedArticle, error: null };
       }
     } catch (error) {
@@ -400,29 +436,25 @@ class ArticleService {
         // Simuler la récupération des articles mis en avant
         const featuredArticles = mockArticles
           .filter((article) => article.featured)
-          .slice(0, limit);
+          .slice(0, limit)
+          .map((article) => this.enrichArticleWithProductData(article));
 
-        // Enrichir les articles avec les données de produits associés
-        const enrichedArticles = featuredArticles.map((article) =>
-          this.enrichArticleWithProductData(article)
-        );
-
-        return { data: enrichedArticles, error: null };
+        return { data: featuredArticles, error: null };
       } else {
         const { data, error } = await supabase
           .from(TABLES.ARTICLES)
           .select('*')
           .eq('featured', true)
-          .order('created_at', { ascending: false })
           .limit(limit);
 
         if (error) throw error;
 
-        // Enrichir les articles avec les données de produits associés
-        const enrichedArticles = data.map((article) =>
+        // Convertir les données de snake_case vers camelCase
+        const camelCaseData = toCamelCase(data);
+        
+        const enrichedArticles = camelCaseData.map((article) =>
           this.enrichArticleWithProductData(article)
         );
-
         return { data: enrichedArticles, error: null };
       }
     } catch (error) {
@@ -445,7 +477,7 @@ class ArticleService {
   async toggleFeatured(id, featured) {
     try {
       if (this.useMockData) {
-        // Simuler le changement du statut "mis en avant"
+        // Simuler le changement de statut d'un article
         const index = mockArticles.findIndex(
           (article) => article.id === Number(id)
         );
@@ -454,14 +486,22 @@ class ArticleService {
           throw new Error('Article non trouvé');
         }
 
-        // Dans un environnement réel, les données mockées seraient persistantes
         mockArticles[index].featured = featured;
+        mockArticles[index].updated_at = moment().format(
+          'YYYY-MM-DDTHH:mm:ssZ'
+        );
 
         return { success: true, error: null };
       } else {
+        // Convertir les données en snake_case pour Supabase
+        const snakeCaseData = toSnakeCase({
+          featured,
+          updated_at: moment().format('YYYY-MM-DDTHH:mm:ssZ'),
+        });
+
         const { error } = await supabase
           .from(TABLES.ARTICLES)
-          .update({ featured })
+          .update(snakeCaseData)
           .eq('id', id);
 
         if (error) throw error;
@@ -473,7 +513,7 @@ class ArticleService {
         success: false,
         error: handleSupabaseError(
           error,
-          `Erreur lors de la modification du statut "mis en avant" de l'article ${id}`
+          `Erreur lors du changement de statut de l'article ${id}`
         ),
       };
     }

@@ -9,7 +9,7 @@
  * Exemple: "imageUrl" -> "image_url"
  */
 function camelToSnake(str) {
-  return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+  return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
 }
 
 /**
