@@ -1,21 +1,33 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ArticleCard from './ArticleCard';
-import SearchAndFilterBar from '../Ui/SearchAndFilterBar';
+import SearchAndFilterBar from './Ui/SearchAndFilterBar';
 
 const ArticlesGrid = ({ articles = [], featuredArticles = [] }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Tous');
 
-  // Extraire toutes les catégories disponibles
-  const allArticles = [...featuredArticles, ...articles];
+  // Créer un ensemble d'articles sans doublons
+  // D'abord extraire les IDs des articles mis en avant
+  const featuredIds = new Set(featuredArticles.map((article) => article.id));
+
+  // Créer un tableau d'articles réguliers sans les articles mis en avant
+  const regularArticles = articles.filter(
+    (article) => !featuredIds.has(article.id)
+  );
+
+  // Extraire toutes les catégories disponibles (sans doublons grâce au Set)
   const categories = [
     'Tous',
-    ...new Set(allArticles.map((article) => article.category)),
+    ...new Set(
+      [...featuredArticles, ...regularArticles].map(
+        (article) => article.category
+      )
+    ),
   ];
 
-  // Filtrer les articles en fonction des critères de recherche et de filtre
-  const filteredArticles = allArticles.filter((article) => {
+  // Filtrer les articles mis en avant selon les critères
+  const filteredFeaturedArticles = featuredArticles.filter((article) => {
     const matchesSearch =
       article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       article.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
@@ -24,14 +36,19 @@ const ArticlesGrid = ({ articles = [], featuredArticles = [] }) => {
     return matchesSearch && matchesCategory;
   });
 
-  // Séparer les articles mis en avant des articles réguliers pour l'affichage
-  const regularFilteredArticles = filteredArticles.filter(
-    (article) =>
-      !featuredArticles.some((featured) => featured.id === article.id)
-  );
-  const featuredFilteredArticles = filteredArticles.filter((article) =>
-    featuredArticles.some((featured) => featured.id === article.id)
-  );
+  // Filtrer les articles réguliers selon les critères
+  const filteredRegularArticles = regularArticles.filter((article) => {
+    const matchesSearch =
+      article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      article.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      selectedCategory === 'Tous' || article.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  // Total des articles filtrés pour l'affichage du compteur
+  const totalFilteredCount =
+    filteredFeaturedArticles.length + filteredRegularArticles.length;
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
@@ -45,24 +62,24 @@ const ArticlesGrid = ({ articles = [], featuredArticles = [] }) => {
         onFilterChange={setSelectedCategory}
         filterLabel="Filtrer par thématique :"
         className="mb-8"
-        resultsCount={filteredArticles.length}
+        resultsCount={totalFilteredCount}
         resultsCountSuffix={
-          filteredArticles.length > 1 ? ' articles trouvés' : ' article trouvé'
+          totalFilteredCount > 1 ? ' articles trouvés' : ' article trouvé'
         }
       />
 
-      {filteredArticles.length > 0 ? (
+      {totalFilteredCount > 0 ? (
         <>
           {/* Articles mis en avant - section spéciale */}
-          {featuredFilteredArticles.length > 0 && (
+          {filteredFeaturedArticles.length > 0 && (
             <div className="mb-12">
               <h2 className="text-2xl font-serif font-bold mb-6 border-b pb-3">
                 Articles à la une
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {featuredFilteredArticles.map((article, index) => (
+                {filteredFeaturedArticles.map((article) => (
                   <ArticleCard
-                    key={`featured-${article.id}-${index}`}
+                    key={`featured-${article.id}`}
                     title={article.title}
                     excerpt={article.excerpt}
                     imageUrl={article.imageUrl}
@@ -75,7 +92,6 @@ const ArticlesGrid = ({ articles = [], featuredArticles = [] }) => {
                     relatedProductName={article.relatedProductName}
                     relatedProductPrice={article.relatedProductPrice}
                     featured={true}
-                    showRelatedProduct={false} // Ne pas afficher le produit associé dans la grille
                   />
                 ))}
               </div>
@@ -83,17 +99,17 @@ const ArticlesGrid = ({ articles = [], featuredArticles = [] }) => {
           )}
 
           {/* Articles réguliers */}
-          {regularFilteredArticles.length > 0 && (
+          {filteredRegularArticles.length > 0 && (
             <div>
-              {featuredFilteredArticles.length > 0 && (
+              {filteredFeaturedArticles.length > 0 && (
                 <h2 className="text-2xl font-serif font-bold mb-6 border-b pb-3">
                   Tous nos articles
                 </h2>
               )}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                {regularFilteredArticles.map((article) => (
+                {filteredRegularArticles.map((article) => (
                   <ArticleCard
-                    key={article.id}
+                    key={`regular-${article.id}`}
                     title={article.title}
                     excerpt={article.excerpt}
                     imageUrl={article.imageUrl}
@@ -105,7 +121,6 @@ const ArticlesGrid = ({ articles = [], featuredArticles = [] }) => {
                     relatedProductImage={article.relatedProductImage}
                     relatedProductName={article.relatedProductName}
                     relatedProductPrice={article.relatedProductPrice}
-                    showRelatedProduct={false} // Ne pas afficher le produit associé dans la grille
                   />
                 ))}
               </div>
