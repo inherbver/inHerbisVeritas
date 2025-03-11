@@ -273,8 +273,12 @@ class ArticleService {
    */
   async createArticle(articleData) {
     try {
+      console.log("Création d'un nouvel article");
+      console.log('Données reçues du frontend:', articleData);
+
       // Formater les dates de l'article
       const formattedArticleData = this.formatArticleDates(articleData);
+      console.log('Données avec dates formatées:', formattedArticleData);
 
       if (this.useMockData) {
         // Simuler la création d'un article
@@ -293,7 +297,13 @@ class ArticleService {
         return { data: enrichedArticle, error: null };
       } else {
         // Retirer les propriétés qui ne sont pas dans la table Supabase
-        const { articleUrl, ...cleanArticleData } = formattedArticleData;
+        const {
+          articleUrl,
+          relatedProductImage,
+          relatedProductName,
+          relatedProductPrice,
+          ...cleanArticleData
+        } = formattedArticleData;
 
         // Créer un nouvel objet pour les données à envoyer à Supabase
         const dataToSend = { ...cleanArticleData };
@@ -306,10 +316,17 @@ class ArticleService {
         dataToSend.created_at = now;
         dataToSend.updated_at = now;
 
+        console.log(
+          'Données nettoyées avant conversion en snake_case:',
+          dataToSend
+        );
+
         // Convertir en snake_case pour Supabase
         const snakeCaseData = toSnakeCase(dataToSend);
-
-        console.log('Données envoyées à Supabase:', snakeCaseData);
+        console.log(
+          'Données converties en snake_case pour Supabase:',
+          snakeCaseData
+        );
 
         const { data, error } = await supabase
           .from(TABLES.ARTICLES)
@@ -322,15 +339,20 @@ class ArticleService {
           throw error;
         }
 
+        console.log('Réponse Supabase après création:', data);
+
         // Convertir les données de snake_case vers camelCase
         const camelCaseData = toCamelCase(data);
+        console.log('Données converties en camelCase:', camelCaseData);
 
         const enrichedArticle =
           this.enrichArticleWithProductData(camelCaseData);
+        console.log('Article enrichi retourné au frontend:', enrichedArticle);
+
         return { data: enrichedArticle, error: null };
       }
     } catch (error) {
-      console.error('Erreur complète:', error);
+      console.error('Erreur complète lors de la création:', error);
       return {
         data: null,
         error: handleSupabaseError(
@@ -349,8 +371,12 @@ class ArticleService {
    */
   async updateArticle(id, articleData) {
     try {
+      console.log("Mise à jour de l'article avec ID:", id);
+      console.log('Données reçues du frontend:', articleData);
+
       // Formater les dates de l'article
       const formattedArticleData = this.formatArticleDates(articleData);
+      console.log('Données avec dates formatées:', formattedArticleData);
 
       if (this.useMockData) {
         // Simuler la mise à jour d'un article
@@ -375,29 +401,63 @@ class ArticleService {
           this.enrichArticleWithProductData(updatedArticle);
         return { data: enrichedArticle, error: null };
       } else {
-        // Convertir les données en snake_case pour Supabase
-        const snakeCaseData = toSnakeCase({
-          ...formattedArticleData,
+        // Retirer les propriétés qui ne sont pas dans la table Supabase
+        const {
+          articleUrl,
+          relatedProductImage,
+          relatedProductName,
+          relatedProductPrice,
+          ...cleanArticleData
+        } = formattedArticleData;
+
+        // Créer un nouvel objet pour les données à envoyer à Supabase
+        const dataToSend = {
+          ...cleanArticleData,
           updated_at: moment().format('YYYY-MM-DDTHH:mm:ssZ'),
-        });
+        };
+
+        console.log(
+          'Données nettoyées avant conversion en snake_case:',
+          dataToSend
+        );
+
+        // Convertir les données en snake_case pour Supabase
+        const snakeCaseData = toSnakeCase(dataToSend);
+        console.log(
+          'Données converties en snake_case pour Supabase:',
+          snakeCaseData
+        );
+
+        // S'assurer que l'ID est une chaîne pour compatibilité avec UUID Supabase
+        const stringId = String(id);
+        console.log('ID formaté pour Supabase:', stringId);
 
         const { data, error } = await supabase
           .from(TABLES.ARTICLES)
           .update(snakeCaseData)
-          .eq('id', id)
+          .eq('id', stringId)
           .select()
           .single();
 
-        if (error) throw error;
+        if (error) {
+          console.error('Erreur Supabase détaillée:', error);
+          throw error;
+        }
+
+        console.log('Réponse Supabase après mise à jour:', data);
 
         // Convertir les données de snake_case vers camelCase
         const camelCaseData = toCamelCase(data);
+        console.log('Données converties en camelCase:', camelCaseData);
 
         const enrichedArticle =
           this.enrichArticleWithProductData(camelCaseData);
+        console.log('Article enrichi retourné au frontend:', enrichedArticle);
+
         return { data: enrichedArticle, error: null };
       }
     } catch (error) {
+      console.error('Erreur complète lors de la mise à jour:', error);
       return {
         data: null,
         error: handleSupabaseError(
@@ -415,6 +475,8 @@ class ArticleService {
    */
   async deleteArticle(id) {
     try {
+      console.log("Suppression de l'article avec ID:", id);
+
       if (this.useMockData) {
         // Simuler la suppression d'un article
         const index = mockArticles.findIndex(
@@ -430,16 +492,25 @@ class ArticleService {
 
         return { success: true, error: null };
       } else {
+        // S'assurer que l'ID est une chaîne pour compatibilité avec UUID Supabase
+        const stringId = String(id);
+        console.log('ID formaté pour Supabase:', stringId);
+
         const { error } = await supabase
           .from(TABLES.ARTICLES)
           .delete()
-          .eq('id', id);
+          .eq('id', stringId);
 
-        if (error) throw error;
+        if (error) {
+          console.error('Erreur Supabase détaillée:', error);
+          throw error;
+        }
 
+        console.log('Article supprimé avec succès');
         return { success: true, error: null };
       }
     } catch (error) {
+      console.error('Erreur complète lors de la suppression:', error);
       return {
         success: false,
         error: handleSupabaseError(
