@@ -1,11 +1,51 @@
-import React from 'react';
-import { articles, featuredArticles } from '../data/articles';
+import React, { useState, useEffect } from 'react';
+import articleService from '../services/api/articleService';
 import ArticlesGrid from '../components/magazine/ArticlesGrid';
 import PageTitle from '../components/Ui/PageTitle';
 import StandardPageLayout from '../components/Ui/StandardPageLayout';
 import { FaLeaf, FaSearch, FaStarOfLife } from 'react-icons/fa';
 
 const Magazine = () => {
+  const [articles, setArticles] = useState([]);
+  const [featuredArticles, setFeaturedArticles] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        setIsLoading(true);
+
+        // Récupérer tous les articles
+        const { data: articlesData, error: articlesError } =
+          await articleService.getArticles({
+            limit: 50, // Augmenter la limite pour afficher plus d'articles
+          });
+
+        if (articlesError) throw articlesError;
+
+        // Récupérer les articles mis en avant
+        const { data: featuredData, error: featuredError } =
+          await articleService.getFeaturedArticles(6);
+
+        if (featuredError) throw featuredError;
+
+        setArticles(articlesData);
+        setFeaturedArticles(featuredData);
+      } catch (err) {
+        console.error('Erreur lors du chargement des articles:', err);
+        setError(
+          err.message ||
+            'Une erreur est survenue lors du chargement des articles'
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, []);
+
   return (
     <StandardPageLayout>
       <div className="max-w-7xl mx-auto">
@@ -58,8 +98,27 @@ const Magazine = () => {
         </div>
       </div>
 
-      {/* Grille d'articles avec recherche et filtres */}
-      <ArticlesGrid articles={articles} featuredArticles={featuredArticles} />
+      {/* Affichage des états de chargement, erreur ou grille d'articles */}
+      {isLoading ? (
+        <div className="text-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Chargement des articles...</p>
+        </div>
+      ) : error ? (
+        <div className="text-center py-12 px-4">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded max-w-2xl mx-auto">
+            <p>
+              <strong>Erreur:</strong> {error}
+            </p>
+            <p className="mt-2">
+              Veuillez réessayer ultérieurement ou contacter notre support.
+            </p>
+          </div>
+        </div>
+      ) : (
+        /* Grille d'articles avec recherche et filtres */
+        <ArticlesGrid articles={articles} featuredArticles={featuredArticles} />
+      )}
 
       {/* Newsletter */}
       <div className="bg-green-50 py-16 mt-12">

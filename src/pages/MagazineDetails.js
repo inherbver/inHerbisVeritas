@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { articles } from '../data/articles';
+import articleService from '../services/api/articleService';
 import StandardPageLayout from '../components/Ui/StandardPageLayout';
 import {
   FaFacebookF,
@@ -21,6 +21,7 @@ const MagazineDetails = () => {
   const [article, setArticle] = useState(null);
   const [relatedArticles, setRelatedArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Animation variants
   const fadeIn = {
@@ -33,106 +34,126 @@ const MagazineDetails = () => {
   };
 
   useEffect(() => {
-    // Trouver l'article correspondant à l'ID de l'URL
-    const foundArticle = articles.find(
-      (a) => a.id.toString() === id || a.slug === id
-    );
+    const fetchArticleDetails = async () => {
+      try {
+        setLoading(true);
 
-    if (foundArticle) {
-      setArticle(foundArticle);
+        // Récupérer l'article soit par son ID soit par son slug
+        let articleData;
 
-      // Trouver des articles similaires (même catégorie ou articles récents)
-      const similar = articles
-        .filter(
-          (a) =>
-            a.category === foundArticle.category && a.id !== foundArticle.id
-        )
-        .slice(0, 3);
+        // D'abord vérifier si id est un UUID (pour Supabase)
+        const isUUID =
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+            id
+          );
 
-      // Si pas assez d'articles dans la même catégorie, ajouter des articles récents
-      if (similar.length < 3) {
-        const recent = articles
-          .filter(
-            (a) =>
-              a.id !== foundArticle.id && !similar.some((s) => s.id === a.id)
-          )
-          .slice(0, 3 - similar.length);
+        if (isUUID) {
+          // Récupérer par ID
+          const { data, error } = await articleService.getArticleById(id);
+          if (error) throw error;
+          articleData = data;
+        } else {
+          // Récupérer par slug
+          const { data, error } = await articleService.getArticles({
+            limit: 1,
+            filters: { slug: id },
+          });
+          if (error) throw error;
 
-        setRelatedArticles([...similar, ...recent]);
-      } else {
-        setRelatedArticles(similar);
+          // Prendre le premier article qui correspond au slug
+          articleData = data.length > 0 ? data[0] : null;
+        }
+
+        if (!articleData) {
+          throw new Error("L'article demandé n'existe pas ou a été supprimé.");
+        }
+
+        setArticle(articleData);
+
+        // Récupérer des articles similaires (même catégorie)
+        if (articleData.category) {
+          const { data: similarData, error: similarError } =
+            await articleService.getArticles({
+              category: articleData.category,
+              limit: 3,
+            });
+
+          if (similarError) throw similarError;
+
+          // Filtrer pour exclure l'article en cours
+          const filtered = similarData.filter((a) => a.id !== articleData.id);
+          setRelatedArticles(filtered);
+        }
+      } catch (err) {
+        console.error("Erreur lors du chargement de l'article:", err);
+        setError(
+          err.message ||
+            "Une erreur est survenue lors du chargement de l'article"
+        );
+      } finally {
+        setLoading(false);
       }
-    }
+    };
 
-    setLoading(false);
+    if (id) {
+      fetchArticleDetails();
+    }
   }, [id]);
 
+  // Si chargement en cours
   if (loading) {
     return (
       <StandardPageLayout>
-        <div className="min-h-screen flex justify-center items-center">
-          <div className="animate-pulse text-2xl text-green-600">
-            Chargement...
-          </div>
+        <div className="max-w-4xl mx-auto px-4 py-24 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Chargement de l'article...</p>
         </div>
       </StandardPageLayout>
     );
   }
 
-  if (!article) {
+  // Si erreur
+  if (error) {
     return (
       <StandardPageLayout>
-        <div className="min-h-screen flex flex-col justify-center items-center">
-          <h1 className="text-3xl font-serif mb-4">Article introuvable</h1>
-          <p className="mb-6 text-gray-600">
-            L'article que vous recherchez n'existe pas ou a été déplacé.
-          </p>
+        <div className="max-w-4xl mx-auto px-4 py-12">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-8">
+            <p>
+              <strong>Erreur :</strong> {error}
+            </p>
+          </div>
           <Link
             to="/magazine"
-            className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full transition-colors"
+            className="inline-flex items-center text-green-700 hover:text-green-900 font-medium"
           >
-            <FaArrowLeft />
-            Retour aux articles
+            <FaArrowLeft className="mr-2" />
+            Retour au magazine
           </Link>
         </div>
       </StandardPageLayout>
     );
   }
 
-  // Contenu factice pour l'exemple
-  const articleContent = {
-    intro:
-      "Dans un monde où le stress et l'anxiété sont omniprésents, revenir aux remèdes naturels peut apporter un profond soulagement. Parmi ces trésors botaniques, la camomille occupe une place de choix, appréciée depuis des millénaires pour ses nombreuses vertus médicinales et esthétiques.",
-
-    paragraphs: [
-      {
-        title: 'Histoire et tradition de la camomille',
-        content:
-          "La camomille, ou Matricaria chamomilla pour les botanistes, est une plante herbacée de la famille des Astéracées. Son nom vient du grec ancien « chamaimelon » signifiant « pomme de terre », en référence au parfum de ses fleurs qui rappelle celui de la pomme. Utilisée depuis l'Égypte ancienne, elle était considérée comme un remède sacré dédié au dieu Soleil pour ses propriétés curatives. Les Romains l'employaient pour aromatiser leurs boissons, tandis que les médecins médiévaux la prescrivaient contre les insomnies et les fièvres.",
-      },
-      {
-        title: 'Propriétés apaisantes pour le corps',
-        content:
-          "La richesse de la camomille réside dans ses composés actifs, notamment les flavonoïdes et les huiles essentielles comme l'azulène, qui lui confèrent ses propriétés anti-inflammatoires, antiseptiques et antispasmodiques. En infusion, elle favorise la digestion, soulage les crampes d'estomac et diminue les inflammations intestinales. Appliquée en compresse, elle apaise les irritations cutanées, l'eczéma et même les brûlures légères.",
-      },
-      {
-        title: "Un allié contre le stress et l'anxiété",
-        content:
-          "Dans notre quotidien effréné, la camomille offre un havre de tranquillité. Ses propriétés légèrement sédatives aident à combattre l'anxiété sans provoquer de somnolence excessive pendant la journée. Une tasse d'infusion de camomille avant le coucher favorise l'endormissement et améliore la qualité du sommeil. Des études scientifiques ont confirmé que la consommation régulière de camomille pouvait réduire significativement les symptômes d'anxiété généralisée.",
-      },
-      {
-        title: 'Beauté et soins naturels',
-        content:
-          'En cosmétique, la camomille est un ingrédient précieux, particulièrement pour les peaux sensibles ou à tendance réactive. Son action anti-inflammatoire apaise les rougeurs, tandis que ses propriétés antioxydantes combattent le vieillissement cutané. Pour les cheveux blonds, un rinçage à la camomille intensifie naturellement les reflets dorés. Intégrée dans des masques maison, elle purifie et adoucit la peau en profondeur.',
-      },
-    ],
-
-    quote:
-      "La camomille nous rappelle que les solutions les plus simples sont souvent les plus efficaces : prendre le temps de s'arrêter, respirer, et savourer une tasse de cette infusion dorée peut transformer notre journée.",
-
-    conclusion:
-      "Qu'elle soit consommée en tisane apaisante, appliquée en soin cosmétique ou utilisée en aromathérapie, la camomille nous invite à redécouvrir la sagesse des remèdes ancestraux. Dans notre quête de bien-être, cette modeste fleur blanche aux pétales délicats nous enseigne que la douceur est parfois la plus grande des forces. Facile à cultiver et à intégrer dans notre quotidien, elle représente une passerelle accessible vers une approche plus naturelle de notre santé et de notre beauté.",
-  };
+  // Si article non trouvé
+  if (!article) {
+    return (
+      <StandardPageLayout>
+        <div className="max-w-4xl mx-auto px-4 py-12 text-center">
+          <h2 className="text-2xl font-bold mb-4">Article non trouvé</h2>
+          <p className="text-gray-600 mb-8">
+            L'article que vous recherchez n'existe pas ou a été supprimé.
+          </p>
+          <Link
+            to="/magazine"
+            className="inline-flex items-center text-green-700 hover:text-green-900 font-medium"
+          >
+            <FaArrowLeft className="mr-2" />
+            Retour au magazine
+          </Link>
+        </div>
+      </StandardPageLayout>
+    );
+  }
 
   return (
     <StandardPageLayout>
@@ -185,48 +206,23 @@ const MagazineDetails = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          {/* Introduction */}
-          <p className="text-lg md:text-xl font-serif text-gray-800 mb-8 leading-relaxed">
-            {articleContent.intro}
-          </p>
+          {/* Corps de l'article */}
+          <article className="prose prose-lg max-w-none">
+            {/* Introduction */}
+            <p className="text-xl text-gray-700 mb-8 leading-relaxed font-medium">
+              {article.excerpt}
+            </p>
 
-          {/* Paragraphes avec sous-titres */}
-          {articleContent.paragraphs.map((paragraph, index) => (
-            <div key={index} className="mb-10">
-              <h2 className="text-2xl md:text-3xl font-serif font-bold text-gray-800 mb-4">
-                {paragraph.title}
-              </h2>
-              <p className="text-gray-700 leading-relaxed mb-6">
-                {paragraph.content}
-              </p>
-
-              {/* Image entre les paragraphes (tous les 2 paragraphes) */}
-              {index % 2 === 1 && (
-                <div className="my-10 rounded-xl overflow-hidden shadow-lg">
-                  <img
-                    src={`/assets/images/mag_${index + 2}.jpeg`}
-                    alt={paragraph.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-            </div>
-          ))}
-
-          {/* Citation mise en avant */}
-          <div className="my-12 bg-green-50 border-l-4 border-green-500 p-6 md:p-8 rounded-r-lg shadow-sm">
-            <div className="flex">
-              <FaQuoteLeft className="text-green-400 text-3xl mr-4 mt-1" />
-              <blockquote className="text-xl font-serif text-gray-700 italic">
-                {articleContent.quote}
-              </blockquote>
-            </div>
-          </div>
-
-          {/* Conclusion */}
-          <p className="text-lg text-gray-700 mb-12 leading-relaxed">
-            {articleContent.conclusion}
-          </p>
+            {/* Contenu principal de l'article */}
+            {article.content ? (
+              <div
+                className="mt-8"
+                dangerouslySetInnerHTML={{ __html: article.content }}
+              />
+            ) : (
+              <></>
+            )}
+          </article>
 
           {/* Produit associé - Affiché uniquement si l'article a un produit associé défini par l'admin */}
           {article.relatedProductId && article.relatedProductImage && (
