@@ -23,6 +23,19 @@ import QuantitySelector from '../components/Ui/QuantitySelector';
 import TabSystem from '../components/Ui/TabSystem';
 import ThumbnailGallery from '../components/product/ThumbnailGallery';
 
+// Composant pour afficher "Fabriqué en France" aux couleurs du drapeau français
+const FrenchMadeBadge = () => (
+  <div className="inline-flex items-center bg-gray-100 rounded-full px-3 py-1 mt-2">
+    <span className="font-medium">
+      <span className="text-blue-700">Fabriqué</span>
+      <span className="text-gray-800 bg-white px-1 mx-1 rounded shadow-sm border border-gray-300">
+        en
+      </span>
+      <span className="text-red-600">France</span>
+    </span>
+  </div>
+);
+
 const ProductDetails = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
