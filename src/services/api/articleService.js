@@ -3,6 +3,7 @@ import { TABLES, handleSupabaseError, DEFAULT_OPTIONS } from './config';
 import { articles as mockArticles } from '../../data/articles';
 import { products } from '../../data/products';
 import moment from 'moment';
+import 'moment/locale/fr'; // Import de la locale française
 import { toSnakeCase, toCamelCase } from '../../utils/convertKeys';
 
 /**
@@ -82,6 +83,33 @@ class ArticleService {
   }
 
   /**
+   * Formate les dates de l'article pour l'affichage (ISO vers format français)
+   * @param {Object} article - Article avec des dates au format ISO
+   * @returns {Object} - Article avec des dates formatées pour l'affichage
+   */
+  formatArticleDatesForDisplay(article) {
+    if (!article) return article;
+
+    const formattedArticle = { ...article };
+
+    // Formater la date de publication pour l'affichage si elle existe
+    if (formattedArticle.date) {
+      try {
+        moment.locale('fr');
+        formattedArticle.date = moment(formattedArticle.date).format(
+          'D MMMM YYYY'
+        );
+      } catch (error) {
+        console.error(
+          `❌ Erreur lors du formatage de la date pour l'affichage: ${error.message}`
+        );
+      }
+    }
+
+    return formattedArticle;
+  }
+
+  /**
    * Récupère tous les articles
    * @param {Object} options - Options de filtre et de pagination
    * @param {Object} options.filters - Critères de filtrage (ex: {slug: 'mon-article', category: 'Plantes'})
@@ -141,9 +169,11 @@ class ArticleService {
         const limit = options.limit || 10;
         const paginatedArticles = filteredArticles.slice(start, start + limit);
 
-        // Enrichir les articles avec les données de produits associés
+        // Enrichir les articles avec les données de produits associés et formater les dates
         const enrichedArticles = paginatedArticles.map((article) =>
-          this.enrichArticleWithProductData(article)
+          this.formatArticleDatesForDisplay(
+            this.enrichArticleWithProductData(article)
+          )
         );
 
         return {
@@ -205,9 +235,11 @@ class ArticleService {
         // Convertir les données de snake_case vers camelCase
         const camelCaseData = toCamelCase(data);
 
-        // Enrichir les articles avec les données de produits associés
+        // Enrichir les articles avec les données de produits associés et formater les dates
         const enrichedArticles = camelCaseData.map((article) =>
-          this.enrichArticleWithProductData(article)
+          this.formatArticleDatesForDisplay(
+            this.enrichArticleWithProductData(article)
+          )
         );
 
         return { data: enrichedArticles, count, error: null };
@@ -236,7 +268,9 @@ class ArticleService {
           (article) => article.id === Number(id)
         );
         const enrichedArticle = article
-          ? this.enrichArticleWithProductData(article)
+          ? this.formatArticleDatesForDisplay(
+              this.enrichArticleWithProductData(article)
+            )
           : null;
         return { data: enrichedArticle, error: null };
       } else {
@@ -251,8 +285,9 @@ class ArticleService {
         // Convertir les données de snake_case vers camelCase
         const camelCaseData = toCamelCase(data);
 
-        const enrichedArticle =
-          this.enrichArticleWithProductData(camelCaseData);
+        const enrichedArticle = this.formatArticleDatesForDisplay(
+          this.enrichArticleWithProductData(camelCaseData)
+        );
         return { data: enrichedArticle, error: null };
       }
     } catch (error) {
@@ -263,6 +298,39 @@ class ArticleService {
           `Erreur lors de la récupération de l'article ${id}`
         ),
       };
+    }
+  }
+
+  /**
+   * Génère un slug unique en ajoutant un suffixe si nécessaire
+   * @param {string} baseSlug - Le slug de base à rendre unique
+   * @returns {Promise<string>} - Le slug unique
+   */
+  async generateUniqueSlug(baseSlug) {
+    try {
+      // Vérifier si le slug existe déjà
+      const { data, error } = await supabase
+        .from(TABLES.ARTICLES)
+        .select('slug')
+        .eq('slug', baseSlug)
+        .single();
+
+      // Si aucune erreur, cela signifie que le slug existe déjà
+      if (!error && data) {
+        // Ajouter un suffixe unique basé sur la date et un nombre aléatoire
+        const timestamp = Date.now().toString().slice(-4);
+        const randomSuffix = Math.floor(Math.random() * 1000);
+        const newSlug = `${baseSlug}-${timestamp}-${randomSuffix}`;
+        console.log(`Slug existant détecté, nouveau slug généré: ${newSlug}`);
+        return newSlug;
+      }
+
+      // Slug disponible, on le retourne tel quel
+      return baseSlug;
+    } catch (error) {
+      console.error('Erreur lors de la vérification du slug:', error);
+      // En cas d'erreur, on ajoute un timestamp pour garantir l'unicité
+      return `${baseSlug}-${Date.now()}`;
     }
   }
 
@@ -293,7 +361,9 @@ class ArticleService {
         // Ici, elles seront réinitialisées lors du rechargement de la page
         mockArticles.push(newArticle);
 
-        const enrichedArticle = this.enrichArticleWithProductData(newArticle);
+        const enrichedArticle = this.formatArticleDatesForDisplay(
+          this.enrichArticleWithProductData(newArticle)
+        );
         return { data: enrichedArticle, error: null };
       } else {
         // Retirer les propriétés qui ne sont pas dans la table Supabase
@@ -305,11 +375,15 @@ class ArticleService {
           ...cleanArticleData
         } = formattedArticleData;
 
+        // Vérifier si le slug existe et le rendre unique si nécessaire
+        if (cleanArticleData.slug) {
+          cleanArticleData.slug = await this.generateUniqueSlug(
+            cleanArticleData.slug
+          );
+        }
+
         // Créer un nouvel objet pour les données à envoyer à Supabase
         const dataToSend = { ...cleanArticleData };
-
-        // Supprimer le champ date s'il existe
-        delete dataToSend.date;
 
         // Ajouter created_at et updated_at au format ISO
         const now = new Date().toISOString();
@@ -345,8 +419,9 @@ class ArticleService {
         const camelCaseData = toCamelCase(data);
         console.log('Données converties en camelCase:', camelCaseData);
 
-        const enrichedArticle =
-          this.enrichArticleWithProductData(camelCaseData);
+        const enrichedArticle = this.formatArticleDatesForDisplay(
+          this.enrichArticleWithProductData(camelCaseData)
+        );
         console.log('Article enrichi retourné au frontend:', enrichedArticle);
 
         return { data: enrichedArticle, error: null };
@@ -397,8 +472,9 @@ class ArticleService {
         // Dans un environnement réel, les données mockées seraient persistantes
         mockArticles[index] = updatedArticle;
 
-        const enrichedArticle =
-          this.enrichArticleWithProductData(updatedArticle);
+        const enrichedArticle = this.formatArticleDatesForDisplay(
+          this.enrichArticleWithProductData(updatedArticle)
+        );
         return { data: enrichedArticle, error: null };
       } else {
         // Retirer les propriétés qui ne sont pas dans la table Supabase
@@ -450,8 +526,9 @@ class ArticleService {
         const camelCaseData = toCamelCase(data);
         console.log('Données converties en camelCase:', camelCaseData);
 
-        const enrichedArticle =
-          this.enrichArticleWithProductData(camelCaseData);
+        const enrichedArticle = this.formatArticleDatesForDisplay(
+          this.enrichArticleWithProductData(camelCaseData)
+        );
         console.log('Article enrichi retourné au frontend:', enrichedArticle);
 
         return { data: enrichedArticle, error: null };
@@ -534,9 +611,11 @@ class ArticleService {
           .filter((article) => article.featured)
           .slice(0, limit);
 
-        // Enrichir les articles avec les données de produits associés
+        // Enrichir les articles avec les données de produits associés et formater les dates
         const enrichedArticles = featuredArticles.map((article) =>
-          this.enrichArticleWithProductData(article)
+          this.formatArticleDatesForDisplay(
+            this.enrichArticleWithProductData(article)
+          )
         );
 
         return { data: enrichedArticles, error: null };
@@ -554,9 +633,11 @@ class ArticleService {
         // Convertir les données de snake_case vers camelCase
         const camelCaseData = toCamelCase(data);
 
-        // Enrichir les articles avec les données de produits associés
+        // Enrichir les articles avec les données de produits associés et formater les dates
         const enrichedArticles = camelCaseData.map((article) =>
-          this.enrichArticleWithProductData(article)
+          this.formatArticleDatesForDisplay(
+            this.enrichArticleWithProductData(article)
+          )
         );
 
         return { data: enrichedArticles, error: null };
