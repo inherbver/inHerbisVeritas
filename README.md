@@ -1,191 +1,141 @@
-# In Herbis Veritas - Plateforme Herboriste et Magazine
+# inHerbisVeritas
 
-## Guide pour Utilisateurs Non-Techniques
+inHerbisVeritas est une application e-commerce spécialisée dans les produits naturels et bio, combinant une boutique en ligne et un magazine éditorial pour promouvoir un mode de vie naturel et durable.
 
-### Présentation du Projet
-In Herbis Veritas est une plateforme dédiée aux produits à base de plantes et d'herbes médicinales, comprenant à la fois une boutique en ligne et un magazine spécialisé. Ce projet vise à offrir une expérience utilisateur fluide et intuitive pour la découverte, l'achat de produits naturels et l'accès à des connaissances sur les plantes médicinales.
+## Technologies
 
-### Fonctionnalités Principales
-- **Boutique en ligne** : Catalogue de produits naturels et herboristerie
-- **Magazine** : Articles thématiques sur les plantes, recettes et bien-être
-- **Administration** : Interface simplifiée pour gérer les produits et articles
-- **Authentification** : Connexion sécurisée pour les administrateurs et utilisateurs
-- **Basculement Admin/Public** : Fonctionnalité permettant aux administrateurs de naviguer facilement entre l'interface d'administration et le site public
+- **Frontend** : React, Tailwind CSS
+- **Backend** : Supabase (BaaS - Backend as a Service)
+- **Authentification** : Supabase Auth (JWT)
+- **Base de données** : PostgreSQL (via Supabase)
+- **Stockage** : Supabase Storage
+- **Déploiement** : Vercel
 
-### Accès à l'Administration
-Pour accéder à l'interface d'administration :
-1. Connectez-vous avec vos identifiants
-2. Accédez au tableau de bord via le menu principal
-3. Utilisez les outils de gestion d'articles et de produits
-4. Basculez entre l'interface admin et le site public grâce au bouton flottant (réservé aux administrateurs)
+## Configuration du Projet
 
-### Gestion des Articles du Magazine
-La nouvelle interface d'administration permet :
-- Création d'articles avec éditeur simplifié
-- Attribution de catégories et produits associés
-- Mise en avant d'articles sur la page d'accueil
-- Filtrage et recherche dans la liste des articles
+### Variables d'Environnement
 
-## Guide pour Développeurs
+Créez un fichier `.env.local` à la racine du projet et ajoutez les variables suivantes :
 
-### Stack Technique
-- **Frontend** : React (v18+)
-- **Styles** : Tailwind CSS
-- **Routage** : React Router v6
-- **Service d'Authentification** : Express.js + Supabase Auth (hébergé sur Render)
-- **Base de données** : Supabase (PostgreSQL)
-- **État** : React Context API et useState/useEffect
-
-### Authentification et Gestion des Rôles
-
-L'application implémente un système d'authentification robuste avec gestion des rôles :
-
-- **Système à trois couches** : 
-  1. Frontend React avec AuthContext
-  2. Service d'authentification Express.js
-  3. Supabase Auth comme backend
-
-- **Principaux rôles** :
-  - **User** : Accès au site public et à son profil personnel
-  - **Admin** : Accès complet au tableau de bord d'administration et à toutes les fonctionnalités de gestion
-
-- **Sécurité** :
-  - Cookies HTTP-only pour les jetons d'authentification
-  - Expiration automatique des sessions
-  - Protection contre les attaques CSRF et XSS
-
-### To Do (12/03/2025)
-
-- [ ] **Migration complète vers Supabase** :
-  - Basculer `useMockData = false` dans articleService
-  - Vérifier les requêtes et la structure des tables
-  - Tester toutes les opérations CRUD
-
-- [ ] **Optimisation du code** :
-  - Refactoriser les services pour une meilleure réutilisation
-  - Améliorer la gestion d'erreurs
-  - Optimiser les requêtes Supabase (pagination, filtres)
-
-- [ ] **Gestion des images** :
-  - Implémenter l'upload et le redimensionnement d'images
-  - Configurer le stockage via Supabase Storage
-  - Optimiser le chargement des images (lazy loading)
-
-- [ ] **Tests cross-platform** :
-  - Tester l'application sur différents navigateurs (Chrome, Firefox, Safari)
-  - Vérifier la compatibilité mobile (iOS, Android)
-  - Tester sur différentes tailles d'écran
-
-- [ ] **Déploiement** :
-  - Mettre à jour le service d'authentification sur Render
-  - Configurer le déploiement automatique
-  - Configurer le monitoring et les alertes
-
-### Architecture du Projet
 ```
-src/
-├── components/          # Composants réutilisables
-│   ├── admin/           # Interface d'administration
-│   ├── auth/            # Composants d'authentification
-│   ├── layout/          # Éléments de mise en page
-│   └── magazine/        # Composants spécifiques au magazine
-├── contexts/            # Contextes React (Auth, Panier, etc.)
-├── data/                # Données mockées pour le développement
-├── pages/               # Pages principales de l'application
-├── services/            # Couche service pour l'accès aux données
-│   └── api/             # Services API et configuration
-├── styles/              # Styles globaux et utilitaires CSS
-└── utils/               # Fonctions utilitaires
-
-auth-service/            # Service d'authentification séparé
-├── server.js            # Point d'entrée du serveur Express
-├── controllers/         # Logique des endpoints d'authentification
-├── middleware/          # Middleware d'authentification et sécurité
-├── routes/              # Définition des routes d'API
-└── config/              # Configuration (Supabase, cookies, etc.)
+REACT_APP_SUPABASE_URL=votre_url_supabase
+REACT_APP_SUPABASE_ANON_KEY=votre_clé_anonyme_supabase
 ```
 
-### Couche Service et Gestion des Données
-Le projet utilise une architecture en couches avec une séparation claire entre :
-- **Composants UI** : Responsables de l'affichage
-- **Services** : Gestion de l'accès aux données et logique métier
-- **Contextes** : Partage d'état global
+### Installation et Démarrage
 
-#### Service d'Articles
-Le service d'articles (`articleService.js`) fournit une interface unifiée pour gérer les articles du magazine :
+```bash
+# Installation des dépendances
+npm install
+
+# Démarrage en mode développement
+npm start
+
+# Build pour la production
+npm run build
+```
+
+## Fonctionnalités Utilisateur
+
+### Authentification et Profil Utilisateur
+
+- **Inscription et Connexion** : Création de compte, connexion via email/mot de passe ou fournisseurs OAuth
+- **Gestion de profil** : Modification des informations personnelles, changement de mot de passe
+- **Suivi des commandes** : Historique et statut des commandes en temps réel
+- **Préférences personnalisées** : Enregistrement des préférences (type de peau, allergies, parfums préférés)
+- **Conversion compte invité** : Processus fluide de conversion d'un compte invité vers un compte permanent
+
+### Expérience d'Achat Personnalisée
+
+- **Recommandations personnalisées** : Suggestions de produits basées sur les préférences utilisateur, l'historique d'achat et les problématiques spécifiques (allergies, type de peau)
+- **Notifications de disponibilité** : Alertes pour les produits saisonniers ou en édition limitée
+- **Programme de fidélité** : Accumulation de points, récompenses et avantages exclusifs
+- **Avis et commentaires** : Système de notation et commentaires sur les produits
+
+### Engagement Communautaire et Éducation
+
+- **Webinaires** : Sessions en ligne avec des experts en plantes médicinales et cosmétiques naturels
+- **Ateliers** : Accès gratuit à des ateliers en ligne ou en personne pour les clients fidèles, avec possibilité d'offrir à un proche
+- **Discussions magazine** : Participation aux conversations sous les articles du magazine
+- **Contenus éducatifs** : Articles détaillés sur les bienfaits et usages des produits naturels
+
+## Schéma de la Base de Données
+
+### Tables Principales
+
+| Nom de la Table | Description |
+|----------------|------------|
+| users | Informations des utilisateurs |
+| products | Catalogue des produits |
+| orders | Commandes des clients |
+| order_items | Produits dans les commandes |
+| articles | Articles du magazine |
+| reviews | Avis sur les produits |
+
+### Tables de Fonctionnalités Utilisateur
+
+| Nom de la Table | Description |
+|----------------|------------|
+| users_preferences | Préférences utilisateur (type de peau, allergies, parfums préférés) |
+| users_stories | Agrégation des données pour le système de recommandation |
+| product_notifications | Alertes de disponibilité pour les produits |
+| webinars | Informations sur les webinaires |
+| webinar_participants | Inscriptions aux webinaires, incluant la fonctionnalité de cadeau |
+| article_comments | Commentaires sur les articles du magazine |
+| loyalty_points | Points de fidélité des utilisateurs |
+
+## Exemple d'Utilisations des Services API
 
 ```javascript
-// Exemples d'utilisation
-import articleService from '../services/api/articleService';
+// Récupération des recommandations personnalisées
+const { data: recommendations } = await recommendationService.getPersonalizedRecommendations(userId);
 
-// Récupérer tous les articles
-const { data, count, error } = await articleService.getArticles({ 
-  category: 'Plantes médicinales',
-  search: 'camomille',
-  page: 1,
-  limit: 10 
+// Inscription à un webinaire
+const { data: registration } = await webinarService.registerForWebinar(webinarId, userId);
+
+// Inscription à un webinaire en cadeau pour un autre utilisateur
+const { data: giftRegistration } = await webinarService.registerForWebinar(webinarId, userId, friendUserId);
+
+// Mise à jour des préférences utilisateur
+const { data: updatedPreferences } = await userPreferencesService.updateUserPreferences(userId, {
+  skinType: 'sensible',
+  concerns: ['rougeurs', 'sécheresse'],
+  preferredScents: ['lavande', 'rose']
 });
 
-// Créer un article
-const { data, error } = await articleService.createArticle({
-  title: 'Nouveau titre',
-  category: 'Bien-être',
-  excerpt: 'Description courte...',
-  content: 'Contenu complet...',
-  featured: false
-});
+// Abonnement aux notifications de disponibilité
+const { data: notification } = await notificationService.subscribeToProductAvailability(userId, productId);
 ```
 
-#### Mode Développement vs Production
-Le service supporte deux modes de fonctionnement :
-- **Mode développement** (`useMockData = true`) : Utilise des données mockées
-- **Mode production** (`useMockData = false`) : Utilise Supabase comme backend
+## Intégrations et APIs Externes
 
-Cette approche permet de développer sans dépendre d'un backend et facilite la transition vers la production.
+- **Stripe** : Traitement des paiements
+- **SendGrid** : Envoi d'emails transactionnels et marketing
+- **Algolia** : Moteur de recherche avancé
+- **Google Analytics** : Suivi des métriques du site
 
-### Déploiement
+## Optimisation SEO et Conversion
 
-L'application est déployée sur deux services distincts :
+L'application implémente plusieurs stratégies pour optimiser le référencement et le taux de conversion :
 
-1. **Frontend React** : Déployé sur Vercel ou Netlify
-2. **Service d'Authentification** : Déployé sur Render
+- Structure de page claire avec balisage HTML sémantique
+- URLs optimisées et slugs pour les produits et articles
+- Rich snippets pour les produits et avis
+- Chargement optimisé des images et lazy loading
+- Design responsive et accessible
+- Formulaires et parcours d'achat simplifiés
 
-Cette séparation offre plusieurs avantages :
-- Meilleure scalabilité (chaque service peut évoluer indépendamment)
-- Sécurité renforcée (séparation des préoccupations)
-- Flexibilité pour les évolutions futures
+## Sécurité
 
-### Configuration Environnement
+- **Row Level Security (RLS)** : Contrôle d'accès au niveau des lignes dans Supabase
+- **JWT** : Jetons d'authentification sécurisés pour les sessions utilisateur
+- **Validation des données** : Validation côté client et serveur
+- **HTTPS** : Toutes les communications sont chiffrées
 
-#### Variables d'environnement Frontend (.env.local)
-```
-REACT_APP_AUTH_SERVICE_URL=https://inherbis-auth.onrender.com/api
-REACT_APP_SUPABASE_URL=votre_url_supabase
-REACT_APP_SUPABASE_ANON_KEY=votre_clé_publique_supabase
-```
+## Contribution
 
-#### Variables d'environnement Service Auth (.env)
-```
-PORT=5000
-SUPABASE_URL=votre_url_supabase
-SUPABASE_ANON_KEY=votre_clé_service_supabase
-NODE_ENV=production
-CORS_ORIGIN=https://inherbisveritas.com
-COOKIE_SECRET=votre_secret_cookie
-```
+Les contributions sont les bienvenues ! Veuillez consulter nos guides de contribution et de style de code dans le dossier `docs/`.
 
-## Contributions et Développement
+## Licence
 
-### Bonnes Pratiques
-- Suivre les conventions de nommage et l'organisation du projet
-- Utiliser les composants et services existants
-- Documenter les nouvelles fonctionnalités
-- Tester les changements en développement avant de déployer
-
-### Workflow Git
-1. Créer une branche pour la fonctionnalité
-2. Implémenter les changements
-3. Tester localement
-4. Créer une Pull Request
-5. Revue de code
-6. Merge et déploiement
+Ce projet est sous licence MIT - voir le fichier LICENSE pour plus de détails.
