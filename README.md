@@ -36,6 +36,51 @@ La nouvelle interface d'administration permet :
 - **Base de données** : Supabase (PostgreSQL)
 - **État** : React Context API et useState/useEffect
 
+### Authentification et Gestion des Rôles
+
+L'application implémente un système d'authentification robuste avec gestion des rôles :
+
+- **Système à trois couches** : 
+  1. Frontend React avec AuthContext
+  2. Service d'authentification Express.js
+  3. Supabase Auth comme backend
+
+- **Principaux rôles** :
+  - **User** : Accès au site public et à son profil personnel
+  - **Admin** : Accès complet au tableau de bord d'administration et à toutes les fonctionnalités de gestion
+
+- **Sécurité** :
+  - Cookies HTTP-only pour les jetons d'authentification
+  - Expiration automatique des sessions
+  - Protection contre les attaques CSRF et XSS
+
+### To Do (12/03/2025)
+
+- [ ] **Migration complète vers Supabase** :
+  - Basculer `useMockData = false` dans articleService
+  - Vérifier les requêtes et la structure des tables
+  - Tester toutes les opérations CRUD
+
+- [ ] **Optimisation du code** :
+  - Refactoriser les services pour une meilleure réutilisation
+  - Améliorer la gestion d'erreurs
+  - Optimiser les requêtes Supabase (pagination, filtres)
+
+- [ ] **Gestion des images** :
+  - Implémenter l'upload et le redimensionnement d'images
+  - Configurer le stockage via Supabase Storage
+  - Optimiser le chargement des images (lazy loading)
+
+- [ ] **Tests cross-platform** :
+  - Tester l'application sur différents navigateurs (Chrome, Firefox, Safari)
+  - Vérifier la compatibilité mobile (iOS, Android)
+  - Tester sur différentes tailles d'écran
+
+- [ ] **Déploiement** :
+  - Mettre à jour le service d'authentification sur Render
+  - Configurer le déploiement automatique
+  - Configurer le monitoring et les alertes
+
 ### Architecture du Projet
 ```
 src/
@@ -97,81 +142,6 @@ Le service supporte deux modes de fonctionnement :
 - **Mode production** (`useMockData = false`) : Utilise Supabase comme backend
 
 Cette approche permet de développer sans dépendre d'un backend et facilite la transition vers la production.
-
-### Authentification Sécurisée
-
-L'application utilise une architecture d'authentification avancée en trois couches :
-
-1. **Frontend React** avec le contexte d'authentification
-2. **Service d'authentification** Express.js déployé sur Render
-3. **Supabase Auth** comme système de gestion des utilisateurs sous-jacent
-
-#### Avantages de cette architecture
-- **Sécurité renforcée** : Les tokens JWT restent sur le serveur et ne sont jamais exposés au client
-- **Protection contre les attaques XSS** : Utilisation de cookies HTTP-only
-- **Meilleure isolation** : Le service d'authentification peut être déployé et sécurisé indépendamment
-
-#### Utilisation dans le code
-
-```javascript
-// Exemple d'utilisation du contexte d'authentification
-import { useAuth } from '../contexts/AuthContext';
-
-function MonComposant() {
-  const { user, logout, isAdmin } = useAuth();
-  
-  return (
-    <div>
-      {user ? (
-        <>
-          <p>Bienvenue, {user.email}</p>
-          <button onClick={logout}>Déconnexion</button>
-          {isAdmin() && <p>Vous avez des droits d'administrateur</p>}
-        </>
-      ) : (
-        <p>Connectez-vous pour accéder à plus de fonctionnalités</p>
-      )}
-    </div>
-  );
-}
-```
-
-#### Bascule Admin/Public
-
-Un bouton flottant, visible uniquement pour les administrateurs, permet de basculer entre l'interface d'administration et le site public tout en conservant la position équivalente :
-
-```javascript
-// Composant visible uniquement pour les administrateurs
-import { useAuth } from '../contexts/AuthContext';
-import { useLocation, useNavigate } from 'react-router-dom';
-
-const AdminToggleButton = () => {
-  const { isAdmin } = useAuth();
-  const location = useLocation();
-  const navigate = useNavigate();
-  
-  if (!isAdmin()) return null; // Masqué pour les non-admins
-  
-  // Logique de basculement entre admin et public
-  const handleToggle = () => {
-    const isInAdmin = location.pathname.startsWith('/admin');
-    const targetPath = isInAdmin
-      ? mapAdminToPublicPath(location.pathname)
-      : mapPublicToAdminPath(location.pathname);
-    
-    navigate(targetPath);
-  };
-  
-  return (
-    <button 
-      className="fixed bottom-6 right-6 p-3 rounded-full shadow-lg"
-      onClick={handleToggle}
-    >
-      {/* Icône basculant selon le contexte */}
-    </button>
-  );
-};
-```
 
 ### Déploiement
 
