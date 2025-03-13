@@ -44,6 +44,9 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@supabase/supabase-js": "^2.48.1",
+    "@tiptap/extension-image": "^2.11.5",
+    "@tiptap/react": "^2.11.5",
+    "@tiptap/starter-kit": "^2.11.5",
     "framer-motion": "^12.4.3",
     "leaflet": "^1.9.4",
     "moment": "^2.30.1",

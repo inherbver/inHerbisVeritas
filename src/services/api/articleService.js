@@ -234,9 +234,47 @@ class ArticleService {
 
         // Convertir les données de snake_case vers camelCase
         const camelCaseData = toCamelCase(data);
+        
+        // Parser le contenu JSON pour chaque article
+        const parsedData = camelCaseData.map(article => {
+          if (article.content && typeof article.content === 'string') {
+            try {
+              // Vérifier si le contenu ressemble à du JSON avant de tenter de le parser
+              if (article.content.trim().startsWith('{') && article.content.trim().endsWith('}')) {
+                article.content = JSON.parse(article.content);
+              } else {
+                // Convertir le texte brut en structure compatible avec Tiptap
+                article.content = {
+                  type: 'doc',
+                  content: [
+                    {
+                      type: 'paragraph',
+                      content: [{ type: 'text', text: article.content }]
+                    }
+                  ]
+                };
+                console.log(`Contenu texte converti en structure Tiptap pour l'article ${article.id}`);
+              }
+            } catch (e) {
+              console.warn(`Impossible de parser le contenu JSON pour l'article ${article.id}:`, e);
+              // Fallback: convertir le contenu en structure compatible avec Tiptap
+              article.content = {
+                type: 'doc',
+                content: [
+                  {
+                    type: 'paragraph',
+                    content: [{ type: 'text', text: article.content || '' }]
+                  }
+                ]
+              };
+              console.log(`Contenu problématique converti en structure Tiptap pour l'article ${article.id}`);
+            }
+          }
+          return article;
+        });
 
         // Enrichir les articles avec les données de produits associés et formater les dates
-        const enrichedArticles = camelCaseData.map((article) =>
+        const enrichedArticles = parsedData.map((article) =>
           this.formatArticleDatesForDisplay(
             this.enrichArticleWithProductData(article)
           )
@@ -284,6 +322,42 @@ class ArticleService {
 
         // Convertir les données de snake_case vers camelCase
         const camelCaseData = toCamelCase(data);
+        
+        // Parser le contenu JSON si c'est une chaîne
+        if (camelCaseData.content && typeof camelCaseData.content === 'string') {
+          try {
+            // Vérifier si le contenu ressemble à du JSON avant de tenter de le parser
+            if (camelCaseData.content.trim().startsWith('{') && camelCaseData.content.trim().endsWith('}')) {
+              camelCaseData.content = JSON.parse(camelCaseData.content);
+              console.log('Contenu JSON parsé avec succès pour le frontend');
+            } else {
+              // Convertir le texte brut en structure compatible avec Tiptap
+              camelCaseData.content = {
+                type: 'doc',
+                content: [
+                  {
+                    type: 'paragraph',
+                    content: [{ type: 'text', text: camelCaseData.content }]
+                  }
+                ]
+              };
+              console.log(`Contenu texte converti en structure Tiptap pour l'article ${camelCaseData.id}`);
+            }
+          } catch (e) {
+            console.warn('Le contenu ne semble pas être un JSON valide:', e);
+            // Fallback: convertir le contenu en structure compatible avec Tiptap
+            camelCaseData.content = {
+              type: 'doc',
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [{ type: 'text', text: camelCaseData.content || '' }]
+                }
+              ]
+            };
+            console.log(`Contenu problématique converti en structure Tiptap pour l'article ${camelCaseData.id}`);
+          }
+        }
 
         const enrichedArticle = this.formatArticleDatesForDisplay(
           this.enrichArticleWithProductData(camelCaseData)
@@ -343,6 +417,14 @@ class ArticleService {
     try {
       console.log("Création d'un nouvel article");
       console.log('Données reçues du frontend:', articleData);
+
+      // Traiter le contenu Tiptap si présent (s'assurer qu'il est au format JSON)
+      if (articleData.content && typeof articleData.content === 'object') {
+        // Tiptap envoie déjà un objet JSON, on le convertit en chaîne pour le stockage
+        articleData.content = JSON.stringify(articleData.content);
+        console.log('Contenu Tiptap transformé en JSON string pour stockage:', 
+          articleData.content.substring(0, 100) + '...');
+      }
 
       // Formater les dates de l'article
       const formattedArticleData = this.formatArticleDates(articleData);
@@ -418,6 +500,42 @@ class ArticleService {
         // Convertir les données de snake_case vers camelCase
         const camelCaseData = toCamelCase(data);
         console.log('Données converties en camelCase:', camelCaseData);
+        
+        // Parser le contenu JSON si c'est une chaîne
+        if (camelCaseData.content && typeof camelCaseData.content === 'string') {
+          try {
+            // Vérifier si le contenu ressemble à du JSON avant de tenter de le parser
+            if (camelCaseData.content.trim().startsWith('{') && camelCaseData.content.trim().endsWith('}')) {
+              camelCaseData.content = JSON.parse(camelCaseData.content);
+              console.log('Contenu JSON parsé avec succès pour le frontend');
+            } else {
+              // Convertir le texte brut en structure compatible avec Tiptap
+              camelCaseData.content = {
+                type: 'doc',
+                content: [
+                  {
+                    type: 'paragraph',
+                    content: [{ type: 'text', text: camelCaseData.content }]
+                  }
+                ]
+              };
+              console.log(`Contenu texte converti en structure Tiptap pour l'article ${camelCaseData.id}`);
+            }
+          } catch (e) {
+            console.warn('Le contenu ne semble pas être un JSON valide:', e);
+            // Fallback: convertir le contenu en structure compatible avec Tiptap
+            camelCaseData.content = {
+              type: 'doc',
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [{ type: 'text', text: camelCaseData.content || '' }]
+                }
+              ]
+            };
+            console.log(`Contenu problématique converti en structure Tiptap pour l'article ${camelCaseData.id}`);
+          }
+        }
 
         const enrichedArticle = this.formatArticleDatesForDisplay(
           this.enrichArticleWithProductData(camelCaseData)
@@ -448,6 +566,14 @@ class ArticleService {
     try {
       console.log("Mise à jour de l'article avec ID:", id);
       console.log('Données reçues du frontend:', articleData);
+
+      // Traiter le contenu Tiptap si présent (s'assurer qu'il est au format JSON)
+      if (articleData.content && typeof articleData.content === 'object') {
+        // Tiptap envoie déjà un objet JSON, on le convertit en chaîne pour le stockage
+        articleData.content = JSON.stringify(articleData.content);
+        console.log('Contenu Tiptap transformé en JSON string pour stockage:', 
+          articleData.content.substring(0, 100) + '...');
+      }
 
       // Formater les dates de l'article
       const formattedArticleData = this.formatArticleDates(articleData);
@@ -515,16 +641,49 @@ class ArticleService {
           .select()
           .single();
 
-        if (error) {
-          console.error('Erreur Supabase détaillée:', error);
-          throw error;
-        }
+        if (error) throw error;
 
         console.log('Réponse Supabase après mise à jour:', data);
 
         // Convertir les données de snake_case vers camelCase
         const camelCaseData = toCamelCase(data);
         console.log('Données converties en camelCase:', camelCaseData);
+        
+        // Parser le contenu JSON si c'est une chaîne
+        if (camelCaseData.content && typeof camelCaseData.content === 'string') {
+          try {
+            // Vérifier si le contenu ressemble à du JSON avant de tenter de le parser
+            if (camelCaseData.content.trim().startsWith('{') && camelCaseData.content.trim().endsWith('}')) {
+              camelCaseData.content = JSON.parse(camelCaseData.content);
+              console.log('Contenu JSON parsé avec succès pour le frontend');
+            } else {
+              // Convertir le texte brut en structure compatible avec Tiptap
+              camelCaseData.content = {
+                type: 'doc',
+                content: [
+                  {
+                    type: 'paragraph',
+                    content: [{ type: 'text', text: camelCaseData.content }]
+                  }
+                ]
+              };
+              console.log(`Contenu texte converti en structure Tiptap pour l'article ${camelCaseData.id}`);
+            }
+          } catch (e) {
+            console.warn('Le contenu ne semble pas être un JSON valide:', e);
+            // Fallback: convertir le contenu en structure compatible avec Tiptap
+            camelCaseData.content = {
+              type: 'doc',
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [{ type: 'text', text: camelCaseData.content || '' }]
+                }
+              ]
+            };
+            console.log(`Contenu problématique converti en structure Tiptap pour l'article ${camelCaseData.id}`);
+          }
+        }
 
         const enrichedArticle = this.formatArticleDatesForDisplay(
           this.enrichArticleWithProductData(camelCaseData)
@@ -578,10 +737,7 @@ class ArticleService {
           .delete()
           .eq('id', stringId);
 
-        if (error) {
-          console.error('Erreur Supabase détaillée:', error);
-          throw error;
-        }
+        if (error) throw error;
 
         console.log('Article supprimé avec succès');
         return { success: true, error: null };
