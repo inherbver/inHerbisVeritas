@@ -3,25 +3,33 @@ import PropTypes from 'prop-types';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
-import { FiImage, FiX, FiBold, FiItalic, FiList, FiCode, FiLink } from 'react-icons/fi';
+import {
+  FiImage,
+  FiX,
+  FiBold,
+  FiItalic,
+  FiList,
+  FiCode,
+  FiLink,
+} from 'react-icons/fi';
 import { debounce } from '../../utils/formatters';
 
 /**
  * TiptapEditor - Un éditeur de texte riche utilisant Tiptap pour React
- * 
+ *
  * Ce composant n'initialise l'éditeur qu'une seule fois lors du montage et
  * utilise un mécanisme de debounce pour éviter les pertes de focus pendant la saisie.
- * 
+ *
  * @param {Object|string} initialContent - Contenu initial pour l'éditeur (JSON ou chaîne)
  * @param {Function} onContentChange - Fonction de rappel quand le contenu change
  * @param {boolean} readOnly - Si l'éditeur est en lecture seule
  * @param {string} placeholder - Texte d'aide quand l'éditeur est vide
  */
-const TiptapEditor = ({ 
-  initialContent, 
-  onContentChange, 
-  readOnly = false, 
-  placeholder = 'Commencez à rédiger ici...' 
+const TiptapEditor = ({
+  initialContent,
+  onContentChange,
+  readOnly = false,
+  placeholder = 'Commencez à rédiger ici...',
 }) => {
   // États pour la gestion des entrées d'images et de liens
   const [showImageInput, setShowImageInput] = useState(false);
@@ -30,22 +38,22 @@ const TiptapEditor = ({
   const [previewImage, setPreviewImage] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
   const [showLinkInput, setShowLinkInput] = useState(false);
-  
+
   // Référence pour éviter de multiples instances de la fonction debounce
   const debouncedUpdateRef = useRef(null);
-  
+
   /**
    * Récupère le contenu initial en gérant à la fois les chaînes et les objets JSON
    */
   const getInitialContent = useCallback(() => {
     if (!initialContent) return '';
     if (typeof initialContent === 'string') return initialContent;
-    
+
     // Pour une structure de contenu JSON complexe
     try {
       return initialContent;
     } catch (e) {
-      console.error('Échec lors de l\'analyse du contenu de l\'éditeur:', e);
+      console.error("Échec lors de l'analyse du contenu de l'éditeur:", e);
       return '';
     }
   }, [initialContent]);
@@ -66,7 +74,8 @@ const TiptapEditor = ({
     editable: !readOnly,
     editorProps: {
       attributes: {
-        class: 'prose prose-green max-w-none focus:outline-none min-h-[200px] px-3 py-2',
+        class:
+          'prose prose-green max-w-none focus:outline-none min-h-[200px] px-3 py-2',
         placeholder,
       },
     },
@@ -83,12 +92,12 @@ const TiptapEditor = ({
   useEffect(() => {
     debouncedUpdateRef.current = debounce((editor) => {
       if (!editor) return;
-      
+
       // Obtient le contenu en JSON pour préserver le formatage
       const content = editor.getJSON();
       onContentChange(content);
     }, 500);
-    
+
     // Fonction de nettoyage qui détruit l'éditeur lors du démontage
     return () => {
       if (editor) {
@@ -102,18 +111,19 @@ const TiptapEditor = ({
     if (editor && initialContent) {
       // Compare le contenu actuel avec le nouveau contenu
       const currentContent = JSON.stringify(editor.getJSON());
-      const newContent = typeof initialContent === 'string' 
-        ? initialContent 
-        : JSON.stringify(initialContent);
-      
+      const newContent =
+        typeof initialContent === 'string'
+          ? initialContent
+          : JSON.stringify(initialContent);
+
       // Ne met à jour que si le contenu a changé pour éviter les pertes de focus
       if (currentContent !== newContent) {
         // Sauvegarde la position du curseur
         const { from, to } = editor.state.selection;
-        
+
         // Met à jour le contenu
         editor.commands.setContent(getInitialContent(), false);
-        
+
         // Tente de restaurer la position du curseur si possible
         try {
           editor.commands.setTextSelection({ from, to });
@@ -147,10 +157,14 @@ const TiptapEditor = ({
     }
 
     // Insère l'image à la position du curseur et maintient le focus
-    editor.chain().focus().setImage({ 
-      src: imageUrl,
-      alt: imageAlt || 'Image' 
-    }).run();
+    editor
+      .chain()
+      .focus()
+      .setImage({
+        src: imageUrl,
+        alt: imageAlt || 'Image',
+      })
+      .run();
 
     // Réinitialise les champs après l'insertion
     setImageUrl('');
@@ -164,7 +178,7 @@ const TiptapEditor = ({
    */
   const insertLink = () => {
     if (!linkUrl.trim() || !editor) {
-      alert("Veuillez saisir une URL valide");
+      alert('Veuillez saisir une URL valide');
       return;
     }
 
@@ -175,10 +189,19 @@ const TiptapEditor = ({
 
     // Si du texte est sélectionné, le convertit en lien
     if (hasSelection) {
-      editor.chain().focus().extendMarkRange('link').setLink({ href: linkUrl }).run();
+      editor
+        .chain()
+        .focus()
+        .extendMarkRange('link')
+        .setLink({ href: linkUrl })
+        .run();
     } else {
       // Si aucun texte n'est sélectionné, insère l'URL comme lien
-      editor.chain().focus().insertContent(`<a href="${linkUrl}">${linkUrl}</a>`).run();
+      editor
+        .chain()
+        .focus()
+        .insertContent(`<a href="${linkUrl}">${linkUrl}</a>`)
+        .run();
     }
 
     // Réinitialise les champs après l'insertion
@@ -199,7 +222,11 @@ const TiptapEditor = ({
 
   // Si l'éditeur n'est pas encore initialisé, affiche un indicateur de chargement
   if (!editor) {
-    return <div className="border border-gray-300 rounded-md p-4">Chargement de l'éditeur...</div>;
+    return (
+      <div className="border border-gray-300 rounded-md p-4">
+        Chargement de l'éditeur...
+      </div>
+    );
   }
 
   return (
@@ -386,10 +413,7 @@ const TiptapEditor = ({
       )}
 
       {/* Zone de contenu de l'éditeur */}
-      <EditorContent 
-        editor={editor} 
-        className="editor-content" 
-      />
+      <EditorContent editor={editor} className="editor-content" />
     </div>
   );
 };

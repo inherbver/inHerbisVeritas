@@ -85,7 +85,7 @@ const ArticleForm = ({ article, onSave, onCancel, loading = false }) => {
   const handleContentChange = (newContent) => {
     setFormData({
       ...formData,
-      content: newContent
+      content: newContent,
     });
   };
 
@@ -93,35 +93,35 @@ const ArticleForm = ({ article, onSave, onCancel, loading = false }) => {
   useEffect(() => {
     if (formData.content) {
       let wordCount = 0;
-      
+
       if (typeof formData.content === 'object') {
         // Fonction récursive pour extraire le texte du contenu JSON
         const extractText = (node) => {
           if (!node) return '';
-          
+
           if (typeof node === 'string') return node;
-          
+
           if (Array.isArray(node)) {
             return node.map(extractText).join(' ');
           }
-          
+
           if (node.content) {
             return extractText(node.content);
           }
-          
+
           if (node.text) {
             return node.text;
           }
-          
+
           return '';
         };
-        
+
         const textContent = extractText(formData.content);
         wordCount = textContent.split(/\s+/).length;
       } else if (typeof formData.content === 'string') {
         wordCount = formData.content.split(/\s+/).length;
       }
-      
+
       const readTimeMin = Math.max(1, Math.ceil(wordCount / 200));
       setFormData({
         ...formData,

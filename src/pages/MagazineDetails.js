@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { generateHTML } from '@tiptap/html';
+import StarterKit from '@tiptap/starter-kit';
+import Image from '@tiptap/extension-image';
 import articleService from '../services/api/articleService';
 import StandardPageLayout from '../components/Ui/StandardPageLayout';
 import {
@@ -214,13 +217,68 @@ const MagazineDetails = () => {
             </p>
 
             {/* Contenu principal de l'article */}
-            {article.content ? (
-              <div
-                className="mt-8"
-                dangerouslySetInnerHTML={{ __html: article.content }}
-              />
-            ) : (
-              <></>
+            {article.content && (
+              <div className="mt-8">
+                {(() => {
+                  try {
+                    console.log('Type du contenu:', typeof article.content);
+
+                    // 1. Préparer le contenu (si c'est une chaîne, la parser en JSON)
+                    const contentObj =
+                      typeof article.content === 'string'
+                        ? JSON.parse(article.content)
+                        : article.content;
+
+                    console.log('Contenu parsé:', contentObj);
+
+                    // 2. Pour le débogage, afficher la structure
+                    if (!contentObj || typeof contentObj !== 'object') {
+                      return (
+                        <p className="text-red-500">
+                          Contenu invalide: ce n'est pas un objet JSON
+                        </p>
+                      );
+                    }
+
+                    // 3. Vérifier que c'est bien au format Tiptap (type: 'doc')
+                    if (!contentObj.type) {
+                      return (
+                        <p className="text-red-500">
+                          Format Tiptap invalide: propriété 'type' manquante
+                        </p>
+                      );
+                    }
+
+                    // 4. Générer le HTML avec les extensions nécessaires (y compris Image)
+                    const html = generateHTML(contentObj, [
+                      StarterKit,
+                      Image, // Ajout de l'extension Image pour gérer les nœuds d'image
+                    ]);
+
+                    console.log('HTML généré:', html.substring(0, 100) + '...');
+
+                    // 5. Retourner le HTML
+                    return <div dangerouslySetInnerHTML={{ __html: html }} />;
+                  } catch (error) {
+                    console.error(
+                      'Erreur lors de la conversion du contenu:',
+                      error
+                    );
+                    return (
+                      <div className="text-red-500">
+                        <p>
+                          Erreur lors de la conversion du contenu:{' '}
+                          {error.message}
+                        </p>
+                        <p className="mt-2">
+                          Veuillez vérifier la structure du contenu dans la
+                          console.
+                        </p>
+                      </div>
+                    );
+                  }
+                })()}
+              </div>
             )}
           </article>
 
