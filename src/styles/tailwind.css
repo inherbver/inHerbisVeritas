@@ -11,6 +11,26 @@
     @apply font-sans m-0;
   }
 
+  /* Styles pour les menus contextuels Tiptap */
+  .bubble-menu-button {
+    @apply p-1.5 transition-colors duration-200 rounded-md;
+  }
+
+  .bubble-menu-button.is-active {
+    @apply bg-gray-200;
+  }
+
+  .floating-menu-button {
+    @apply p-1.5 flex items-center text-left transition-colors duration-200 rounded-md;
+  }
+
+  .floating-menu-button.is-active {
+    @apply bg-gray-200;
+  }
+
+  /* Tiptap utilise Tippy.js pour gérer l'affichage des menus contextuels */
+  /* Ne pas cacher ces menus avec hidden, ils sont gérés par le JavaScript */
+
   /* Styles pour le carrousel hero */
   .hero-carousel-slide {
     @apply absolute inset-0 opacity-0 transition-opacity duration-700 ease-in-out;
