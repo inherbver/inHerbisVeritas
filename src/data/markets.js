@@ -3,6 +3,7 @@ export const markets = [
     id: 1,
     name: 'Béziers',
     slug: 'beziers',
+    type: 'market',
     address: 'Allées Paul Riquet, 34500 Béziers',
     fullAddress:
       'Allées Paul Riquet, entre la place Jean Jaurès et la place de la Victoire, 34500 Béziers',
@@ -34,68 +35,81 @@ export const markets = [
   },
   {
     id: 2,
-    name: 'Montpellier - Les Arceaux',
-    slug: 'montpellier-arceaux',
-    address: 'Place des Arceaux, 34000 Montpellier',
+    name: 'Salon Bio & Nature de Montpellier',
+    slug: 'salon-bio-montpellier',
+    type: 'fair',
+    address: 'Parc des Expositions, 34000 Montpellier',
     fullAddress:
-      "Boulevard des Arceaux, sous l'aqueduc Saint-Clément, 34000 Montpellier",
-    days: 'Mardi et Samedi',
-    hours: '7h-13h30',
-    coordinates: [43.6119, 3.8701],
+      "Parc des Expositions de Montpellier, Route de la Foire, 34470 Pérols",
+    days: '24 au 26 avril 2025',
+    hours: '10h-19h',
+    coordinates: [43.6119, 3.9017],
     description:
-      "Le marché des Arceaux est l'un des marchés bio emblématiques de Montpellier. Retrouvez notre stand In Herbis Veritas tous les mardis et samedis matin pour découvrir nos herbes aromatiques et médicinales.",
+      "Le Salon Bio & Nature de Montpellier est l'événement incontournable pour tous les acteurs et amateurs du bio et du naturel. Retrouvez notre stand In Herbis Veritas pendant ces 3 jours pour découvrir notre gamme complète de produits.",
     longDescription:
-      "Situé sous les arches majestueuses de l'aqueduc Saint-Clément, le marché des Arceaux est une véritable institution à Montpellier. Ce marché bio rassemble plus de 100 producteurs et artisans engagés dans une démarche de production responsable et durable. L'ambiance y est conviviale et l'offre extrêmement variée. Notre stand In Herbis Veritas s'y trouve deux fois par semaine, proposant des plantes aromatiques et médicinales cultivées et cueillies avec soin dans notre ferme.",
+      "Le Salon Bio & Nature de Montpellier est devenu en quelques années un rendez-vous majeur pour les professionnels et le grand public intéressés par les modes de vie durables et les produits naturels. Sur plus de 5000m², ce salon rassemble plus de 120 exposants venus partager leur passion et leur expertise. Notre stand In Herbis Veritas y présente l'intégralité de notre gamme de produits à base de plantes médicinales et aromatiques, avec des offres spéciales salon. Nous organisons également des mini-ateliers de découverte des plantes médicinales toutes les heures, ainsi que des conférences sur les bienfaits de la phytothérapie dans notre quotidien. Venez échanger avec notre équipe d'experts passionnés !",
     parkingInfo:
-      'Parking des Arceaux payant à proximité immédiate, places limitées',
-    publicTransport: 'Tram ligne 3, arrêt "Plan Cabanes" puis 5 minutes à pied',
-    standLocation:
-      "Allée centrale, troisième stand à partir de l'entrée Boulevard des Arceaux",
+      'Parking gratuit du Parc des Expositions (3000 places)',
+    publicTransport: 'Tramway ligne 3, arrêt "Parc Expo"',
+    standLocation: 'Hall B, Allée des Producteurs, Stand B42',
+    exhibitorCategory: 'Produits naturels et bien-être',
+    specialEvents: [
+      'Atelier "Découverte des plantes médicinales locales" - Chaque jour à 11h',
+      'Conférence "Les secrets des plantes du Sud pour votre santé" - Samedi à 14h30',
+      'Démonstration de préparations à base de plantes - Dimanche à 16h'
+    ],
     photos: [
       {
         url: 'https://www.herault-tourisme.com/uploads/2020/03/arceaux-oti-montpellier.jpg',
-        alt: 'Vue générale du marché des Arceaux à Montpellier',
+        alt: 'Entrée du Salon Bio & Nature de Montpellier',
       },
       {
         url: 'https://www.local.fr/sites/local.fr/files/styles/listing/public/marchebio.jpg',
-        alt: 'Étals de légumes bio au marché des Arceaux',
+        alt: 'Stands d\'exposants au Salon Bio & Nature',
       },
       {
         url: 'https://montpellier.love/wp-content/uploads/2022/03/marche-arceaux.jpg',
-        alt: "Ambiance du marché des Arceaux sous l'aqueduc",
+        alt: 'Atelier démonstratif au Salon Bio & Nature',
       },
     ],
   },
   {
     id: 3,
-    name: 'Sète - Les Halles',
-    slug: 'sete-halles',
-    address: 'Les Halles de Sète, Rue Gambetta, 34200 Sète',
+    name: 'Festival des Plantes de Sète',
+    slug: 'festival-plantes-sete',
+    type: 'festival',
+    address: 'Jardin du Château d\'Eau, 34200 Sète',
     fullAddress:
-      'Les Halles de Sète, 3 Rue Gambetta (angle Quai Maximin Licciardi), 34200 Sète',
-    days: 'Tous les jours',
-    hours: '8h-14h',
+      'Jardin du Château d\'Eau, 16 Rue Maurice Clavel, 34200 Sète',
+    days: '15 au 17 mai 2025',
+    hours: '9h-18h',
     coordinates: [43.4075, 3.6935],
     description:
-      'Les Halles de Sète offrent une expérience authentique au cœur de la ville. Notre stand In Herbis Veritas est présent chaque dimanche avec une sélection de nos meilleurs produits.',
+      'Le Festival des Plantes de Sète est un événement annuel célébrant la biodiversité méditerranéenne et les savoir-faire autour des plantes. In Herbis Veritas y participe avec des ateliers et présentations de produits naturels.',
     longDescription:
-      'Les Halles de Sète sont un lieu emblématique de la ville, où se côtoient les parfums de la mer et de la terre. Ce marché couvert, récemment rénové, met à l\'honneur les produits frais et locaux dans une ambiance typique de la région. Notre stand In Herbis Veritas propose chaque dimanche une sélection de plantes aromatiques, de tisanes et de produits transformés. Ne manquez pas de goûter à notre spécialité : la tisane "Brise Marine", créée spécialement pour Sète.',
+      'Le Festival des Plantes de Sète est un rendez-vous printanier qui transforme le Jardin du Château d\'Eau en un véritable paradis vert pendant trois jours. Cet événement réunit pépiniéristes, herboristes, artisans et experts du monde végétal dans un cadre exceptionnel surplombant la Méditerranée. La programmation comprend des expositions, des ateliers pratiques, des conférences thématiques et des animations pour petits et grands. Notre équipe In Herbis Veritas anime plusieurs ateliers sur les usages traditionnels des plantes méditerranéennes et propose des dégustations de nos tisanes et élixirs spécialement conçus pour l\'occasion. Un événement familial où se conjuguent plaisir, découverte et sensibilisation à l\'importance de notre patrimoine végétal.',
     parkingInfo:
-      'Parking des Halles (payant) en sous-sol, entrée par le Quai Maximin Licciardi',
-    publicTransport: 'Bus ligne 3, arrêt "Halles"',
-    standLocation: 'Allée E, stand n°12, section "Producteurs locaux"',
+      'Stationnement limité, privilégiez le parking du Centre-ville (15 min à pied) ou le parking du Théâtre de la Mer (10 min à pied)',
+    publicTransport: 'Bus ligne 5, arrêt "Château d\'Eau"',
+    standLocation: 'Zone des artisans, espace D3, près de la fontaine centrale',
+    festivalTheme: 'Plantes médicinales méditerranéennes : tradition et innovation',
+    activities: [
+      'Atelier "Fabrication de baumes aux plantes locales" - Vendredi et Samedi à 14h',
+      'Balade botanique guidée "À la découverte des plantes sauvages comestibles" - Samedi et Dimanche à 10h',
+      'Conférence "Les trésors oubliés de la phytothérapie méditerranéenne" - Dimanche à 15h'
+    ],
     photos: [
       {
         url: 'https://www.thau-info.fr/wp-content/uploads/2019/10/Halles-1024x513.jpg',
-        alt: 'Les Halles de Sète, vue extérieure',
+        alt: 'Vue du Festival des Plantes dans les Jardins du Château d\'Eau',
       },
       {
         url: 'https://www.sete.fr/app/uploads/2021/11/interieur_halles_de_sete-1920x960.jpg',
-        alt: 'Intérieur des Halles de Sète',
+        alt: 'Ateliers pédagogiques au Festival des Plantes',
       },
       {
         url: 'https://static.actu.fr/uploads/2021/12/25850-211214114018618-0.jpg',
-        alt: 'Étals de produits frais aux Halles de Sète',
+        alt: 'Stand In Herbis Veritas au Festival des Plantes',
       },
     ],
   },
@@ -103,6 +117,7 @@ export const markets = [
     id: 4,
     name: 'Agde - Marché Central',
     slug: 'agde-central',
+    type: 'market',
     address: 'Avenue du 8 Mai 1945 et Place Jean Jaurès, 34300 Agde',
     fullAddress:
       "Avenue du 8 Mai 1945 (s'étendant jusqu'à la Place Jean Jaurès), Centre-ville, 34300 Agde",
@@ -135,6 +150,7 @@ export const markets = [
     id: 5,
     name: 'Pézenas - Cours Jean Jaurès',
     slug: 'pezenas',
+    type: 'market',
     address: 'Cours Jean Jaurès, 34120 Pézenas',
     fullAddress: 'Cours Jean Jaurès, centre historique, 34120 Pézenas',
     days: 'Samedi',
@@ -162,7 +178,7 @@ export const markets = [
         alt: 'Ambiance du marché de Pézenas',
       },
     ],
-  },
+  }
 ];
 
 export const contactInfos = {

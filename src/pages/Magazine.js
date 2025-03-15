@@ -3,6 +3,7 @@ import articleService from '../services/api/articleService';
 import ArticlesGrid from '../components/magazine/ArticlesGrid';
 import PageTitle from '../components/Ui/PageTitle';
 import StandardPageLayout from '../components/Ui/StandardPageLayout';
+import PageHeader from '../components/Ui/PageHeader';
 import { FaLeaf, FaSearch, FaStarOfLife } from 'react-icons/fa';
 
 const Magazine = () => {
@@ -49,17 +50,21 @@ const Magazine = () => {
   return (
     <StandardPageLayout>
       <div className="max-w-7xl mx-auto">
-        {/* En-tête de page avec description */}
-        <div className="text-center mb-12 px-4">
-          <PageTitle subtitle="Explorez notre univers herbier">
-            Le Magazine
-          </PageTitle>
-          <p className="max-w-2xl mx-auto text-gray-600 mt-6">
-            Découvrez notre collection d'articles sur les plantes médicinales,
-            les cosmétiques naturels, et les remèdes ancestraux. Notre mission :
-            partager notre passion pour les bienfaits de la nature.
-          </p>
-        </div>
+        {/* En-tête de page avec PageHeader */}
+        <PageHeader
+          image={<FaLeaf size={60} />}
+          title="Le Magazine In Herbis Veritas"
+          description="Articles inspirants, conseils pratiques et expertises botaniques pour intégrer les bienfaits des plantes à votre quotidien."
+          backgroundColor="bg-green-50"
+          actionButton={
+            <a 
+              href="#articles" 
+              className="inline-block px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors"
+            >
+              Découvrir nos articles
+            </a>
+          }
+        />
 
         {/* Section des caractéristiques du magazine */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 px-4">
