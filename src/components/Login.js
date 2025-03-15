@@ -1,5 +1,4 @@
 import React from 'react';
-import { supabase } from '../config/supabase';
 
 const Login = () => {
   // Nouvelle logique d'authentification email/mot de passe

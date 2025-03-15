@@ -1,7 +1,7 @@
 Contexte du Projet
 
 Le projet est une application React avec un admin panel permettant de gérer des articles (CRUD : création, lecture, mise à jour, suppression).
-Le front-end utilise actuellement un système mocké (données locales) pour les articles. L’objectif est de passer à un stockage réel sur Supabase.
+Le front-end utilise actuellement un système mocké (données locales) amené à basculer en données réelles. L’objectif est de passer à un stockage réel sur Supabase.
 Un articleService gère les opérations CRUD (lecture/écriture). Il doit désormais interagir avec Supabase au lieu de tableaux statiques.
 Supabase est configuré avec un projet existant, et la table articles sera créée (ou a été créée) avec les colonnes nécessaires (id, title, slug, category, excerpt, image_url, content, featured, read_time, date, related_product_id, created_at, updated_at).
 Exigences Techniques

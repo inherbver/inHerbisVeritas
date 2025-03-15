@@ -5,12 +5,10 @@ import {
   FaBars,
   FaTimes,
   FaUser,
-  FaChevronDown,
   FaSignOutAlt,
   FaClipboardList,
   FaHeart,
   FaIdCard,
-  FaUserCog,
   FaSignInAlt,
   FaUserPlus,
   FaTachometerAlt,
@@ -25,7 +23,7 @@ const Navbar = () => {
   const menuRef = useRef(null);
   const userMenuRef = useRef(null);
   const location = useLocation();
-  const { currentUser, userRole, isAdmin, logout } = useAuth();
+  const { currentUser, isAdmin, logout } = useAuth();
 
   // Gestion des clics externes et touche ESC pour fermer le menu mobile
   useEffect(() => {
@@ -89,9 +87,7 @@ const Navbar = () => {
             <NavLink
               key={link.path}
               to={link.path}
-              className={({ isActive }) =>
-                `relative px-2 py-1 text-lg text-white hover:text-white transition-colors duration-200`
-              }
+              className={`relative px-2 py-1 text-lg text-white hover:text-white transition-colors duration-200`}
             >
               {link.label}
               {(location.pathname === link.path ||
@@ -157,7 +153,7 @@ const Navbar = () => {
                     /* Options pour administrateur */
                     <>
                       <div className="px-4 py-2 text-xs text-gray-500 border-b border-gray-100">
-                        Connecté en tant qu'
+                        Connecté en tant qu&apos;
                         <span className="font-semibold">administrateur</span>
                       </div>
                       <Link

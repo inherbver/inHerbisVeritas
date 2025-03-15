@@ -10,7 +10,7 @@ import { HiOutlineHome } from 'react-icons/hi';
  * Conserve la position/page dans chaque section lors des allers-retours
  */
 const AdminToggleButton = () => {
-  const { currentUser, userRole, isAdmin } = useAuth();
+  const { currentUser, isAdmin } = useAuth();
   const [isAdminView, setIsAdminView] = useState(false);
   const navigate = useNavigate();
 

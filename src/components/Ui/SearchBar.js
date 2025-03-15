@@ -5,10 +5,11 @@ import PropTypes from 'prop-types';
  * Composant de barre de recherche réutilisable
  */
 const SearchBar = ({
-  placeholder = 'Rechercher...',
+  placeholder = 'Rechercher un produit...',
+  onSearch,
+  className = '',
   value,
   onChange,
-  className = '',
   inputClassName = '',
   iconClassName = '',
 }) => {

@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 
 module.exports = {
@@ -49,7 +50,6 @@ module.exports = {
           },
         }),
       ];
-      
       return webpackConfig;
     },
   },

@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FiImage, FiX, FiLink, FiPlus } from 'react-icons/fi';
+import { FiImage, FiX, FiLink } from 'react-icons/fi';
 import { products } from '../../../data/products';
-import TiptapEditor from '../../editor/TiptapEditor';
 
 const ArticleForm = ({ article, onSave, onCancel, loading = false }) => {
   // Initialisation avec un article vide ou l'article à éditer
@@ -55,6 +54,14 @@ const ArticleForm = ({ article, onSave, onCancel, loading = false }) => {
     });
   };
 
+  // Gestion du contenu du textarea (remplace temporairement TipTap)
+  const handleContentChange = (e) => {
+    setFormData({
+      ...formData,
+      content: e.target.value,
+    });
+  };
+
   // Gestion de la soumission du formulaire
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -78,14 +85,6 @@ const ArticleForm = ({ article, onSave, onCancel, loading = false }) => {
       ...formData,
       slug,
       articleUrl: `/magazine/${slug}`,
-    });
-  };
-
-  // Gestion du contenu de l'éditeur Tiptap
-  const handleContentChange = (newContent) => {
-    setFormData({
-      ...formData,
-      content: newContent,
     });
   };
 
@@ -270,14 +269,21 @@ const ArticleForm = ({ article, onSave, onCancel, loading = false }) => {
       {/* Contenu de l'article */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Contenu de l'article
+          Contenu de l&apos;article <span className="text-red-500">*</span>
         </label>
-        <TiptapEditor
-          initialContent={formData.content}
-          onContentChange={handleContentChange}
-          readOnly={loading}
+        <textarea
+          name="content"
+          value={typeof formData.content === 'string' ? formData.content : JSON.stringify(formData.content)}
+          onChange={handleContentChange}
+          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
           placeholder="Rédigez le contenu de votre article ici..."
+          rows={15}
+          required
+          disabled={loading}
         />
+        <p className="mt-1 text-sm text-gray-500">
+          Éditeur simplifié temporaire. L&apos;éditeur visuel React Quill sera implémenté prochainement.
+        </p>
       </div>
 
       {/* Produit associé */}

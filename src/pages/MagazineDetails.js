@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { generateHTML } from '@tiptap/html';
-import StarterKit from '@tiptap/starter-kit';
-import Image from '@tiptap/extension-image';
 import articleService from '../services/api/articleService';
 import StandardPageLayout from '../components/Ui/StandardPageLayout';
 import {
@@ -14,10 +11,8 @@ import {
   FaCalendarAlt,
   FaClock,
   FaArrowLeft,
-  FaQuoteLeft,
   FaLeaf,
 } from 'react-icons/fa';
-import SocialMediaFooter from '../components/SocialMediaFooter';
 
 const MagazineDetails = () => {
   const { id } = useParams();
@@ -240,25 +235,30 @@ const MagazineDetails = () => {
                       );
                     }
 
-                    // 3. Vérifier que c'est bien au format Tiptap (type: 'doc')
-                    if (!contentObj.type) {
+                    // 3. Vérifier que c'est bien un format JSON valide
+                    if (!contentObj.content) {
                       return (
                         <p className="text-red-500">
-                          Format Tiptap invalide: propriété 'type' manquante
+                          Format invalide: propriété 'content' manquante
                         </p>
                       );
                     }
 
-                    // 4. Générer le HTML avec les extensions nécessaires (y compris Image)
-                    const html = generateHTML(contentObj, [
-                      StarterKit,
-                      Image, // Ajout de l'extension Image pour gérer les nœuds d'image
-                    ]);
+                    // 4. Temporairement, afficher le contenu tel quel jusqu'à l'implémentation de React Quill
+                    const htmlContent = contentObj.content;
+                    console.log('Contenu à afficher:', htmlContent);
 
-                    console.log('HTML généré:', html.substring(0, 100) + '...');
-
-                    // 5. Retourner le HTML
-                    return <div dangerouslySetInnerHTML={{ __html: html }} />;
+                    // 5. Retourner le HTML (à remplacer par le rendu React Quill)
+                    return (
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            typeof htmlContent === 'string'
+                              ? htmlContent
+                              : JSON.stringify(htmlContent),
+                        }}
+                      />
+                    );
                   } catch (error) {
                     console.error(
                       'Erreur lors de la conversion du contenu:',
@@ -298,7 +298,7 @@ const MagazineDetails = () => {
                   />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-xl font-bold mb-2">
+                  <h4 className="text-lg font-bold mb-2">
                     {article.relatedProductName}
                   </h4>
                   <p className="text-gray-600 mb-4">

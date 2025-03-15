@@ -163,7 +163,9 @@ const AdminDashboard = () => {
               />
             ))
           ) : (
-            <p className="text-gray-500">Aucune alerte pour le moment</p>
+            <p className="text-gray-500">
+              Vous n&apos;avez aucune notification non lue.
+            </p>
           )}
         </div>
       </div>

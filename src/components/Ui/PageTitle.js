@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const PageTitle = ({ children, subtitle, className = '', hasHero = false }) => (
+const PageTitle = ({ children, subtitle, className = '' }) => (
   <div className="max-w-7xl mx-auto px-4">
     <section className="pt-16 pb-8">
       <div className={`text-center max-w-7xl ${className}`}>
@@ -18,7 +18,6 @@ PageTitle.propTypes = {
   children: PropTypes.node.isRequired,
   subtitle: PropTypes.string,
   className: PropTypes.string,
-  hasHero: PropTypes.bool,
 };
 
 export default PageTitle;

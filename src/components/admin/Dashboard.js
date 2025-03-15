@@ -7,10 +7,7 @@ import {
   FiShoppingCart,
   FiUser,
   FiEye,
-  FiPackage,
-  FiStar,
 } from 'react-icons/fi';
-import { supabase } from '../../config/supabase';
 
 const StatCard = ({ title, value, icon, trend, color }) => (
   <div className="bg-white rounded-lg shadow p-5">

@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { products } from '../data/products';
-import PropTypes from 'prop-types';
 import { FaInfoCircle, FaRegHeart } from 'react-icons/fa';
 
 // Composants existants
@@ -24,17 +23,18 @@ import TabSystem from '../components/Ui/TabSystem';
 import ThumbnailGallery from '../components/product/ThumbnailGallery';
 
 // Composant pour afficher "Fabriqué en France" aux couleurs du drapeau français
-const FrenchMadeBadge = () => (
-  <div className="inline-flex items-center bg-gray-100 rounded-full px-3 py-1 mt-2">
-    <span className="font-medium">
-      <span className="text-blue-700">Fabriqué</span>
-      <span className="text-gray-800 bg-white px-1 mx-1 rounded shadow-sm border border-gray-300">
-        en
-      </span>
-      <span className="text-red-600">France</span>
-    </span>
-  </div>
-);
+// Conservé mais non utilisé pour l'instant - peut être réutilisé plus tard
+// const FrenchMadeBadge = () => (
+//   <div className="inline-flex items-center bg-gray-100 rounded-full px-3 py-1 mt-2">
+//     <span className="font-medium">
+//       <span className="text-blue-700">Fabriqué</span>
+//       <span className="text-gray-800 bg-white px-1 mx-1 rounded shadow-sm border border-gray-300">
+//         en
+//       </span>
+//       <span className="text-red-600">France</span>
+//     </span>
+//   </div>
+// );
 
 const ProductDetails = () => {
   const { slug } = useParams();
@@ -43,9 +43,6 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('description');
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-
-  // Référence pour stocker la position de défilement actuelle
-  const scrollPositionRef = useRef(0);
 
   // Effet pour restaurer la position de défilement si on vient de naviguer
   useEffect(() => {

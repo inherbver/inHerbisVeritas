@@ -14,7 +14,7 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
 // Mock for window.matchMedia which is not implemented in JSDOM
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: jest.fn().mockImplementation(query => ({
+  value: jest.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -26,13 +26,10 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
-// Suppress console errors from Tiptap
+// Supprimer les suppressions d'erreurs console spécifiques à certaines bibliothèques
 const originalConsoleError = console.error;
 console.error = (...args) => {
-  if (args[0] && typeof args[0] === 'string' && 
-    (args[0].includes('ProseMirror') || 
-     args[0].includes('tiptap'))) {
-    return;
-  }
+  // Ici, on peut ajouter des conditions pour supprimer certaines erreurs
+  // Par exemple pour les erreurs liées aux tests spécifiques
   originalConsoleError(...args);
 };

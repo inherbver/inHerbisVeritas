@@ -3,6 +3,7 @@ module.exports = {
     browser: true,
     es2021: true,
     node: true, // ✅ Ajout pour éviter les erreurs sur `module` et `process`
+    jest: true, // ✅ Ajout pour les tests Jest
   },
   extends: [
     'eslint:recommended',
@@ -19,6 +20,11 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['react', '@typescript-eslint', 'prettier'],
+  settings: {
+    react: {
+      version: 'detect', // Détecte automatiquement la version de React
+    },
+  },
   rules: {
     // Permet les variables non utilisées en mode 'warn' (pour ne pas bloquer le build)
     '@typescript-eslint/no-unused-vars': 'warn',
@@ -52,4 +58,3 @@ module.exports = {
     ],
   },
 };
-

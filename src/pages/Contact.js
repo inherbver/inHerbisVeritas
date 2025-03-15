@@ -24,9 +24,9 @@ const Contact = () => {
             Contactez-nous
           </PageTitle>
           <p className="max-w-2xl mx-auto text-gray-600 mt-6">
-            N'hésitez pas à nous contacter pour toute question concernant nos
-            produits, nos services ou nos événements. Notre équipe sera ravie de
-            vous répondre.
+            N&apos;hésitez pas à nous contacter pour toute question concernant
+            nos produits, nos services ou nos événements. Notre équipe sera
+            ravie de vous répondre.
           </p>
         </div>
 
