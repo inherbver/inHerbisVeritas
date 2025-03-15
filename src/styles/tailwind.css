@@ -3,32 +3,9 @@
 @tailwind utilities;
 
 @layer components {
-  .btn-custom {
-    @apply bg-green-600 p-4 border-2 border-black;
-  }
-
   body {
     @apply font-sans m-0;
   }
-
-  /* Styles pour les menus contextuels */
-  .bubble-menu-button {
-    @apply p-1.5 transition-colors duration-200 rounded-md;
-  }
-
-  .bubble-menu-button.is-active {
-    @apply bg-gray-200;
-  }
-
-  .floating-menu-button {
-    @apply p-1.5 flex items-center text-left transition-colors duration-200 rounded-md;
-  }
-
-  .floating-menu-button.is-active {
-    @apply bg-gray-200;
-  }
-
-  /* Ne pas cacher ces menus avec hidden, ils sont gérés par le JavaScript */
 
   /* Styles pour le carrousel hero */
   .hero-carousel-slide {
@@ -51,6 +28,14 @@
     @apply absolute top-1/2 -translate-y-1/2 z-20 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/50;
   }
 
+  .hero-carousel-nav-button.next {
+    @apply right-4;
+  }
+  
+  .hero-carousel-nav-button.prev {
+    @apply left-4;
+  }
+
   /* Support des attributs 'loading' pour les images sur les navigateurs qui ne supportent pas le lazy loading natif */
   img[loading='lazy'] {
     @apply will-change-transform;
@@ -70,6 +55,24 @@
 
   .slide-content-animation {
     animation: slideContentFadeIn 0.8s ease-out forwards;
+  }
+
+  /* Correction spécifique du sélecteur de quantité pour tablettes intermédiaires */
+  @media (min-width: 600px) and (max-width: 900px) {
+    .quantity-selector {
+      width: 130px; /* Augmenter légèrement la largeur */
+      padding: 4px; /* Ajout de padding interne pour éviter chevauchement */
+    }
+
+    .quantity-selector-value {
+      width: 60px !important; /* Largeur augmentée pour afficher clairement le nombre */
+      text-align: center;
+    }
+
+    .quantity-selector-btn {
+      width: 30px !important; /* largeur fixe pour les boutons + / - */
+      flex-shrink: 0; /* éviter la réduction automatique des boutons */
+    }
   }
 }
 

@@ -113,11 +113,11 @@ const ProductDetails = () => {
       content: (
         <ProductSection title="Pourquoi l'aimer">
           <div className="prose prose-green max-w-none">
-            <p className="text-gray-600 mb-6">{product.description}</p>
-            <div className="my-8">
+            <p className="text-gray-600 mb-6 leading-relaxed">{product.description}</p>
+            <section className="my-8">
               <h3 className="text-xl font-semibold mb-4">Les bénéfices clés</h3>
               <SpecList items={product.benefits} />
-            </div>
+            </section>
           </div>
         </ProductSection>
       ),
@@ -128,11 +128,23 @@ const ProductDetails = () => {
       content: (
         <ProductSection title="Composition">
           <div className="prose prose-green max-w-none">
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 mb-6 leading-relaxed">
               Ce produit est formulé à partir d'ingrédients soigneusement
               sélectionnés:
             </p>
             <SpecList items={product.composition} />
+            
+            {product.inci_list && (
+              <section className="mt-8 border-t pt-6">
+                <h3 className="text-xl font-semibold mb-4">Liste INCI</h3>
+                <figure className="p-4 bg-gray-50 rounded-md border border-gray-200">
+                  <code className="text-sm text-gray-600 block whitespace-pre-wrap break-words leading-relaxed">{product.inci_list}</code>
+                </figure>
+                <figcaption className="mt-2 text-xs text-gray-500">
+                  La liste INCI (International Nomenclature of Cosmetic Ingredients) est la nomenclature internationale des ingrédients cosmétiques.
+                </figcaption>
+              </section>
+            )}
           </div>
         </ProductSection>
       ),
@@ -141,16 +153,15 @@ const ProductDetails = () => {
       id: 'usage',
       label: 'Utilisation',
       content: (
-        <ProductSection title="Conseils d'utilisation">
+        <ProductSection title="Comment l'utiliser">
           <div className="prose prose-green max-w-none">
-            <div className="mb-8">
-              <h3 className="text-xl font-semibold mb-4">Comment l'utiliser</h3>
-              <Tips text={product.usageTips} />
-            </div>
-            <div>
+            <section className="mb-8">
+              <Tips text={product.usageTips} className="leading-relaxed" />
+            </section>
+            <section>
               <h3 className="text-xl font-semibold mb-4">Conservation</h3>
-              <Tips text={product.storageTips} />
-            </div>
+              <Tips text={product.storageTips} className="leading-relaxed" />
+            </section>
           </div>
         </ProductSection>
       ),
@@ -189,9 +200,6 @@ const ProductDetails = () => {
         />
 
         <section className="bg-white rounded-xl shadow-sm p-8 mb-8">
-          {/* En-tête du produit */}
-          <ProductHeader title={product.title} category={product.category} />
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {/* Galerie d'images */}
             <figure className="relative">
@@ -209,74 +217,114 @@ const ProductDetails = () => {
                 images={thumbnails}
                 onSelect={setSelectedImageIndex}
                 selectedIndex={selectedImageIndex}
+                className="mt-4 gap-3"
+                imageClassName="hover:scale-105 transition-transform duration-200"
+                selectedImageClassName="ring-2 ring-green-500 ring-offset-2"
               />
             </figure>
 
-            {/* Informations du produit avec hauteur fixe et bouton positionné en bas */}
-            <div className="flex flex-col h-full">
-              {/* Zone scrollable pour les informations variables */}
-              <div
-                className="flex-1 overflow-y-auto mb-6 pr-2 space-y-8"
-                style={{ maxHeight: '350px' }}
-              >
-                <div>
-                  <ProductPrice
-                    price={product.price}
-                    description={product.description}
-                  />
-                  <p className="text-sm text-gray-500 mt-1">{product.volume}</p>
-                  <p className="text-gray-400 text-sm mt-2">
-                    <FaInfoCircle className="inline mr-1" />
-                    Prix TTC, livraison non incluse
-                  </p>
-                </div>
+            {/* Informations produit */}
+            <div className="flex flex-col">
+              {/* En-tête avec nom, badge catégorie */}
+              <header>
+                <h1 className="text-3xl font-bold text-gray-800">{product.title}</h1>
+                <span className="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm mt-2">
+                  {product.category}
+                </span>
+              </header>
 
-                {/* Badges et attributs produit */}
+              {/* Prix et description */}
+              <section className="mt-8">
+                <p className="text-3xl font-medium text-green-600 mb-5">
+                  {product.price} €
+                </p>
+                <p className="text-gray-600 mb-4 leading-relaxed">{product.description}</p>
+                <p className="text-sm text-gray-500 mb-8">
+                  Contenance : {product.quantity_value} {product.quantity_unit}
+                </p>
+              </section>
+
+              {/* Badges et caractéristiques */}
+              <section className="flex flex-wrap gap-3 mb-8">
                 <ProductBadges
-                  isCueilletteSauvage={product.isCueilletteSauvage}
-                  isVegan={product.isVegan}
-                  isFrenchMade={product.isFrenchMade}
+                  badges={[
+                    {
+                      key: 'isFrenchMade',
+                      label: 'Origine France',
+                      active: product.isFrenchMade,
+                    },
+                    {
+                      key: 'isVegan',
+                      label: 'Végan',
+                      active: product.isVegan,
+                    },
+                    {
+                      key: 'isCueilletteSauvage',
+                      label: 'Cueillette sauvage',
+                      active: product.isCueilletteSauvage,
+                    },
+                  ]}
                 />
-              </div>
+              </section>
+
+              {/* Informations de stock */}
+              <section>
+                <p className="flex items-center mb-6">
+                  <FaInfoCircle className="text-green-600 mr-2" />
+                  <span className="text-sm text-gray-600">
+                    {product.stock > 0
+                      ? `En stock: ${product.stock} unités`
+                      : 'En rupture de stock'}
+                  </span>
+                </p>
+              </section>
 
               {/* Section fixe en bas avec sélecteur de quantité et bouton d'achat */}
               <div className="mt-auto">
                 <div className="border-t border-gray-100 pt-4">
-                  {/* Sélecteur de quantité */}
-                  <QuantitySelector
-                    quantity={quantity}
-                    onChange={handleQuantityChange}
-                    min={1}
-                    max={10}
-                  />
-
-                  {/* Boutons d'action */}
-                  <div className="grid grid-cols-6 gap-4 mt-6">
-                    <div className="col-span-5">
-                      <AddToCartButton
-                        onClick={handleAddToCart}
-                        text={`Acheter pour ${(product.price * quantity).toFixed(2)}€`}
-                        className="py-4 text-base hover:shadow-md"
+                  <div className="flex flex-col md:flex-row gap-4 items-center">
+                    {/* Sélecteur de quantité */}
+                    <div className="w-full md:w-1/3">
+                      <QuantitySelector
+                        quantity={quantity}
+                        onChange={handleQuantityChange}
+                        min={1}
+                        max={10}
                       />
                     </div>
-                    <button
-                      className="flex items-center justify-center p-4 border border-gray-300 rounded-lg text-gray-500 hover:text-pink-500 hover:border-pink-300 transition-colors"
-                      aria-label="Ajouter aux favoris"
-                    >
-                      <FaRegHeart size={22} />
-                    </button>
+
+                    {/* Boutons d'action */}
+                    <div className="w-full md:w-2/3 flex gap-4 items-center">
+                      <div className="flex-grow max-w-[250px]">
+                        <AddToCartButton
+                          onClick={handleAddToCart}
+                          text={`Acheter pour ${(product.price * quantity).toFixed(2)}€`}
+                          className="py-4 text-base hover:shadow-md transition-shadow"
+                        />
+                      </div>
+                      <button
+                        className="flex items-center justify-center p-4 border border-gray-300 rounded-lg text-gray-500 hover:text-pink-500 hover:border-pink-300 transition-colors"
+                        aria-label="Ajouter aux favoris"
+                      >
+                        <FaRegHeart size={22} />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Onglets d'information */}
-          <TabSystem
-            activeTab={activeTab}
-            onChange={setActiveTab}
-            tabs={tabs}
-          />
+          {/* Onglets d'information avec style amélioré */}
+          <div className="mt-12">
+            <TabSystem
+              activeTab={activeTab}
+              onChange={setActiveTab}
+              tabs={tabs}
+              tabClassName="py-4 px-6 font-medium text-gray-600 border-b-2 border-transparent transition-colors hover:text-gray-900"
+              activeTabClassName="text-green-600 border-b-4 border-green-600 font-semibold"
+            />
+          </div>
         </section>
       </article>
     </main>

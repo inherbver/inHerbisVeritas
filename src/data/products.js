@@ -6,7 +6,8 @@ export const products = [
     description:
       'Baume nourrissant et apaisant pour peaux sèches, sujettes aux rougeurs et imperfections.',
     price: parseFloat(14.9).toFixed(2),
-    volume: '50ml',
+    quantity_value: 50,
+    quantity_unit: 'ml',
     category: 'Baumes',
     imageUrl: '/assets/images/pdct_1.jpg',
     stock: 20,
@@ -18,13 +19,14 @@ export const products = [
       'Huile de tournesol',
       'Huile de cameline',
       'Huile de sésame',
-      'Cire d’abeille',
+      'Cire d\'abeille',
       'Huile essentielle de copahu',
       'Huile essentielle de katafray',
       'Huile essentielle de menthe-bergamote',
     ],
+    inci_list: 'HELIANTHUS ANNUUS SEED OIL, CAMELINA SATIVA SEED OIL, SESAMUM INDICUM SEED OIL, CERA ALBA, COPAIFERA OFFICINALIS RESIN, CEDRELOPSIS GREVEI BARK OIL, MENTHA CITRATA LEAF OIL, TOCOPHEROL, LINALOOL, LIMONENE',
     usageTips:
-      'Appliquer une noisette sur peau propre et sèche après le rasage. Masser jusqu’à absorption.',
+      'Appliquer une noisette sur peau propre et sèche après le rasage. Masser jusqu\'à absorption.',
     storageTips: "Conserver à l'abri de la chaleur et de la lumière.",
     benefits: [
       'Hydratation intense',
@@ -39,7 +41,8 @@ export const products = [
     description:
       'Baume naturel pour redonner vitalité et éclat aux peaux sèches et matures.',
     price: parseFloat(16.5).toFixed(2),
-    volume: '50ml',
+    quantity_value: 50,
+    quantity_unit: 'ml',
     category: 'Baumes',
     imageUrl: '/assets/images/pdct_2.jpg',
     stock: 18,
@@ -51,12 +54,13 @@ export const products = [
       'Huile de tournesol',
       'Huile de cameline',
       'Huile de sésame',
-      'Cire d’abeille',
+      'Cire d\'abeille',
       'Huile essentielle de ciste ladanifère',
-      'Huile essentielle d’encens',
+      'Huile essentielle d\'encens',
       'Huile essentielle de bois de Hô',
       'Huile essentielle de géranium rosat',
     ],
+    inci_list: 'HELIANTHUS ANNUUS SEED OIL, CAMELINA SATIVA SEED OIL, SESAMUM INDICUM SEED OIL, CERA ALBA, CISTUS LADANIFERUS OIL, BOSWELLIA CARTERII OIL, CINNAMOMUM CAMPHORA LINALOOLIFERA OIL, PELARGONIUM GRAVEOLENS OIL, TOCOPHEROL, LINALOOL, CITRONELLOL, GERANIOL',
     usageTips:
       'Chauffer une petite quantité entre les mains et appliquer sur peau propre et sèche matin et soir.',
     storageTips: "Conserver à l'abri de la lumière et de l'humidité.",
@@ -73,7 +77,8 @@ export const products = [
     description:
       'Huile polyvalente pour le visage et le corps, enrichie en camomille et lavande.',
     price: parseFloat(19.0).toFixed(2),
-    volume: '100ml',
+    quantity_value: 100,
+    quantity_unit: 'ml',
     category: 'Huiles',
     imageUrl: '/assets/images/pdct_3.jpg',
     stock: 25,
@@ -83,11 +88,12 @@ export const products = [
     isFrenchMade: true,
     composition: [
       'Huile de tournesol',
-      'Huile d’amande douce',
+      'Huile d\'amande douce',
       'Huile de sésame',
       'Huile essentielle de camomille allemande',
       'Huile essentielle de lavande fine',
     ],
+    inci_list: 'HELIANTHUS ANNUUS SEED OIL, PRUNUS AMYGDALUS DULCIS OIL, SESAMUM INDICUM SEED OIL, CHAMOMILLA RECUTITA FLOWER OIL, LAVANDULA ANGUSTIFOLIA OIL, TOCOPHEROL, LINALOOL',
     usageTips:
       'Appliquer quelques gouttes sur peau propre et sèche en massant délicatement.',
     storageTips: 'Conserver dans un endroit frais et sec.',
@@ -104,7 +110,8 @@ export const products = [
     description:
       'Soin réparateur et apaisant pour le visage et le corps, idéal après une exposition au soleil.',
     price: parseFloat(18.5).toFixed(2),
-    volume: '100ml',
+    quantity_value: 100,
+    quantity_unit: 'ml',
     category: 'Huiles',
     imageUrl: '/assets/images/pdct_4.jpg',
     stock: 22,
@@ -117,6 +124,7 @@ export const products = [
       'Extrait de millepertuis',
       'Huile essentielle de lavande fine',
     ],
+    inci_list: 'HELIANTHUS ANNUUS SEED OIL, HYPERICUM PERFORATUM FLOWER/LEAF/STEM EXTRACT, LAVANDULA ANGUSTIFOLIA OIL, TOCOPHEROL, LINALOOL',
     usageTips:
       'Appliquer sur les zones sensibles ou irritées en massant délicatement.',
     storageTips:
@@ -134,7 +142,8 @@ export const products = [
     description:
       'Encens en poudre naturelle aux notes mystiques de myrrhe, oliban et cyprès.',
     price: parseFloat(12.9).toFixed(2),
-    volume: '50g',
+    quantity_value: 50,
+    quantity_unit: 'g',
     category: 'Encens',
     imageUrl: '/assets/images/pdct_5.jpg',
     stock: 30,
@@ -143,24 +152,26 @@ export const products = [
     isVegan: true,
     isFrenchMade: false,
     composition: ['Myrrhe', 'Oliban', 'Cyprès'],
+    // Pas de liste INCI pour ce produit non cosmétique
     usageTips:
       'Déposer une pincée de poudre sur un charbon ardent et laisser se consumer.',
     storageTips:
-      'Conserver dans un récipient hermétique à l’abri de l’humidité.',
+      'Conserver dans un récipient hermétique à l\'abri de l\'humidité.',
     benefits: [
       'Apaisement et sérénité',
       'Élévation spirituelle',
-      'Purification de l’espace',
+      'Purification de l\'espace',
     ],
   },
   {
     id: 6,
     slug: 'sel-gruissan-hibiscus',
-    title: 'Sel de Gruissan à l’Hibiscus',
+    title: 'Sel de Gruissan à l\'Hibiscus',
     description:
-      'Sel marin artisanal aux calices d’hibiscus bio, parfait pour rehausser vos plats.',
+      'Sel marin artisanal aux calices d\'hibiscus bio, parfait pour rehausser vos plats.',
     price: parseFloat(9.5).toFixed(2),
-    volume: '150g',
+    quantity_value: 150,
+    quantity_unit: 'g',
     category: 'Sels aromatisés',
     imageUrl: '/assets/images/pdct_6.jpg',
     stock: 28,
@@ -168,14 +179,48 @@ export const products = [
     isCueilletteSauvage: false,
     isVegan: true,
     isFrenchMade: true,
-    composition: ['Sel de Gruissan', 'Calices d’hibiscus bio'],
+    composition: ['Sel de Gruissan', 'Calices d\'hibiscus bio'],
+    // Pas de liste INCI pour ce produit alimentaire
     usageTips:
       'Saupoudrer sur vos plats après cuisson pour conserver la saveur et la couleur.',
-    storageTips: 'Conserver à l’abri de l’humidité et de la lumière.',
+    storageTips: 'Conserver à l\'abri de l\'humidité et de la lumière.',
     benefits: [
       'Apporte une touche acidulée et florale',
       'Riche en antioxydants',
       'Sublime les plats visuellement et gustativement',
     ],
   },
+  {
+    id: 7,
+    slug: 'coffret-decouverte-4-huiles',
+    title: 'Coffret Découverte - 4 Huiles Essentielles',
+    description:
+      'Assortiment de nos 4 huiles essentielles les plus appréciées dans un élégant coffret en bois.',
+    price: parseFloat(32.0).toFixed(2),
+    quantity_value: 1,
+    quantity_unit: 'unité(s)',
+    category: 'Coffrets',
+    imageUrl: '/assets/images/pdct_3.jpg',
+    stock: 15,
+    rating: 4.9,
+    isCueilletteSauvage: false,
+    isVegan: true,
+    isFrenchMade: true,
+    composition: [
+      'Huile essentielle de lavande fine (10ml)',
+      'Huile essentielle de tea tree (10ml)',
+      'Huile essentielle d\'eucalyptus (10ml)',
+      'Huile essentielle de menthe poivrée (10ml)',
+      'Coffret en bois provenant de forêts gérées durablement'
+    ],
+    inci_list: 'LAVANDULA ANGUSTIFOLIA OIL, MELALEUCA ALTERNIFOLIA LEAF OIL, EUCALYPTUS GLOBULUS LEAF OIL, MENTHA PIPERITA OIL, LINALOOL, LIMONENE, GERANIOL, CITRAL',
+    usageTips:
+      'Chaque huile peut être utilisée en diffusion, en massage dilué ou en inhalation. Consulter la notice incluse pour les précautions d\'emploi spécifiques.',
+    storageTips: 'Conserver à l\'abri de la chaleur et de la lumière. Tenir hors de portée des enfants.',
+    benefits: [
+      'Découverte des bienfaits de l\'aromathérapie',
+      'Huiles 100% naturelles certifiées biologiques',
+      'Coffret idéal pour offrir'
+    ],
+  }
 ];
