@@ -54,7 +54,7 @@ const ArticleForm = ({ article, onSave, onCancel, loading = false }) => {
     });
   };
 
-  // Gestion du contenu du textarea (remplace temporairement TipTap)
+  // Gestion du contenu du textarea
   const handleContentChange = (e) => {
     setFormData({
       ...formData,
@@ -282,7 +282,7 @@ const ArticleForm = ({ article, onSave, onCancel, loading = false }) => {
           disabled={loading}
         />
         <p className="mt-1 text-sm text-gray-500">
-          Éditeur simplifié temporaire. L&apos;éditeur visuel React Quill sera implémenté prochainement.
+          Temps de lecture estimé : {formData.readTime}
         </p>
       </div>
 

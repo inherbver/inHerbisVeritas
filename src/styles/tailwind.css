@@ -11,7 +11,7 @@
     @apply font-sans m-0;
   }
 
-  /* Styles pour les menus contextuels Tiptap */
+  /* Styles pour les menus contextuels */
   .bubble-menu-button {
     @apply p-1.5 transition-colors duration-200 rounded-md;
   }
@@ -28,7 +28,6 @@
     @apply bg-gray-200;
   }
 
-  /* Tiptap utilise Tippy.js pour gérer l'affichage des menus contextuels */
   /* Ne pas cacher ces menus avec hidden, ils sont gérés par le JavaScript */
 
   /* Styles pour le carrousel hero */

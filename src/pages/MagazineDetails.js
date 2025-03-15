@@ -244,11 +244,11 @@ const MagazineDetails = () => {
                       );
                     }
 
-                    // 4. Temporairement, afficher le contenu tel quel jusqu'à l'implémentation de React Quill
+                    // Afficher le contenu de l'article
                     const htmlContent = contentObj.content;
                     console.log('Contenu à afficher:', htmlContent);
 
-                    // 5. Retourner le HTML (à remplacer par le rendu React Quill)
+                    // Rendu du contenu HTML
                     return (
                       <div
                         dangerouslySetInnerHTML={{
