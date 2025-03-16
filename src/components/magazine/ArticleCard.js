@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FaCalendarAlt, FaClock } from 'react-icons/fa';
+import { Card, CardImage, CardContent, CardMeta, CardFooter } from '../common/Card';
+import Badge from '../Ui/Badge';
 
 const ArticleCard = ({
   imageUrl,
@@ -16,69 +18,88 @@ const ArticleCard = ({
   relatedProductName = null,
   relatedProductPrice = null,
   featured = false,
-  showRelatedProduct = false, // Nouvelle prop pour contrôler l'affichage du produit associé
+  showRelatedProduct = false, // Prop pour contrôler l'affichage du produit associé
 }) => {
+  // Vérifions et consignons le chemin de l'image pour diagnostic
+  console.log('ArticleCard imageUrl:', imageUrl);
+  
   return (
-    <article
-      className={`group bg-white rounded-xl shadow-sm overflow-hidden flex flex-col hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 h-full ${featured ? 'md:col-span-2' : ''}`}
+    <Card 
+      as="article"
+      className={`group ${featured ? 'md:col-span-2' : ''}`}
+      to={articleUrl}
+      color="green"
+      elevateOnHover
+      fullHeight
+      roundedSize="xl"
+      shadow="sm"
     >
-      <Link to={articleUrl} className="block relative flex flex-col h-full">
-        {/* Image container avec hauteur fixe */}
-        <div className="relative h-64 overflow-hidden">
-          <img
-            src={imageUrl}
-            alt={title}
-            className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-500"
+      <CardImage 
+        src={imageUrl}
+        alt={title}
+        height="h-64"
+        overlay={true}
+        badge={
+          <Badge variant="primary">{category}</Badge>
+        }
+        onError={(e) => {
+          console.warn(`Article image failed to load: ${imageUrl}`);
+        }}
+      >
+        {/* Titre sur l'image avec un gradient */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 pb-6">
+          <h3 className="text-white font-serif font-bold text-xl line-clamp-2 group-hover:text-green-300 transition-colors">
+            {title}
+          </h3>
+        </div>
+      </CardImage>
+      
+      <CardContent>
+        {/* Métadonnées de l'article */}
+        <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
+          <CardMeta 
+            icon={<FaCalendarAlt />}
+            text={date}
+            iconClassName="text-green-600"
           />
-          <div className="absolute top-3 left-3 bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium">
-            {category}
-          </div>
-
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 pb-6">
-            <h3 className="text-white font-serif font-bold text-xl line-clamp-2 group-hover:text-green-300 transition-colors">
-              {title}
-            </h3>
-          </div>
+          <CardMeta 
+            icon={<FaClock />}
+            text={`${readTime} de lecture`}
+            iconClassName="text-green-600"
+          />
         </div>
 
-        {/* Contenu avec structure flex pour garantir l'alignement */}
-        <div className="p-5 flex flex-col flex-grow">
-          {/* Métadonnées de l'article */}
-          <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
-            <div className="flex items-center gap-1">
-              <FaCalendarAlt className="text-green-600" />
-              <span>{date}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <FaClock className="text-green-600" />
-              <span>{readTime} de lecture</span>
-            </div>
-          </div>
+        {/* Extrait de l'article */}
+        <p className="text-gray-600 line-clamp-3 text-sm mb-4">{excerpt}</p>
 
-          {/* Extrait de l'article */}
-          <p className="text-gray-600 line-clamp-3 text-sm mb-4">{excerpt}</p>
-
-          {/* CTA pour lire l'article */}
-          <div className="mt-auto pt-3 border-t border-gray-100 flex justify-between items-center">
-            <span className="font-medium text-green-600 group-hover:text-green-700 transition-colors">
-              Lire la suite
-            </span>
-            <span className="text-sm text-gray-400 group-hover:translate-x-1 transition-transform duration-300">
-              →
-            </span>
-          </div>
-        </div>
-      </Link>
+        {/* CTA pour lire l'article */}
+        <CardFooter className="flex justify-between items-center">
+          <span className="font-medium text-green-600 group-hover:text-green-700 transition-colors">
+            Lire la suite
+          </span>
+          <span className="text-sm text-gray-400 group-hover:translate-x-1 transition-transform duration-300">
+            →
+          </span>
+        </CardFooter>
+      </CardContent>
 
       {/* Produit en relation - Affiché uniquement si showRelatedProduct est true */}
       {showRelatedProduct && relatedProductId && (
-        <div className="mt-auto px-5 pb-5 pt-2 bg-gray-50 border-t border-gray-100">
+        <CardFooter 
+          bordered 
+          background="bg-gray-50"
+          padding="px-5 pb-5 pt-2"
+        >
           <div className="flex items-center gap-3">
             <div className="w-16 h-16 rounded-md overflow-hidden shrink-0">
               <img
                 src={relatedProductImage}
                 alt={relatedProductName}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = '/assets/images/placeholder.jpg';
+                }}
               />
             </div>
             <div className="flex-1 min-w-0">
@@ -91,17 +112,17 @@ const ArticleCard = ({
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                // Logique d'ajout au panier
+                // Action d'ajout au panier (à implémenter)
                 console.log(`Ajout du produit ${relatedProductId} au panier`);
               }}
-              className="shrink-0 bg-green-600 hover:bg-green-700 text-white text-xs font-medium py-2 px-3 rounded-full transition-all duration-300 transform active:scale-95"
+              className="bg-green-600 hover:bg-green-700 text-white py-1 px-3 rounded-full text-sm transition-colors"
             >
-              Acheter
+              Ajouter
             </button>
           </div>
-        </div>
+        </CardFooter>
       )}
-    </article>
+    </Card>
   );
 };
 
@@ -116,12 +137,9 @@ ArticleCard.propTypes = {
   relatedProductId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   relatedProductImage: PropTypes.string,
   relatedProductName: PropTypes.string,
-  relatedProductPrice: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]),
+  relatedProductPrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   featured: PropTypes.bool,
-  showRelatedProduct: PropTypes.bool, // Ajout de la prop dans propTypes
+  showRelatedProduct: PropTypes.bool
 };
 
 export default ArticleCard;

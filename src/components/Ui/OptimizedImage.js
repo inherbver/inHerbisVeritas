@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * Composant pour afficher des images optimisées avec support WebP
- * Ce composant recherche automatiquement les versions .webp et .min des images
- * et charge la version la plus appropriée en fonction du support du navigateur
+ * Composant OptimizedImage modernisé avec support des formats next-gen
+ * et intégration améliorée avec votre configuration CRACO existante
  */
 const OptimizedImage = ({
   src,
@@ -13,55 +12,89 @@ const OptimizedImage = ({
   width,
   height,
   loading = 'lazy',
-  quality = 'high',
+  sizes = '100vw',
+  onError,
   ...props
 }) => {
-  // Fonctions utilitaires pour générer les chemins des différentes versions
-  const getWebpPath = (originalPath) => {
-    const pathObj = new URL(originalPath, window.location.origin);
-    const fileName = pathObj.pathname.split('/').pop();
-    const fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
-    const dirPath = pathObj.pathname.substring(
-      0,
-      pathObj.pathname.lastIndexOf('/') + 1
-    );
-
-    // Retourne le chemin WebP
-    return `${dirPath}${fileNameWithoutExt}.webp`;
+  const [imgError, setImgError] = useState(false);
+  const [avifError, setAvifError] = useState(false);
+  const [webpError, setWebpError] = useState(false);
+  const fallbackImage = '/assets/images/placeholder.jpg';
+  
+  // Vérification et normalisation du chemin source
+  const safeImageSrc = src || fallbackImage;
+  
+  // Génération des chemins pour les formats modernes
+  const getOptimizedPath = (path, format) => {
+    if (!path || typeof path !== 'string') return null;
+    
+    // Ne pas modifier les URLs externes
+    if (path.startsWith('http')) return null;
+    
+    // Vérifier si l'image a une extension compatible
+    const validExtRegex = /\.(jpe?g|png|gif)$/i;
+    if (!validExtRegex.test(path)) return null;
+    
+    // Générer le chemin du format spécifié
+    try {
+      return path.replace(validExtRegex, `.${format}`);
+    } catch (error) {
+      return null;
+    }
   };
-
-  const getMinPath = (originalPath) => {
-    const pathObj = new URL(originalPath, window.location.origin);
-    const fileName = pathObj.pathname.split('/').pop();
-    const fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
-    const ext = fileName.substring(fileName.lastIndexOf('.'));
-    const dirPath = pathObj.pathname.substring(
-      0,
-      pathObj.pathname.lastIndexOf('/') + 1
-    );
-
-    // Retourne le chemin vers la version minifiée
-    return `${dirPath}${fileNameWithoutExt}.min${ext}`;
+  
+  // Chemins vers les formats optimisés
+  const webpSrc = getOptimizedPath(safeImageSrc, 'webp');
+  const avifSrc = getOptimizedPath(safeImageSrc, 'avif');
+  
+  // Gestionnaires d'erreur pour chaque format
+  const handleAvifError = () => setAvifError(true);
+  const handleWebpError = () => setWebpError(true);
+  
+  // Gestionnaire d'erreur principal pour l'image de fallback
+  const handleImageError = (e) => {
+    if (!imgError) {
+      setImgError(true);
+      e.target.onerror = null;
+      e.target.src = fallbackImage;
+      
+      if (typeof onError === 'function') {
+        onError(e);
+      }
+    }
   };
-
-  // Chemin de l'image original pour fallback
-  const fallbackSrc = src;
-
-  // Chemin vers les versions optimisées
-  const webpSrc = getWebpPath(src);
-  const minSrc = quality === 'high' ? fallbackSrc : getMinPath(src);
 
   return (
     <picture>
-      <source srcSet={webpSrc} type="image/webp" />
-      <source srcSet={minSrc} type={`image/${src.split('.').pop()}`} />
-      <img
-        src={fallbackSrc}
-        alt={alt}
+      {/* AVIF - Format le plus optimisé mais support limité */}
+      {!imgError && avifSrc && !avifError && (
+        <source 
+          srcSet={avifSrc} 
+          type="image/avif" 
+          sizes={sizes}
+          onError={handleAvifError} 
+        />
+      )}
+      
+      {/* WebP - Format bien supporté et efficace */}
+      {!imgError && webpSrc && !webpError && (
+        <source 
+          srcSet={webpSrc} 
+          type="image/webp" 
+          sizes={sizes}
+          onError={handleWebpError} 
+        />
+      )}
+      
+      {/* Image originale comme fallback ultime */}
+      <img 
+        src={safeImageSrc}
+        alt={alt || ''}
         className={className}
         width={width}
         height={height}
         loading={loading}
+        onError={handleImageError}
         {...props}
       />
     </picture>
@@ -69,13 +102,14 @@ const OptimizedImage = ({
 };
 
 OptimizedImage.propTypes = {
-  src: PropTypes.string.isRequired,
+  src: PropTypes.string,
   alt: PropTypes.string.isRequired,
   className: PropTypes.string,
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   loading: PropTypes.oneOf(['lazy', 'eager', 'auto']),
-  quality: PropTypes.oneOf(['high', 'low']),
+  sizes: PropTypes.string,
+  onError: PropTypes.func
 };
 
 export default OptimizedImage;

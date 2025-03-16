@@ -1,18 +1,24 @@
 import PropTypes from 'prop-types';
 import MarketCard from './MarketCard';
+import Grid from '../common/Grid';
 
 const ContactGrid = ({ markets = [] }) => {
   // Limiter l'affichage aux 4 premières cartes
   const limitedMarkets = markets.slice(0, 4);
   
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+    <Grid 
+      cols={{ default: 1, sm: 2, lg: 4 }} 
+      gap={6} 
+      className="items-stretch"
+      as="section"
+    >
       {limitedMarkets.map((market) => (
         <div key={`${market.name}-${market.id}`} className="h-full">
           <MarketCard market={market} />
         </div>
       ))}
-    </div>
+    </Grid>
   );
 };
 

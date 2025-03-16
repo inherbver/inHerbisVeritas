@@ -31,6 +31,7 @@
   },
   "scripts": {
     "start": "craco start",
+    "prestart": "node scripts/generate-image-formats.js",
     "start:dev": "env-cmd -f .env.development craco start",
     "start:staging": "env-cmd -f .env.staging craco start",
     "start:prod": "env-cmd -f .env.production craco start",
@@ -38,7 +39,7 @@
     "build:dev": "env-cmd -f .env.development craco build",
     "build:staging": "env-cmd -f .env.staging craco build",
     "build:prod": "env-cmd -f .env.production craco build",
-    "optimize-images": "node scripts/optimizeImages.js",
+    "optimize-images": "node scripts/optimizeImages.js && node scripts/generate-image-formats.js",
     "prebuild": "npm run optimize-images",
     "prebuild:prod": "npm run optimize-images",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
